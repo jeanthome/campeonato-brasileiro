@@ -1,7 +1,5 @@
 package brasileirao.api.persistence;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -19,7 +17,6 @@ import java.util.List;
  */
 @Entity
 @Table(name = "CLUB")
-@JsonIgnoreProperties({"playerList"})
 public class Club {
 
    /**

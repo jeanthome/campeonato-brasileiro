@@ -20,8 +20,6 @@ public abstract class Person {
     */
    @Id
    @GeneratedValue(strategy = GenerationType.AUTO)
-   @NotNull
-   @Column(name = "ID")
    protected Long id;
 
    /**

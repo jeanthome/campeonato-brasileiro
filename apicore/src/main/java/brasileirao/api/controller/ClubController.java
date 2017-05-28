@@ -1,9 +1,13 @@
 package brasileirao.api.controller;
 
+import brasileirao.api.converter.ConvertHelper;
+import brasileirao.api.dto.ClubDto;
+import brasileirao.api.dto.CoachDto;
 import brasileirao.api.persistence.Club;
 import brasileirao.api.persistence.Coach;
 import brasileirao.api.service.ClubService;
 import brasileirao.api.service.CoachService;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -14,6 +18,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -35,6 +41,12 @@ public class ClubController {
    @Autowired
    private CoachService coachService;
 
+   /***
+    * Instância da classe resposnsavel por mapear um objeto a seu respectivo DTO.
+    */
+   @Autowired
+   private ModelMapper modelMapper;
+
 
    /**
     * Retorna JSON com todos os clubes cadastrados no banco.
@@ -46,9 +58,15 @@ public class ClubController {
    public ResponseEntity<?> getAllClubs() {
 
       final Iterable<Club> clubIterable = this.clubService.findAll();
+      final Iterator<Club> clubIterator = clubIterable.iterator();
 
-      if (clubIterable.iterator().hasNext()) {
-         return new ResponseEntity<>(clubIterable, HttpStatus.FOUND);
+      final List<ClubDto> clubDtoList = new ArrayList<>();
+      while (clubIterator.hasNext()) {
+         clubDtoList.add(ConvertHelper.convertClubToDto(clubIterator.next()));
+      }
+
+      if (!clubDtoList.isEmpty()) {
+         return new ResponseEntity<>(clubDtoList, HttpStatus.FOUND);
       } else {
          return new ResponseEntity<>("Não encontrado", HttpStatus.NOT_FOUND);
       }
@@ -66,7 +84,7 @@ public class ClubController {
 
       final Club club = this.clubService.findById(id);
       if (club != null) {
-         return new ResponseEntity<>(club, HttpStatus.FOUND);
+         return new ResponseEntity<>(ConvertHelper.convertClubToDto(club), HttpStatus.FOUND);
       } else {
          return new ResponseEntity<>("Não encontrado", HttpStatus.NOT_FOUND);
       }
@@ -88,11 +106,10 @@ public class ClubController {
       return new ResponseEntity<>("Salvo", HttpStatus.CREATED);
    }
 
-
    /**
-    * Atribui um clube à instância de <i>Coach</i> recebida e faz a persistência no banco. O atributo
-    * <b>clubId</b> deve ser o identificador do clube a ser atribuído ao técnico. Retorna erro se o
-    * atributo não corresponder a nenhuma instância da classe <i>Club</i>.
+    * Atribui um clube à instância de <i>Coach</i> recebida e faz a persistência no banco.
+    * O atributo <b>clubId</b> deve ser o identificador do clube a ser atribuído ao técnico.
+    * Retorna erro se o atributo não corresponder a nenhuma instância da classe <i>Club</i>.
     *
     * @param coach  Instância de <i>Coach</i> a ser persistida.
     * @param clubId Identificador do clube a ser atribuido ao técnico,
@@ -109,7 +126,7 @@ public class ClubController {
       if (club != null) {
          coach.setActualClub(club);
          this.coachService.save(coach);
-         return new ResponseEntity<>(coach, HttpStatus.CREATED);
+         return new ResponseEntity<>(ConvertHelper.convertCoachToDto(coach), HttpStatus.CREATED);
       } else {
          return new ResponseEntity<>("Clube não encontrado", HttpStatus.NOT_FOUND);
       }
@@ -120,11 +137,14 @@ public class ClubController {
    public ResponseEntity<?> getCoachOfClub(@PathVariable Long clubId) {
       final Club club = this.clubService.findById(clubId);
 
-      if (club != null) {
-         final Coach coach = this.coachService.findByActualClub(club);
 
-         if (coach != null) {
-            return new ResponseEntity<>(coach, HttpStatus.FOUND);
+      if (club != null) {
+
+         final Coach coach = this.coachService.findByActualClub(club);
+         final CoachDto coachDto = ConvertHelper.convertCoachToDto(coach);
+
+         if (coachDto != null) {
+            return new ResponseEntity<>(coachDto, HttpStatus.FOUND);
          } else {
             return new ResponseEntity<>("Técnico não encontrado.", HttpStatus.NOT_FOUND);
          }
@@ -133,3 +153,4 @@ public class ClubController {
       }
    }
 }
+

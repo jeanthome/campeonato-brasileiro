@@ -51,12 +51,32 @@
                     </div>
 
                     <div class="form-group">
+                        <input type="text" class="form-control" id="nationality"
+                               th:field="*{nationality}" placeholder="Nacionalidade"/>
+                    </div>
+
+                    <div  class="form-group">
+                        <select class="form-control" id="bankInput"
+                                th:field="*{positionEnum}">
+                            <option th:each="position : ${T(brasileirao.api.enums.PositionEnum).values()}"
+                                    th:value="${position}" th:text="${position.positionName}">Bancos
+                            </option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <input type="text" class="form-control" id="number"
+                               th:field="*{number}" placeholder="Número da camisa"/>
+                    </div>
+
+
+                    <div class="form-group">
                         <textarea class="form-control" th:field="*{biography}"
                                   placeholder="Biografia" maxlength="1000" rows="10">...</textarea>
                     </div>
 
                     <button type="submit" class="btn btn-primary" id="btn-send">
-                        CONTINUAR
+                        CADASTRAR
                     </button>
 
 

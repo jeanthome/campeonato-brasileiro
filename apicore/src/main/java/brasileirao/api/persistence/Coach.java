@@ -16,7 +16,6 @@ import java.util.List;
  */
 @Entity
 @Table(name = "COACH")
-@JsonIgnoreProperties({"actualClub"})
 public class Coach extends Person {
 
    /**
