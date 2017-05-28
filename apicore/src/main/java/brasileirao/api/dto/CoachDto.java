@@ -1,5 +1,9 @@
 package brasileirao.api.dto;
 
+/***
+ * Define a classe DTO para a entidade <i>Coach</i> Possui somente os atributos que serão expostos
+ * pela API.
+ */
 public class CoachDto {
 
    protected Long id;

@@ -6,9 +6,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
@@ -29,8 +29,7 @@ public class PlayerController {
     *
     * @return ResponseEntity Objeto com detalhes da requisição HTTP, como o Status.
     */
-   @RequestMapping(value = "", produces = MediaType.APPLICATION_JSON_VALUE,
-           method = RequestMethod.GET)
+   @GetMapping(value = "", produces = MediaType.APPLICATION_JSON_VALUE)
    public ResponseEntity<?> getAllPlayers() {
 
       final Iterable<Player> playerIterable = this.playerService.findAll();
@@ -48,8 +47,7 @@ public class PlayerController {
     * @param id Identificador do jogador a ser buscado.
     * @return ResponseEntity Objeto com detalhes da requisição HTTP, como o Status.
     */
-   @RequestMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE,
-           method = RequestMethod.GET)
+   @GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
    public ResponseEntity<?> getPlayerById(@PathVariable Long id) {
 
       final Player player = this.playerService.findById(id);

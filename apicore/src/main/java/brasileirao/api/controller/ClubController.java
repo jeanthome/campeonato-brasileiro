@@ -7,15 +7,15 @@ import brasileirao.api.persistence.Club;
 import brasileirao.api.persistence.Coach;
 import brasileirao.api.service.ClubService;
 import brasileirao.api.service.CoachService;
-import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.ArrayList;
@@ -41,11 +41,7 @@ public class ClubController {
    @Autowired
    private CoachService coachService;
 
-   /***
-    * Instância da classe resposnsavel por mapear um objeto a seu respectivo DTO.
-    */
-   @Autowired
-   private ModelMapper modelMapper;
+
 
 
    /**
@@ -53,8 +49,7 @@ public class ClubController {
     *
     * @return ResponseEntity Objeto com detalhes da requisição HTTP, como o Status.
     */
-   @RequestMapping(value = "", produces = MediaType.APPLICATION_JSON_VALUE,
-           method = RequestMethod.GET)
+   @GetMapping(value = "", produces = MediaType.APPLICATION_JSON_VALUE)
    public ResponseEntity<?> getAllClubs() {
 
       final Iterable<Club> clubIterable = this.clubService.findAll();
@@ -78,8 +73,7 @@ public class ClubController {
     * @param id Identificador do clube a ser buscado.
     * @return ResponseEntity Objeto com detalhes da requisição HTTP, como o Status.
     */
-   @RequestMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE,
-           method = RequestMethod.GET)
+   @GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
    public ResponseEntity<?> getClubById(@PathVariable Long id) {
 
       final Club club = this.clubService.findById(id);
@@ -96,8 +90,7 @@ public class ClubController {
     * @param clubs JSON com lista dos clubes a serem persistidos.
     * @return ResponseEntity Objeto com detalhes da requisição HTTP, como o Status.
     */
-   @RequestMapping(value = "/clubs-list", produces = MediaType.APPLICATION_JSON_VALUE,
-           method = RequestMethod.POST)
+   @PostMapping(value = "/clubs-list", produces = MediaType.APPLICATION_JSON_VALUE)
    public ResponseEntity<?> createClubs(@RequestBody List<Club> clubs) {
 
       for (Club club : clubs) {
@@ -117,8 +110,7 @@ public class ClubController {
     * @see Club
     * @see Coach
     */
-   @RequestMapping(value = "/{clubId}/coach", produces = MediaType.APPLICATION_JSON_VALUE,
-           method = RequestMethod.POST)
+   @PostMapping(value = "/{clubId}/coach", produces = MediaType.APPLICATION_JSON_VALUE)
    public ResponseEntity<?> setClubToCoach(@RequestBody Coach coach, @PathVariable Long clubId) {
 
       final Club club = this.clubService.findById(clubId);
@@ -132,11 +124,9 @@ public class ClubController {
       }
    }
 
-   @RequestMapping(value = "/{clubId}/coach", produces = MediaType.APPLICATION_JSON_VALUE,
-           method = RequestMethod.GET)
+   @GetMapping(value = "/{clubId}/coach", produces = MediaType.APPLICATION_JSON_VALUE)
    public ResponseEntity<?> getCoachOfClub(@PathVariable Long clubId) {
       final Club club = this.clubService.findById(clubId);
-
 
       if (club != null) {
 
