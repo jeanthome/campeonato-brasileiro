@@ -19,20 +19,21 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.context.ServletContextAware;
 
-import javax.servlet.ServletContext;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+
+import static org.springframework.hateoas.mvc.ControllerLinkBuilder.linkTo;
+import static org.springframework.hateoas.mvc.ControllerLinkBuilder.methodOn;
 
 /**
  * Lida com requisições referentes à entidade <i>Club</i>.
  */
 @RestController
 @RequestMapping(value = "/clubs")
-public class ClubController implements ServletContextAware {
+public class ClubController {
 
    /**
     * Instância da classe de serviços da entidade <i>Club</i>
@@ -46,28 +47,23 @@ public class ClubController implements ServletContextAware {
    @Autowired
    private CoachService coachService;
 
-   @Autowired
-   private ServletContext servletContext;
-
-   @Override
-   public void setServletContext(ServletContext servletContext) {
-      this.servletContext = servletContext;
-   }
-
    /**
     * Retorna JSON com todos os clubes cadastrados no banco.
     *
     * @return ResponseEntity Objeto com detalhes da requisição HTTP, como o Status.
     */
    @GetMapping(value = "", produces = MediaType.APPLICATION_JSON_VALUE)
-   public ResponseEntity<?> getAllClubs() {
+   public ResponseEntity<?> getAllClubs() throws IOException {
 
       final Iterable<Club> clubIterable = this.clubService.findAll();
       final Iterator<Club> clubIterator = clubIterable.iterator();
 
       final List<ClubDto> clubDtoList = new ArrayList<>();
       while (clubIterator.hasNext()) {
-         clubDtoList.add(ConvertHelper.convertClubToDto(clubIterator.next()));
+         final Club club = clubIterator.next();
+         ClubDto clubDto = ConvertHelper.convertClubToDto(club);
+         clubDto = addLinksToClub(clubDto, club.getId());
+         clubDtoList.add(clubDto);
       }
 
       if (!clubDtoList.isEmpty()) {
@@ -82,16 +78,30 @@ public class ClubController implements ServletContextAware {
     *
     * @param id Identificador do clube a ser buscado.
     * @return ResponseEntity Objeto com detalhes da requisição HTTP, como o Status.
+    * @throws IOException Exceção para arquivo não encontrado.
     */
    @GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
-   public ResponseEntity<?> getClubById(@PathVariable Long id) {
+   public ResponseEntity<?> getClubById(@PathVariable Long id) throws IOException {
 
       final Club club = this.clubService.findById(id);
       if (club != null) {
-         return new ResponseEntity<>(ConvertHelper.convertClubToDto(club), HttpStatus.FOUND);
+
+         ClubDto clubDto = ConvertHelper.convertClubToDto(club);
+         clubDto = addLinksToClub(clubDto, club.getId());
+
+         return new ResponseEntity<>(clubDto, HttpStatus.FOUND);
+
       } else {
          return new ResponseEntity<>("Não encontrado", HttpStatus.NOT_FOUND);
       }
+   }
+
+   private ClubDto addLinksToClub(ClubDto clubDto, Long clubId) throws IOException {
+
+      clubDto.add(linkTo(methodOn(ClubController.class).getClubById(clubId)).withSelfRel());
+      clubDto.add(linkTo(methodOn(ClubController.class).getEscudo(clubId)).withRel("badge"));
+      return clubDto;
+
    }
 
    /**

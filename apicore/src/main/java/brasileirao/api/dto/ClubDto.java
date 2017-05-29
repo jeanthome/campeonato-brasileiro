@@ -1,10 +1,12 @@
 package brasileirao.api.dto;
 
+import org.springframework.hateoas.ResourceSupport;
+
 /***
  * Define a classe DTO para a entidade <i>Club</i> Possui somente os atributos que serão expostos
  * pela API.
  */
-public class ClubDto {
+public class ClubDto extends ResourceSupport {
 
    private Long id;
 
@@ -15,10 +17,6 @@ public class ClubDto {
    private String abbreviation;
 
    private String image;
-
-   public Long getId() {
-      return id;
-   }
 
    public void setId(Long id) {
       this.id = id;

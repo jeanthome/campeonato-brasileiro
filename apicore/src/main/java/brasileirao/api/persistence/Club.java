@@ -1,5 +1,8 @@
 package brasileirao.api.persistence;
 
+import org.springframework.hateoas.ResourceSupport;
+import sun.misc.Resource;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
