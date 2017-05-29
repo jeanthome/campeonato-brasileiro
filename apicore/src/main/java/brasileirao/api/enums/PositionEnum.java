@@ -2,57 +2,75 @@ package brasileirao.api.enums;
 
 /**
  * Define as posicões possíveis para um jogador.
- * */
+ */
 public enum PositionEnum {
 
-    /**
-     * Goleiro
-     * */
-    GOALKEEPER("Goleiro"),
+   /**
+    * Goleiro
+    */
+   GOALKEEPER("Goleiro", "Gol"),
 
-    /**
-     * Zagueiro
-     * */
-    DEFENDER("Zagueiro"),
+   /**
+    * Zagueiro Esquerdo
+    */
+   LEFT_DEFENDER("Zagueiro Esquerdo", "ZAE"),
 
-    /**
-     * Lateral Esquerdo
-     * */
-    LEFT_BACK("Lateral Esquerdo"),
+   /**
+    * Zagueiro Direito
+    */
+   RIGHT_DEFENDER("Zagueiro Direito", "ZAD"),
 
-    /**Lateral Direito*/
-    RIGHT_BACK("Lateral Direito"),
+   /**
+    * Lateral Esquerdo
+    */
+   LEFT_BACK("Lateral Esquerdo", "LAE"),
 
-    /**
-     * Volante
-     * */
-    DEFENSIVE_MIDFIELDER("Volante"),
+   /**
+    * Lateral Direito
+    */
+   RIGHT_BACK("Lateral Direito", "LAD"),
 
-    /**
-     * Meia Central
-     * */
-    MIDFIELDER("Meia Central"),
+   /**
+    * Volante
+    */
+   DEFENSIVE_MIDFIELDER("Volante", "VOL"),
 
-    /**
-     * Atacante
-     * */
-    STRIKER("Atacante");
+   /**
+    * Meia Central
+    */
+   MIDFIELDER("Meia Central", "MEC"),
 
-    /**
-     * Nome da posicão.
-     * */
-    private String positionName;
+   /**
+    * Atacante
+    */
+   STRIKER("Atacante", "ATA");
 
-    /**
-     * Cria o item do ENUM representa uma posicão de jogador.
-     * @param positionName O nome da posicão.
-     * */
-    PositionEnum(String positionName) {
-        this.positionName = positionName;
-    }
+   /**
+    * Nome da posicão.
+    */
+   private String positionName;
 
-    public String getPositionName() {
-        return positionName;
-    }
+   /***
+    * Abreviação da posição.
+    */
+   private String abbreviation;
 
+   /**
+    * Cria o item do ENUM representa uma posicão de jogador.
+    *
+    * @param positionName O nome da posicão.
+    * @param abbreviation A abreviação da posição.
+    */
+   PositionEnum(String positionName, String abbreviation) {
+      this.positionName = positionName;
+      this.abbreviation = abbreviation;
+   }
+
+   public String getPositionName() {
+      return positionName;
+   }
+
+   public String getAbbreviation() {
+      return abbreviation;
+   }
 }

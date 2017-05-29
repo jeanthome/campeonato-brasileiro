@@ -8,6 +8,8 @@ import brasileirao.api.persistence.Coach;
 import brasileirao.api.service.ClubService;
 import brasileirao.api.service.CoachService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.ClassPathResource;
+import org.springframework.core.io.InputStreamResource;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -17,7 +19,10 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.context.ServletContextAware;
 
+import javax.servlet.ServletContext;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -27,7 +32,7 @@ import java.util.List;
  */
 @RestController
 @RequestMapping(value = "/clubs")
-public class ClubController {
+public class ClubController implements ServletContextAware {
 
    /**
     * Instância da classe de serviços da entidade <i>Club</i>
@@ -41,8 +46,13 @@ public class ClubController {
    @Autowired
    private CoachService coachService;
 
+   @Autowired
+   private ServletContext servletContext;
 
-
+   @Override
+   public void setServletContext(ServletContext servletContext) {
+      this.servletContext = servletContext;
+   }
 
    /**
     * Retorna JSON com todos os clubes cadastrados no banco.
@@ -140,6 +150,25 @@ public class ClubController {
          }
       } else {
          return new ResponseEntity<>("Clube não encontrado.", HttpStatus.NOT_FOUND);
+      }
+   }
+
+   @GetMapping(value = "/{clubId}/escudo", produces = MediaType.APPLICATION_JSON_VALUE)
+   public ResponseEntity<?> getEscudo(@PathVariable Long clubId) throws IOException {
+
+      final Club club = this.clubService.findById(clubId);
+      if (club != null) {
+         final ClassPathResource image = new ClassPathResource("/images/clubs/" + club.getImage() + ".png");
+         try {
+            final InputStreamResource inputStreamResource = new InputStreamResource(image.getInputStream());
+            return ResponseEntity.ok().contentLength(image.contentLength())
+                    .contentType(MediaType.IMAGE_PNG).body(inputStreamResource);
+
+         } catch (IOException e) {
+            return new ResponseEntity<>(e, HttpStatus.NOT_FOUND);
+         }
+      } else {
+         return new ResponseEntity<>("Clube não encontrado", HttpStatus.NOT_FOUND);
       }
    }
 }
