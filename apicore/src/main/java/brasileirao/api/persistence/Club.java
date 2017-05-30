@@ -1,8 +1,5 @@
 package brasileirao.api.persistence;
 
-import org.springframework.hateoas.ResourceSupport;
-import sun.misc.Resource;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -92,6 +89,11 @@ public class Club {
    private President president;
 
    /**
+    * Nome do diretório onde os arquivos do clube serão armazenados.
+    */
+   private String folderName;
+
+   /**
     * Contrutor vazio a ser utilizado nos Testes Unitários.
     */
    public Club() {
@@ -177,5 +179,11 @@ public class Club {
       this.president = president;
    }
 
+   public String getFolderName() {
+      return folderName;
+   }
 
+   public void setFolderName(String folderName) {
+      this.folderName = folderName;
+   }
 }

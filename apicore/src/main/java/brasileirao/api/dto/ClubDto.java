@@ -8,15 +8,25 @@ import org.springframework.hateoas.ResourceSupport;
  */
 public class ClubDto extends ResourceSupport {
 
+   /***
+    * Id do clube.
+    */
    private Long id;
 
+   /***
+    * Nome completo do clube.
+    */
    private String fullName;
 
+   /***
+    * Nome reduzido do clube.
+    */
    private String name;
 
+   /***
+    * Abreviação do nome do clube.
+    */
    private String abbreviation;
-
-   private String image;
 
    public void setId(Long id) {
       this.id = id;
@@ -46,11 +56,4 @@ public class ClubDto extends ResourceSupport {
       this.abbreviation = abbreviation;
    }
 
-   public String getImage() {
-      return image;
-   }
-
-   public void setImage(String image) {
-      this.image = image;
-   }
 }

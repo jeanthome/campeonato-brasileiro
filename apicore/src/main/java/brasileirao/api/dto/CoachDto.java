@@ -6,12 +6,24 @@ package brasileirao.api.dto;
  */
 public class CoachDto {
 
+   /***
+    * Id do Coach.
+    */
    protected Long id;
 
+   /***
+    * Nome de exibição do técnico.
+    */
    protected String displayName;
 
+   /***
+    * Nome do arquivo com a foto do técnico.
+    */
    protected String photo;
 
+   /***
+    * Idade do tecnico.
+    */
    protected Integer age;
 
    public Long getId() {

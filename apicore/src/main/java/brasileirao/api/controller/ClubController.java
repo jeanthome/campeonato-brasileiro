@@ -51,6 +51,7 @@ public class ClubController {
     * Retorna JSON com todos os clubes cadastrados no banco.
     *
     * @return ResponseEntity Objeto com detalhes da requisição HTTP, como o Status.
+    * @throws IOException Exceção a ser lançada
     */
    @GetMapping(value = "", produces = MediaType.APPLICATION_JSON_VALUE)
    public ResponseEntity<?> getAllClubs() throws IOException {
@@ -96,12 +97,19 @@ public class ClubController {
       }
    }
 
+   /**
+    * Adiciona links (self e escudo) no JSON de {@link Club}
+    *
+    * @param clubDto Instância que receberá os links
+    * @param clubId Identificador do clube.
+    * @return Instância de {@link ClubDto} com os links adicionados.
+    * @throws IOException
+    */
    private ClubDto addLinksToClub(ClubDto clubDto, Long clubId) throws IOException {
 
       clubDto.add(linkTo(methodOn(ClubController.class).getClubById(clubId)).withSelfRel());
       clubDto.add(linkTo(methodOn(ClubController.class).getEscudo(clubId)).withRel("badge"));
       return clubDto;
-
    }
 
    /**
@@ -168,9 +176,11 @@ public class ClubController {
 
       final Club club = this.clubService.findById(clubId);
       if (club != null) {
-         final ClassPathResource image = new ClassPathResource("/images/clubs/" + club.getImage() + ".png");
+         final ClassPathResource image = new ClassPathResource("/images/clubs/"
+                 + club.getFolderName() + "/" + club.getImage() + ".png");
          try {
-            final InputStreamResource inputStreamResource = new InputStreamResource(image.getInputStream());
+            final InputStreamResource inputStreamResource =
+                    new InputStreamResource(image.getInputStream());
             return ResponseEntity.ok().contentLength(image.contentLength())
                     .contentType(MediaType.IMAGE_PNG).body(inputStreamResource);
 
