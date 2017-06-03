@@ -7,21 +7,6 @@
 </head>
 <body>
 
-<!--<div th:unless="${#lists.isEmpty(clubs)}">-->
-
-<!--<th:block th:each="club : ${clubs}">-->
-
-<!--<tr>-->
-<!--<td th:text="${club.name}"></td>-->
-<!--</tr>-->
-
-<!--<tr>-->
-<!--<td th:text="${club.mascot}">...</td>-->
-<!--</tr>-->
-<!--<br/>-->
-<!--</th:block>-->
-<!--</div>-->
-
 <div class="container">
     <div class="col-md-12">
         <div class="col-md-6 col-md-offset-3">
@@ -46,8 +31,13 @@
                     </div>
 
                     <div class="form-group">
+                        <input type="text" class="form-control" id="height"
+                               th:field="*{height}" placeholder="Altura"/>
+                    </div>
+
+                    <div class="form-group">
                         <input type="text" class="form-control" id="birthDate"
-                               th:field="*{birthDate}" placeholder="Data de nascimento"/>
+                               th:field="*{birthDate}" placeholder="Data de nascimento YYYY/MM/DD"/>
                     </div>
 
                     <div class="form-group">
@@ -55,11 +45,25 @@
                                th:field="*{nationality}" placeholder="Nacionalidade"/>
                     </div>
 
-                    <div  class="form-group">
-                        <select class="form-control" id="bankInput"
+                    <div class="form-group">
+                        <input type="text" class="form-control" id="photo"
+                               th:field="*{photo}" placeholder="Nome do arquivo de imagem"/>
+                    </div>
+
+                    <div class="form-group">
+                        <select class="form-control" id="positionInput"
                                 th:field="*{positionEnum}">
                             <option th:each="position : ${T(brasileirao.api.enums.PositionEnum).values()}"
-                                    th:value="${position}" th:text="${position.positionName}">Bancos
+                                    th:value="${position}" th:text="${position.positionName}">
+                                Posições
+                            </option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <select class="form-control" id="clubInput" th:field="*{actualClubId}">
+                            <option th:each="club : ${clubs}" th:value="${club.id}"
+                                    th:text="${club.name}"> Clubes
                             </option>
                         </select>
                     </div>
@@ -72,7 +76,7 @@
 
                     <div class="form-group">
                         <textarea class="form-control" th:field="*{biography}"
-                                  placeholder="Biografia" maxlength="1000" rows="10">...</textarea>
+                                  placeholder="Biografia" maxlength="100000" rows="10">...</textarea>
                     </div>
 
                     <button type="submit" class="btn btn-primary" id="btn-send">

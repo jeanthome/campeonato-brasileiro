@@ -1,6 +1,13 @@
 package brasileirao.api.dto;
 
+import brasileirao.api.controller.ClubController;
+import brasileirao.api.persistence.Club;
 import org.springframework.hateoas.ResourceSupport;
+
+import java.io.IOException;
+
+import static org.springframework.hateoas.mvc.ControllerLinkBuilder.linkTo;
+import static org.springframework.hateoas.mvc.ControllerLinkBuilder.methodOn;
 
 /***
  * Define a classe DTO para a entidade <i>Club</i> Possui somente os atributos que serão expostos
@@ -54,6 +61,24 @@ public class ClubDto extends ResourceSupport {
 
    public void setAbbreviation(String abbreviation) {
       this.abbreviation = abbreviation;
+   }
+
+
+
+   /**
+    * Adiciona links (self e escudo) no JSON de {@link Club}
+    *
+    * @param clubDto Instância que receberá os links
+    * @param clubId Identificador do clube.
+    * @return Instância de {@link ClubDto} com os links adicionados.
+    * @throws IOException
+    */
+   public ClubDto addLinks(Long clubId) throws IOException {
+
+      this.add(linkTo(methodOn(ClubController.class).getClubById(clubId)).withSelfRel());
+      this.add(linkTo(methodOn(ClubController.class).getEscudo(clubId)).withRel("badge"));
+      this.add(linkTo(methodOn(ClubController.class).getCoachOfClub(clubId)).withRel("coach"));
+      return this;
    }
 
 }

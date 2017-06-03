@@ -25,9 +25,6 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-import static org.springframework.hateoas.mvc.ControllerLinkBuilder.linkTo;
-import static org.springframework.hateoas.mvc.ControllerLinkBuilder.methodOn;
-
 /**
  * Lida com requisições referentes à entidade <i>Club</i>.
  */
@@ -62,8 +59,8 @@ public class ClubController {
       final List<ClubDto> clubDtoList = new ArrayList<>();
       while (clubIterator.hasNext()) {
          final Club club = clubIterator.next();
-         ClubDto clubDto = ConvertHelper.convertClubToDto(club);
-         clubDto = addLinksToClub(clubDto, club.getId());
+         final ClubDto clubDto = ConvertHelper.convertClubToDto(club);
+         clubDto.addLinks(club.getId());
          clubDtoList.add(clubDto);
       }
 
@@ -87,29 +84,13 @@ public class ClubController {
       final Club club = this.clubService.findById(id);
       if (club != null) {
 
-         ClubDto clubDto = ConvertHelper.convertClubToDto(club);
-         clubDto = addLinksToClub(clubDto, club.getId());
-
+         final ClubDto clubDto = ConvertHelper.convertClubToDto(club);
+         clubDto.addLinks(club.getId());
          return new ResponseEntity<>(clubDto, HttpStatus.FOUND);
 
       } else {
          return new ResponseEntity<>("Não encontrado", HttpStatus.NOT_FOUND);
       }
-   }
-
-   /**
-    * Adiciona links (self e escudo) no JSON de {@link Club}
-    *
-    * @param clubDto Instância que receberá os links
-    * @param clubId Identificador do clube.
-    * @return Instância de {@link ClubDto} com os links adicionados.
-    * @throws IOException
-    */
-   private ClubDto addLinksToClub(ClubDto clubDto, Long clubId) throws IOException {
-
-      clubDto.add(linkTo(methodOn(ClubController.class).getClubById(clubId)).withSelfRel());
-      clubDto.add(linkTo(methodOn(ClubController.class).getEscudo(clubId)).withRel("badge"));
-      return clubDto;
    }
 
    /**
@@ -153,25 +134,28 @@ public class ClubController {
    }
 
    @GetMapping(value = "/{clubId}/coach", produces = MediaType.APPLICATION_JSON_VALUE)
-   public ResponseEntity<?> getCoachOfClub(@PathVariable Long clubId) {
+   public ResponseEntity<?> getCoachOfClub(@PathVariable Long clubId) throws IOException {
       final Club club = this.clubService.findById(clubId);
 
       if (club != null) {
 
          final Coach coach = this.coachService.findByActualClub(club);
-         final CoachDto coachDto = ConvertHelper.convertCoachToDto(coach);
 
-         if (coachDto != null) {
+         if (coach != null) {
+            final CoachDto coachDto = ConvertHelper.convertCoachToDto(coach);
+            coachDto.addLinks(club.getId());
             return new ResponseEntity<>(coachDto, HttpStatus.FOUND);
+
          } else {
             return new ResponseEntity<>("Técnico não encontrado.", HttpStatus.NOT_FOUND);
          }
+
       } else {
          return new ResponseEntity<>("Clube não encontrado.", HttpStatus.NOT_FOUND);
       }
    }
 
-   @GetMapping(value = "/{clubId}/escudo", produces = MediaType.APPLICATION_JSON_VALUE)
+   @GetMapping(value = "/{clubId}/badge", produces = MediaType.APPLICATION_JSON_VALUE)
    public ResponseEntity<?> getEscudo(@PathVariable Long clubId) throws IOException {
 
       final Club club = this.clubService.findById(clubId);
@@ -191,5 +175,9 @@ public class ClubController {
          return new ResponseEntity<>("Clube não encontrado", HttpStatus.NOT_FOUND);
       }
    }
+//   private CoachDto addLinksToCoach(CoachDto coachDto, Long clubId ) throws IOException {
+//      coachDto.add( linkTo( methodOn(ClubController.class).getCoachOfClub(clubId)).withSelfRel());
+//      return coachDto;
+//   }
 }
 

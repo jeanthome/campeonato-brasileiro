@@ -1,9 +1,7 @@
 package brasileirao.api.controller;
 
 import brasileirao.api.converter.ConvertHelper;
-import brasileirao.api.dto.ClubDto;
 import brasileirao.api.dto.PlayerDto;
-import brasileirao.api.persistence.Club;
 import brasileirao.api.persistence.Player;
 import brasileirao.api.service.PlayerService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,9 +19,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-
-import static org.springframework.hateoas.mvc.ControllerLinkBuilder.linkTo;
-import static org.springframework.hateoas.mvc.ControllerLinkBuilder.methodOn;
 
 /**
  * Lida com requisições referentes à entidade <i>Player</i>
@@ -53,15 +48,14 @@ public class PlayerController {
 
       while (playerIterator.hasNext()) {
          final Player player = playerIterator.next();
-         PlayerDto playerDto = ConvertHelper.convertPlayerToDto(player);
+         final PlayerDto playerDto = ConvertHelper.convertPlayerToDto(player);
 
          /*Adiciona link para o clube caso o jogador pertença a um.*/
          if (player.getActualClub() != null) {
-            playerDto = addLinksToPlayer(playerDto, player.getId(), player.getActualClub().getId());
+            playerDto.addLinksToPlayer(player.getId(), player.getActualClub().getId());
          } else {
-            playerDto = addLinksToPlayer(playerDto, player.getId());
+            playerDto.addLinks(player.getId());
          }
-
 
          playerDtoList.add(playerDto);
       }
@@ -85,8 +79,15 @@ public class PlayerController {
       final Player player = this.playerService.findById(id);
 
       if (player != null) {
-         PlayerDto playerDto = ConvertHelper.convertPlayerToDto(player);
-         playerDto = addLinksToPlayer(playerDto, player.getId(), player.getActualClub().getId());
+
+         final PlayerDto playerDto = ConvertHelper.convertPlayerToDto(player);
+
+         /*Adiciona link para o clube caso o jogador pertença a um.*/
+         if (player.getActualClub() != null) {
+            playerDto.addLinksToPlayer(player.getId(), player.getActualClub().getId());
+         } else {
+            playerDto.addLinks(player.getId());
+         }
 
          return new ResponseEntity<>(playerDto, HttpStatus.FOUND);
       } else {
@@ -94,7 +95,7 @@ public class PlayerController {
       }
    }
 
-   @GetMapping(value = "/{id}/imagem", produces = MediaType.APPLICATION_JSON_VALUE)
+   @GetMapping(value = "/{id}/image", produces = MediaType.APPLICATION_JSON_VALUE)
    public ResponseEntity<?> getPlayerImage(@PathVariable Long id) {
       final Player player = this.playerService.findById(id);
 
@@ -117,34 +118,6 @@ public class PlayerController {
       }
    }
 
-   /**
-    * Adiciona links (self e escudo) no JSON de {@link Club}
-    *
-    * @param playerDto Instância que receberá os links
-    * @param playerId  Identificador do jogador.
-    * @return Instância de {@link ClubDto} com os links adicionados.
-    * @throws IOException
-    */
-   private PlayerDto addLinksToPlayer(PlayerDto playerDto, Long playerId, Long clubId) throws IOException {
-      playerDto.add(linkTo(methodOn(PlayerController.class).getPlayerById(playerId)).withSelfRel());
-      playerDto.add(linkTo(methodOn(PlayerController.class).getPlayerImage(playerId)).withRel("image"));
-      playerDto.add(linkTo(methodOn(ClubController.class).getClubById(clubId)).withRel("club"));
-      return playerDto;
-   }
-
-   /**
-    * Adiciona links (self e escudo) no JSON de {@link Club}
-    *
-    * @param playerDto Instância que receberá os links
-    * @param playerId  Identificador do jogador.
-    * @return Instância de {@link ClubDto} com os links adicionados.
-    * @throws IOException
-    */
-   private PlayerDto addLinksToPlayer(PlayerDto playerDto, Long playerId) throws IOException {
-      playerDto.add(linkTo(methodOn(PlayerController.class).getPlayerById(playerId)).withSelfRel());
-      playerDto.add(linkTo(methodOn(PlayerController.class).getPlayerImage(playerId)).withRel("image"));
-      return playerDto;
-   }
 
 //   @RequestMapping(value = "players/savePlayers", produces = MediaType.APPLICATION_JSON_VALUE,
 //           method = RequestMethod.POST)

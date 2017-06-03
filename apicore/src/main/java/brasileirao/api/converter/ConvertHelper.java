@@ -75,6 +75,10 @@ public class ConvertHelper {
       position.put("abbreviation", player.getPositionEnum().getAbbreviation());
       playerDto.setPosition(position);
 
+      /*Obtem e setta a idade do jogador*/
+      final Date date = player.getBirthDate();
+      playerDto.setAge(ConvertHelper.convertDateToPeriod(date).getYears());
+
       return playerDto;
    }
 }

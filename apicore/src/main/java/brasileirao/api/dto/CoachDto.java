@@ -1,10 +1,19 @@
 package brasileirao.api.dto;
 
+import brasileirao.api.controller.ClubController;
+import brasileirao.api.controller.CoachController;
+import org.springframework.hateoas.ResourceSupport;
+
+import java.io.IOException;
+
+import static org.springframework.hateoas.mvc.ControllerLinkBuilder.linkTo;
+import static org.springframework.hateoas.mvc.ControllerLinkBuilder.methodOn;
+
 /***
  * Define a classe DTO para a entidade <i>Coach</i> Possui somente os atributos que serão expostos
  * pela API.
  */
-public class CoachDto {
+public class CoachDto extends ResourceSupport{
 
    /***
     * Id do Coach.
@@ -17,18 +26,9 @@ public class CoachDto {
    protected String displayName;
 
    /***
-    * Nome do arquivo com a foto do técnico.
-    */
-   protected String photo;
-
-   /***
     * Idade do tecnico.
     */
    protected Integer age;
-
-   public Long getId() {
-      return id;
-   }
 
    public void setId(Long id) {
       this.id = id;
@@ -42,14 +42,6 @@ public class CoachDto {
       this.displayName = displayName;
    }
 
-   public String getPhoto() {
-      return photo;
-   }
-
-   public void setPhoto(String photo) {
-      this.photo = photo;
-   }
-
    public Integer getAge() {
       return age;
    }
@@ -57,4 +49,13 @@ public class CoachDto {
    public void setAge(Integer age) {
       this.age = age;
    }
+
+   public CoachDto addLinks(/*CoachDto coachDto,*/ Long clubId ) throws IOException {
+      this.add( linkTo( methodOn(CoachController.class).getCoachById(this.id)).withSelfRel());
+      this.add(linkTo(methodOn(CoachController.class).getCoachImage(this.id)).withRel("image"));
+      this.add( linkTo( methodOn(ClubController.class).getClubById(clubId)).withRel("actualClub"));
+      return this;
+   }
+
+
 }

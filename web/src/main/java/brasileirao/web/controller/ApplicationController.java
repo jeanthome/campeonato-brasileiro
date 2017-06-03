@@ -4,6 +4,8 @@ import brasileirao.api.persistence.Club;
 import brasileirao.api.persistence.Player;
 import brasileirao.api.service.ClubService;
 import brasileirao.api.service.PlayerService;
+import brasileirao.web.dto.PlayerRegisterDto;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
@@ -46,28 +48,46 @@ public class ApplicationController {
 
       final Iterable<Club> clubs = this.clubService.findAll();
 
-      modelAndView.addObject(PLAYER, new Player());
+      modelAndView.addObject(PLAYER, new PlayerRegisterDto());
+      modelAndView.addObject("clubs", clubs);
       return modelAndView;
    }
 
    /***
     * Insere um jogador no banco de dados.
     *
-    * @param player Instância do jogador a ser inserido.
+    * @param playerRegisterDto Instância do jogador a ser inserido.
     * @param result Instância que BindResult com informaçÕes dos possíveis erros de bind.
     * @return Instância de <i>ModelAndView</i> com a nova tela.
     */
    @RequestMapping(value = "/insert_player", method = RequestMethod.POST)
-   public ModelAndView insertNewPlayer(@Valid Player player, BindingResult result) {
+   public ModelAndView insertNewPlayer(@Valid PlayerRegisterDto playerRegisterDto, BindingResult result) {
 
       final ModelAndView modelAndView = new ModelAndView("redirect:/form");
       if (result.hasErrors()) {
          return modelAndView;
       } else {
-         this.playerService.save(player);
+         this.playerService.save( this.convertPlayerRegisterDtoDoPlayer(playerRegisterDto) );
       }
 
       modelAndView.addObject(PLAYER, new Player());
       return modelAndView;
+   }
+
+
+   public Player convertPlayerRegisterDtoDoPlayer(PlayerRegisterDto playerRegisterDto) {
+
+      final ModelMapper modelMapper = new ModelMapper();
+      final Player player = modelMapper.map(playerRegisterDto, Player.class);
+
+      if (playerRegisterDto.getActualClubId() != null ){
+         final Club club = this.clubService.findById(playerRegisterDto.getActualClubId());
+         player.setActualClub(club);
+      }
+
+      if (playerRegisterDto.getNationality().length() < 3 ){
+         player.setNationality("Brasileiro");
+      }
+      return player;
    }
 }
