@@ -3,10 +3,13 @@ package brasileirao.api.controller;
 import brasileirao.api.converter.ConvertHelper;
 import brasileirao.api.dto.ClubDto;
 import brasileirao.api.dto.CoachDto;
+import brasileirao.api.dto.PlayerDto;
 import brasileirao.api.persistence.Club;
 import brasileirao.api.persistence.Coach;
+import brasileirao.api.persistence.Player;
 import brasileirao.api.service.ClubService;
 import brasileirao.api.service.CoachService;
+import brasileirao.api.service.PlayerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.InputStreamResource;
@@ -43,6 +46,12 @@ public class ClubController {
     */
    @Autowired
    private CoachService coachService;
+
+   /***
+    * Instância da classe de serviços da entidade {@link brasileirao.api.persistence.Player}
+    */
+   @Autowired
+   private PlayerService playerService;
 
    /**
     * Retorna JSON com todos os clubes cadastrados no banco.
@@ -153,6 +162,21 @@ public class ClubController {
       } else {
          return new ResponseEntity<>("Clube não encontrado.", HttpStatus.NOT_FOUND);
       }
+   }
+
+   @GetMapping(value = "/{clubId}/players", produces = MediaType.APPLICATION_JSON_VALUE)
+   public ResponseEntity<?> getPlayers(@PathVariable Long clubId) throws IOException {
+
+      final Club club = this.clubService.findById(clubId);
+      final List<PlayerDto> playerDtoList = new ArrayList<>();
+
+      for (Player player : club.getPlayerList()) {
+
+         final PlayerDto playerDto = ConvertHelper.convertPlayerToDto( player );
+         playerDto.addLinksToPlayer(player.getId(), clubId);
+         playerDtoList.add(playerDto);
+      }
+      return new ResponseEntity<Object>(playerDtoList, HttpStatus.FOUND);
    }
 
    @GetMapping(value = "/{clubId}/badge", produces = MediaType.APPLICATION_JSON_VALUE)

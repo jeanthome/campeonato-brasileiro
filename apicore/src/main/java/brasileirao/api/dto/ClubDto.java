@@ -10,7 +10,7 @@ import static org.springframework.hateoas.mvc.ControllerLinkBuilder.linkTo;
 import static org.springframework.hateoas.mvc.ControllerLinkBuilder.methodOn;
 
 /***
- * Define a classe DTO para a entidade <i>Club</i> Possui somente os atributos que serão expostos
+ * Define a classe DTO para a entidade <i>Club</i>. Possui somente os atributos que serão expostos
  * pela API.
  */
 public class ClubDto extends ResourceSupport {
@@ -64,11 +64,9 @@ public class ClubDto extends ResourceSupport {
    }
 
 
-
    /**
     * Adiciona links (self e escudo) no JSON de {@link Club}
     *
-    * @param clubDto Instância que receberá os links
     * @param clubId Identificador do clube.
     * @return Instância de {@link ClubDto} com os links adicionados.
     * @throws IOException
@@ -78,6 +76,7 @@ public class ClubDto extends ResourceSupport {
       this.add(linkTo(methodOn(ClubController.class).getClubById(clubId)).withSelfRel());
       this.add(linkTo(methodOn(ClubController.class).getEscudo(clubId)).withRel("badge"));
       this.add(linkTo(methodOn(ClubController.class).getCoachOfClub(clubId)).withRel("coach"));
+      this.add(linkTo(methodOn(ClubController.class).getPlayers(clubId)).withRel("players"));
       return this;
    }
 

@@ -77,8 +77,8 @@ public class PlayerDto extends ResourceSupport {
    /**
     * Adiciona links (self, image e acualClub) no JSON de {@link PlayerDto}
     *
-    * @param playerId  Identificador do jogador.
-    * @param clubId Identificador do club ao qual o jogador pertence.
+    * @param playerId Identificador do jogador.
+    * @param clubId   Identificador do club ao qual o jogador pertence.
     * @return Instância de {@link ClubDto} com os links adicionados.
     * @throws IOException Exceção lançada no método GetPlayerImage.
     */
@@ -92,7 +92,7 @@ public class PlayerDto extends ResourceSupport {
    /**
     * Adiciona links (self e image) no JSON de {@link Club}
     *
-    * @param playerId  Identificador do jogador.
+    * @param playerId Identificador do jogador.
     * @return Instância de {@link ClubDto} com os links adicionados.
     * @throws IOException Exceção lançada no método GetPlayerImage
     */

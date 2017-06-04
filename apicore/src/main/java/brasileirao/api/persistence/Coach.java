@@ -47,4 +47,6 @@ public class Coach extends Person {
    public void setClubList(List<Club> clubList) {
       this.clubList = clubList;
    }
+
+
 }
