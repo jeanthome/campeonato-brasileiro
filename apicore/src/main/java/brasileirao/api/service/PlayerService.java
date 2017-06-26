@@ -1,5 +1,6 @@
 package brasileirao.api.service;
 
+import brasileirao.api.dto.PlayerDto;
 import brasileirao.api.persistence.Player;
 
 /**
@@ -38,4 +39,12 @@ public interface PlayerService {
     * @return Iterable com a lista de jogadores.
     */
    Iterable<Player> findAll();
+
+   /**
+    * Converte uma instância de {@link Player} ao seu respectivo DTO.
+    *
+    * @param player Instância da classe {@link Player}, que será convertida em DTO.
+    * @return Instância de {@link PlayerDto}
+    */
+   PlayerDto convertPlayerToDto(Player player);
 }

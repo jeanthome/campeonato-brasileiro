@@ -68,7 +68,7 @@ public class ClubController {
       final List<ClubDto> clubDtoList = new ArrayList<>();
       while (clubIterator.hasNext()) {
          final Club club = clubIterator.next();
-         final ClubDto clubDto = ConvertHelper.convertClubToDto(club);
+         final ClubDto clubDto = this.clubService.convertClubToDto(club);
          clubDto.addLinks(club.getId());
          clubDtoList.add(clubDto);
       }
@@ -93,7 +93,7 @@ public class ClubController {
       final Club club = this.clubService.findById(id);
       if (club != null) {
 
-         final ClubDto clubDto = ConvertHelper.convertClubToDto(club);
+         final ClubDto clubDto = this.clubService.convertClubToDto(club);
          clubDto.addLinks(club.getId());
          return new ResponseEntity<>(clubDto, HttpStatus.FOUND);
 
@@ -136,7 +136,7 @@ public class ClubController {
       if (club != null) {
          coach.setActualClub(club);
          this.coachService.save(coach);
-         return new ResponseEntity<>(ConvertHelper.convertCoachToDto(coach), HttpStatus.CREATED);
+         return new ResponseEntity<>(this.coachService.convertCoachToDto(coach), HttpStatus.CREATED);
       } else {
          return new ResponseEntity<>("Clube não encontrado", HttpStatus.NOT_FOUND);
       }
@@ -151,7 +151,7 @@ public class ClubController {
          final Coach coach = this.coachService.findByActualClub(club);
 
          if (coach != null) {
-            final CoachDto coachDto = ConvertHelper.convertCoachToDto(coach);
+            final CoachDto coachDto = this.coachService.convertCoachToDto(coach);
             coachDto.addLinks(club.getId());
             return new ResponseEntity<>(coachDto, HttpStatus.FOUND);
 
@@ -179,11 +179,14 @@ public class ClubController {
       return new ResponseEntity<Object>(playerDtoList, HttpStatus.FOUND);
    }
 
+
    @GetMapping(value = "/{clubId}/badge", produces = MediaType.APPLICATION_JSON_VALUE)
    public ResponseEntity<?> getEscudo(@PathVariable Long clubId) throws IOException {
 
       final Club club = this.clubService.findById(clubId);
       if (club != null) {
+
+         //TODO Mover para a classe de servico.
          final ClassPathResource image = new ClassPathResource("/images/clubs/"
                  + club.getFolderName() + "/" + club.getImage() + ".png");
          try {
@@ -203,5 +206,7 @@ public class ClubController {
 //      coachDto.add( linkTo( methodOn(ClubController.class).getCoachOfClub(clubId)).withSelfRel());
 //      return coachDto;
 //   }
+
+
 }
 

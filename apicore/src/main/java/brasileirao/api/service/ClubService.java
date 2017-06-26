@@ -1,5 +1,6 @@
 package brasileirao.api.service;
 
+import brasileirao.api.dto.ClubDto;
 import brasileirao.api.persistence.Club;
 
 /**
@@ -29,4 +30,14 @@ public interface ClubService {
     * @return Iterable com a lista de clubes.
     */
    Iterable<Club> findAll();
+
+   /**
+    * Converte uma instância de <i>Club</i> ao seu respectivo DTO.
+    *
+    * @param club Instância da classe <i>Club</i>, que será convertida em DTO.
+    * @return Instância de <i>ClubDto</i>
+    */
+   ClubDto convertClubToDto(Club club);
+
+
 }

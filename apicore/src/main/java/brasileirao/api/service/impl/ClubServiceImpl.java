@@ -1,8 +1,10 @@
 package brasileirao.api.service.impl;
 
 import brasileirao.api.dao.ClubDao;
+import brasileirao.api.dto.ClubDto;
 import brasileirao.api.persistence.Club;
 import brasileirao.api.service.ClubService;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -49,5 +51,18 @@ public class ClubServiceImpl implements ClubService {
    @Override
    public Iterable<Club> findAll() {
       return clubDao.findAll();
+   }
+
+   /**
+    * Converte uma instância de <i>Club</i> ao seu respectivo DTO.
+    *
+    * @param club Instância da classe <i>Club</i>, que será convertida em DTO.
+    * @return Instância de <i>ClubDto</i>
+    */
+   @Override
+   public ClubDto convertClubToDto(Club club) {
+      final ModelMapper modelMapper = new ModelMapper();
+      final ClubDto clubDto = modelMapper.map(club, ClubDto.class);
+      return clubDto;
    }
 }

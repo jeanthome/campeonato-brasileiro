@@ -37,6 +37,7 @@ public class CoachController {
     * Retorna JSON com todos os técnicos cadastrados no banco.
     *
     * @return ResponseEntity Objeto com detalhes da requisição HTTP, como o Status.
+    * @throws IOException Exceçao
     */
    @GetMapping(value = "/coaches", produces = MediaType.APPLICATION_JSON_VALUE)
    public ResponseEntity<?> getAllCoaches() throws IOException {
@@ -47,7 +48,7 @@ public class CoachController {
       final List<CoachDto> coachDtoList = new ArrayList<>();
       while (coachIterator.hasNext()) {
          final Coach coach = coachIterator.next();
-         final CoachDto coachDto = ConvertHelper.convertCoachToDto(coach);
+         final CoachDto coachDto = this.coachService.convertCoachToDto(coach);
          coachDto.addLinks(coach.getId());
          coachDtoList.add(coachDto);
       }
@@ -71,7 +72,7 @@ public class CoachController {
       final Coach coach = this.coachService.findById(id);
 
       if (coach != null) {
-         final CoachDto coachDto = ConvertHelper.convertCoachToDto(coach);
+         final CoachDto coachDto = this.coachService.convertCoachToDto(coach);
          coachDto.addLinks(coach.getActualClub().getId());
          return new ResponseEntity<>(coachDto, HttpStatus.FOUND);
       } else {
@@ -108,7 +109,6 @@ public class CoachController {
          return new ResponseEntity<>("Coach não encontrado.", HttpStatus.NOT_FOUND);
       }
    }
-
 
    /**
     * Persiste uma instância da classe <i>Coach</i> no banco. A instância recebida deve possuir o

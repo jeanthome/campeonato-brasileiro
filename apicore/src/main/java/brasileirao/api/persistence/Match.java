@@ -80,7 +80,6 @@ public class Match {
    /**
     * Lista de jogadores titulares.
     */
-   //@NotNull
    @OneToMany
    @JoinTable(name = "MATCH_STARTING_PLAYER", joinColumns = {@JoinColumn(name = "MATCH_ID")},
            inverseJoinColumns = {@JoinColumn(name = "PLAYER_ID")})
@@ -89,7 +88,6 @@ public class Match {
    /**
     * Lista de jogadores reservas.
     */
-   //@NotNull
    @OneToMany
    @JoinTable(name = "MATCH_SUBSTITUTE_PLAYER", joinColumns = {@JoinColumn(name = "MATCH_ID")},
            inverseJoinColumns = {@JoinColumn(name = "PLAYER_ID")})

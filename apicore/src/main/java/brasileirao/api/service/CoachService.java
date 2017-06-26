@@ -1,5 +1,6 @@
 package brasileirao.api.service;
 
+import brasileirao.api.dto.CoachDto;
 import brasileirao.api.persistence.Club;
 import brasileirao.api.persistence.Coach;
 
@@ -39,4 +40,12 @@ public interface CoachService {
     * @return Instância do técnico encontrado. <i>null</i> caso o técnico não seja encontrado.
     */
    Coach findByActualClub(Club club);
+
+   /**
+    * Converte uma instância de <i>Coach</i> ao seu respectivo DTO.
+    *
+    * @param coach Instância da classe <i>Coach</i>, que será convertida em DTO.
+    * @return Instância de <i>ClubDto</i>
+    */
+   CoachDto convertCoachToDto(Coach coach);
 }

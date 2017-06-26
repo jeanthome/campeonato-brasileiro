@@ -1,11 +1,16 @@
 package brasileirao.api.service.impl;
 
+import brasileirao.api.converter.ConvertHelper;
 import brasileirao.api.dao.CoachDao;
+import brasileirao.api.dto.CoachDto;
 import brasileirao.api.persistence.Club;
 import brasileirao.api.persistence.Coach;
 import brasileirao.api.service.CoachService;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.Date;
 
 /**
  * Implementação da classe de serviços da entidade <i>Coach</i>.
@@ -62,5 +67,22 @@ public class CoachServiceImpl implements CoachService {
     */
    public Coach findByActualClub(Club club) {
       return this.coachDao.findByActualClub(club);
+   }
+
+   /**
+    * Converte uma instância de <i>Coach</i> ao seu respectivo DTO.
+    *
+    * @param coach Instância da classe <i>Coach</i>, que será convertida em DTO.
+    * @return Instância de <i>ClubDto</i>
+    */
+   @Override
+   public CoachDto convertCoachToDto(Coach coach) {
+      final ModelMapper modelMapper = new ModelMapper();
+      final CoachDto coachDto = modelMapper.map(coach, CoachDto.class);
+
+      /*Obtem e setta a idade do técnico.*/
+      final Date date = coach.getBirthDate();
+      coachDto.setAge(ConvertHelper.convertDateToPeriod(date).getYears());
+      return coachDto;
    }
 }

@@ -59,7 +59,6 @@ public abstract class Person {
    /**
     * Nacionalidade da pessoa.
     */
-   @NotNull
    @Column(name = "NATIONALITY")
    protected String nationality;
 

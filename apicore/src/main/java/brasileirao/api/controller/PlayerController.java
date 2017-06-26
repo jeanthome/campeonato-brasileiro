@@ -48,7 +48,7 @@ public class PlayerController {
 
       while (playerIterator.hasNext()) {
          final Player player = playerIterator.next();
-         final PlayerDto playerDto = ConvertHelper.convertPlayerToDto(player);
+         final PlayerDto playerDto = this.playerService.convertPlayerToDto(player);
 
          /*Adiciona link para o clube caso o jogador pertença a um.*/
          if (player.getActualClub() != null) {
@@ -80,7 +80,7 @@ public class PlayerController {
 
       if (player != null) {
 
-         final PlayerDto playerDto = ConvertHelper.convertPlayerToDto(player);
+         final PlayerDto playerDto = this.playerService.convertPlayerToDto(player);
 
          /*Adiciona link para o clube caso o jogador pertença a um.*/
          if (player.getActualClub() != null) {
@@ -117,25 +117,4 @@ public class PlayerController {
          return new ResponseEntity<>("Jogador não encontrado.", HttpStatus.NOT_FOUND);
       }
    }
-
-
-//   @RequestMapping(value = "players/savePlayers", produces = MediaType.APPLICATION_JSON_VALUE,
-//           method = RequestMethod.POST)
-//   public Player saveListOfPlayers(@RequestBody List<Player> players) {
-//
-//      for (Player player : players) {
-//         playerService.save(player);
-//      }
-//      return playerService.findByDisplayName("Guerrero");
-//   }
-//
-//   @RequestMapping(value = "player/savePlayer", produces = MediaType.APPLICATION_JSON_VALUE,
-//           method = RequestMethod.POST)
-//   public Player saveListOfPlayers(@RequestBody Player player) {
-//
-//      this.playerService.save(player);
-//
-//      return playerService.findByDisplayName("Guerrero");
-//   }
-
 }

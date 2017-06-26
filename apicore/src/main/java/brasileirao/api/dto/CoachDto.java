@@ -50,10 +50,19 @@ public class CoachDto extends ResourceSupport{
       this.age = age;
    }
 
-   public CoachDto addLinks(/*CoachDto coachDto,*/ Long clubId ) throws IOException {
-      this.add( linkTo( methodOn(CoachController.class).getCoachById(this.id)).withSelfRel());
+   /**
+    * Adiciona os devidos links ao DTO de {@link brasileirao.api.persistence.Coach}
+    * @param clubId Id do clube no qual o Coach trabalha.
+    * @return DTO com os links adicionados.
+    * @throws IOException Excecao
+    */
+   public CoachDto addLinks(Long clubId ) throws IOException {
+      this.add(linkTo( methodOn(CoachController.class).getCoachById(this.id)).withSelfRel());
       this.add(linkTo(methodOn(CoachController.class).getCoachImage(this.id)).withRel("image"));
-      this.add( linkTo( methodOn(ClubController.class).getClubById(clubId)).withRel("actualClub"));
+
+      if (clubId != null ){
+         this.add( linkTo( methodOn(ClubController.class).getClubById(clubId)).withRel("actualClub"));
+      }
       return this;
    }
 
