@@ -1,0 +1,69 @@
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <link rel="stylesheet" href="webjars/bootstrap/3.3.7-1/css/bootstrap.min.css"
+          th:href="@{webjars/bootstrap/3.3.7-1/css/bootstrap.min.css}"/>
+    <link rel="stylesheet" href="webjars/bootstrap/3.3.7-1/css/bo.min.css"
+          th:href="@{webjars/bootstrap/3.3.7-1/css/bootstrap.min.css}"/>
+</head>
+<body>
+
+<div class="container">
+    <div class="col-md-12">
+        <div class="col-md-8 col-md-offset-2">
+            <div class="form-area">
+                <form th:action="@{/insert_match}" th:object="${match}" method="post">
+                    <br style="clear:both">
+                    <h3 style="margin-bottom: 25px; text-align: center;">Cadastro de Partida</h3>
+
+                    <div class="form-group col-md-2">
+                        <input type="number" class="form-control" id="roundNumber"
+                               th:field="*{roundNumber}"/>
+                    </div>
+
+                    <div class="form-group col-md-4">
+                        <input type="datetime" class="form-control" id="kickOff"
+                               th:field="*{kickOff}" placeholder="Data YYYY/MM/DD HH:MM"/>
+                    </div>
+
+                    <div class="form-group col-md-6">
+                        <select class="form-control" id="stadiumInput"
+                                th:field="*{stadiumEnum}">
+                            <option th:each="stadium : ${T(brasileirao.api.enums.StadiumEnum).values()}"
+                                    th:value="${stadium}" th:text="${stadium.name}">
+                                Estádios
+                            </option>
+                        </select>
+                    </div>
+
+                    <div class="form-group col-md-6">
+                        <select class="form-control" id="clubInput" th:field="*{homeClub}" placeholder="Clube mandante">
+                            <option th:each="club : ${clubs}" th:value="${club.id}"
+                                    th:text="${club.name}"> Clubes
+                            </option>
+                        </select>
+                    </div>
+
+                    <div class="form-group col-md-6">
+                        <select class="form-control" id="clubInput" th:field="*{visitorClub}" placeholder="Clube visitante">
+                            <option th:each="club : ${clubs}" th:value="${club.id}"
+                                    th:text="${club.name}"> Clubes
+                            </option>
+                        </select>
+                    </div>
+
+                    <div class="form-group col-md-6">
+                        <button type="submit" class="btn btn-primary" id="btn-send">
+                            CADASTRAR
+                        </button>
+                    </div>
+                    </br>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="webjars/jquery/2.1.4/jquery.min.js"></script>
+<script src="form.js"></script>
+</body>
+</html>
