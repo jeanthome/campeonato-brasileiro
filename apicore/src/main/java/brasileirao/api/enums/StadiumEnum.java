@@ -98,7 +98,28 @@ public enum StadiumEnum {
    /**
     * Vila Belmiro
     */
-   VILA_BELMIRO("Vila Belmiro");
+   VILA_BELMIRO("Vila Belmiro"),
+
+   /**
+    * Ilha do Urubu.
+    */
+   ILHA_DO_URUBU("Ilha do Urubu"),
+
+   /**
+    * Pacaembu.
+    */
+   PACAEMBU("Pacaembu"),
+
+   /**
+    * Estádio Olímpico.
+    */
+   ESTADIO_OLIMPICO("Estádio Olímpico"),
+
+   /**
+    * Barradão.
+    */
+   BARRADAO("Barradão");
+
 
    /**
     * O nome do estádio.

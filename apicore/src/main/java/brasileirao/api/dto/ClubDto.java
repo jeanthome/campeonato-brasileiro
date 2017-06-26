@@ -9,7 +9,7 @@ import java.io.IOException;
 import static org.springframework.hateoas.mvc.ControllerLinkBuilder.linkTo;
 import static org.springframework.hateoas.mvc.ControllerLinkBuilder.methodOn;
 
-/***
+/**
  * Define a classe DTO para a entidade <i>Club</i>. Possui somente os atributos que serão expostos
  * pela API.
  */
