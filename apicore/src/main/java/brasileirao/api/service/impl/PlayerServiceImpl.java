@@ -1,8 +1,8 @@
 package brasileirao.api.service.impl;
 
-import brasileirao.api.converter.ConvertHelper;
 import brasileirao.api.dao.PlayerDao;
 import brasileirao.api.dto.PlayerDto;
+import brasileirao.api.helper.DateHelper;
 import brasileirao.api.persistence.Player;
 import brasileirao.api.service.PlayerService;
 import org.modelmapper.ModelMapper;
@@ -68,7 +68,7 @@ public class PlayerServiceImpl implements PlayerService {
 
       /*Obtem e setta a idade do jogador*/
       final Date date = player.getBirthDate();
-      playerDto.setAge(ConvertHelper.convertDateToPeriod(date).getYears());
+      playerDto.setAge(DateHelper.convertDateToPeriod(date).getYears());
 
       return playerDto;
    }

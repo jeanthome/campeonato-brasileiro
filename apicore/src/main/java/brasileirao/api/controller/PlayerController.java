@@ -1,6 +1,5 @@
 package brasileirao.api.controller;
 
-import brasileirao.api.converter.ConvertHelper;
 import brasileirao.api.dto.PlayerDto;
 import brasileirao.api.persistence.Player;
 import brasileirao.api.service.PlayerService;
@@ -112,7 +111,6 @@ public class PlayerController {
          } catch (IOException e) {
             return new ResponseEntity<>(e, HttpStatus.NOT_FOUND);
          }
-
       } else {
          return new ResponseEntity<>("Jogador não encontrado.", HttpStatus.NOT_FOUND);
       }

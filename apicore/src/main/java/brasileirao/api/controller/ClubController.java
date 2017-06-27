@@ -1,6 +1,5 @@
 package brasileirao.api.controller;
 
-import brasileirao.api.converter.ConvertHelper;
 import brasileirao.api.dto.ClubDto;
 import brasileirao.api.dto.CoachDto;
 import brasileirao.api.dto.PlayerDto;
@@ -172,16 +171,15 @@ public class ClubController {
 
       for (Player player : club.getPlayerList()) {
 
-         final PlayerDto playerDto = ConvertHelper.convertPlayerToDto( player );
+         final PlayerDto playerDto = this.playerService.convertPlayerToDto(player);
          playerDto.addLinksToPlayer(player.getId(), clubId);
          playerDtoList.add(playerDto);
       }
       return new ResponseEntity<Object>(playerDtoList, HttpStatus.FOUND);
    }
 
-
    @GetMapping(value = "/{clubId}/badge", produces = MediaType.APPLICATION_JSON_VALUE)
-   public ResponseEntity<?> getEscudo(@PathVariable Long clubId) throws IOException {
+   public ResponseEntity<?> getBadge(@PathVariable Long clubId) throws IOException {
 
       final Club club = this.clubService.findById(clubId);
       if (club != null) {
@@ -202,11 +200,6 @@ public class ClubController {
          return new ResponseEntity<>("Clube não encontrado", HttpStatus.NOT_FOUND);
       }
    }
-//   private CoachDto addLinksToCoach(CoachDto coachDto, Long clubId ) throws IOException {
-//      coachDto.add( linkTo( methodOn(ClubController.class).getCoachOfClub(clubId)).withSelfRel());
-//      return coachDto;
-//   }
-
 
 }
 

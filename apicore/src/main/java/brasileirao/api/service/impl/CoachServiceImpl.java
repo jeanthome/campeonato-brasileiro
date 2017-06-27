@@ -1,8 +1,8 @@
 package brasileirao.api.service.impl;
 
-import brasileirao.api.converter.ConvertHelper;
 import brasileirao.api.dao.CoachDao;
 import brasileirao.api.dto.CoachDto;
+import brasileirao.api.helper.DateHelper;
 import brasileirao.api.persistence.Club;
 import brasileirao.api.persistence.Coach;
 import brasileirao.api.service.CoachService;
@@ -82,7 +82,7 @@ public class CoachServiceImpl implements CoachService {
 
       /*Obtem e setta a idade do técnico.*/
       final Date date = coach.getBirthDate();
-      coachDto.setAge(ConvertHelper.convertDateToPeriod(date).getYears());
+      coachDto.setAge(DateHelper.convertDateToPeriod(date).getYears());
       return coachDto;
    }
 }

@@ -1,6 +1,5 @@
 package brasileirao.api.controller;
 
-import brasileirao.api.converter.ConvertHelper;
 import brasileirao.api.dto.CoachDto;
 import brasileirao.api.persistence.Coach;
 import brasileirao.api.service.CoachService;
@@ -104,7 +103,6 @@ public class CoachController {
          } catch (IOException e) {
             return new ResponseEntity<>(e, HttpStatus.NOT_FOUND);
          }
-
       } else {
          return new ResponseEntity<>("Coach não encontrado.", HttpStatus.NOT_FOUND);
       }

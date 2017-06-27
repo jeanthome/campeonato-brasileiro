@@ -43,14 +43,6 @@ public class Player extends Person {
    private Club actualClub;
 
    /**
-    * Lista de clubes pelos quais o jogador já passou.
-    */
-   @ManyToMany(fetch = FetchType.LAZY)
-   @JoinTable(name = "PLAYER_CLUB", joinColumns = {@JoinColumn(name = "PLAYER_ID")},
-           inverseJoinColumns = {@JoinColumn(name = "CLUB_ID")})
-   private List<Club> clubList;
-
-   /**
     * Contrutor vazio, usado nos testes unitários.
     */
    public Player() {
@@ -78,14 +70,6 @@ public class Player extends Person {
 
    public void setActualClub(Club actualClub) {
       this.actualClub = actualClub;
-   }
-
-   public List<Club> getClubList() {
-      return clubList;
-   }
-
-   public void setClubList(List<Club> clubList) {
-      this.clubList = clubList;
    }
 
 }

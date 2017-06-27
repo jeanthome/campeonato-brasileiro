@@ -21,16 +21,7 @@ public class Coach extends Person {
     */
    @OneToOne
    @JoinColumn(name = "CLUB_ID")
-
    private Club actualClub;
-
-   /**
-    * Lista de clubes pelos quais o técnico já passou.
-    */
-   @ManyToMany(fetch = FetchType.LAZY)
-   @JoinTable(name = "COACH_CLUB", joinColumns = {@JoinColumn(name = "COACH_ID")},
-           inverseJoinColumns = {@JoinColumn(name = "CLUB_ID")})
-   private List<Club> clubList;
 
    public Club getActualClub() {
       return actualClub;
@@ -39,14 +30,5 @@ public class Coach extends Person {
    public void setActualClub(Club actualClub) {
       this.actualClub = actualClub;
    }
-
-   public List<Club> getClubList() {
-      return clubList;
-   }
-
-   public void setClubList(List<Club> clubList) {
-      this.clubList = clubList;
-   }
-
 
 }

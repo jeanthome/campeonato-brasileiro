@@ -45,6 +45,7 @@ public class Match {
     */
    @NotNull
    @ManyToOne(fetch = FetchType.LAZY)
+   @JoinColumn(name = "HOME_CLUB_ID")
    private Club homeClub;
 
    /**
@@ -52,6 +53,7 @@ public class Match {
     */
    @NotNull
    @ManyToOne(fetch = FetchType.LAZY)
+   @JoinColumn(name = "VISITOR_CLUB_ID")
    private Club visitorClub;
 
    /**
@@ -78,28 +80,52 @@ public class Match {
    private StadiumEnum stadiumEnum;
 
    /**
-    * Lista de jogadores titulares.
+    * Lista de jogadores titulares do clube mandante.
     */
    @OneToMany
-   @JoinTable(name = "MATCH_STARTING_PLAYER", joinColumns = {@JoinColumn(name = "MATCH_ID")},
+   @JoinTable(name = "MATCH_HOME_STARTING_PLAYER", joinColumns = {@JoinColumn(name = "MATCH_ID")},
            inverseJoinColumns = {@JoinColumn(name = "PLAYER_ID")})
-   private List<Player> startingPlayers;
+   private List<Player> homeClubStartingPlayers;
 
    /**
-    * Lista de jogadores reservas.
+    * Lista de jogadores titulares do clube visitante.
     */
    @OneToMany
-   @JoinTable(name = "MATCH_SUBSTITUTE_PLAYER", joinColumns = {@JoinColumn(name = "MATCH_ID")},
+   @JoinTable(name = "MATCH_VISITOR_STARTING_PLAYER", joinColumns = {@JoinColumn(name = "MATCH_ID")},
            inverseJoinColumns = {@JoinColumn(name = "PLAYER_ID")})
-   private List<Player> substitutePlayers;
+   private List<Player> visitorClubStartingPlayers;
 
    /**
-    * Lista de cartões da partida.
+    * Lista de jogadores reservas do clube mandante.
     */
-   @JoinTable(name = "MATCH_CARD", joinColumns = {@JoinColumn(name = "MATCH_ID")},
+   @OneToMany
+   @JoinTable(name = "MATCH_HOME_SUBSTITUTE_PLAYER", joinColumns = {@JoinColumn(name = "MATCH_ID")},
+           inverseJoinColumns = {@JoinColumn(name = "PLAYER_ID")})
+   private List<Player> homeClubSubstitutePlayers;
+
+   /**
+    * Lista de jogadores reservas do clube visitante.
+    */
+   @OneToMany
+   @JoinTable(name = "MATCH_VISITOR_SUBSTITUTE_PLAYER", joinColumns = {@JoinColumn(name = "MATCH_ID")},
+           inverseJoinColumns = {@JoinColumn(name = "PLAYER_ID")})
+   private List<Player> visitorClubSubstitutePlayers;
+
+   /**
+    * Lista de cartões da equipe mandante.
+    */
+   @JoinTable(name = "MATCH_HOME_CARD", joinColumns = {@JoinColumn(name = "MATCH_ID")},
            inverseJoinColumns = {@JoinColumn(name = "CARD_ID")})
    @OneToMany
-   private List<Card> cardList;
+   private List<Card> homeClubCardList;
+
+   /**
+    * Lista de cartões da equipe visitante.
+    */
+   @JoinTable(name = "MATCH_VISITOR_CARD", joinColumns = {@JoinColumn(name = "MATCH_ID")},
+           inverseJoinColumns = {@JoinColumn(name = "CARD_ID")})
+   @OneToMany
+   private List<Card> visitorClubCardList;
 
    /**
     * Data da partida
@@ -164,28 +190,52 @@ public class Match {
       this.visitorGoals = visitorGoals;
    }
 
-   public List<Player> getStartingPlayers() {
-      return startingPlayers;
+   public List<Player> getHomeClubStartingPlayers() {
+      return homeClubStartingPlayers;
    }
 
-   public void setStartingPlayers(List<Player> startingPlayers) {
-      this.startingPlayers = startingPlayers;
+   public void setHomeClubStartingPlayers(List<Player> homeClubStartingPlayers) {
+      this.homeClubStartingPlayers = homeClubStartingPlayers;
    }
 
-   public List<Player> getSubstitutePlayers() {
-      return substitutePlayers;
+   public List<Player> getVisitorClubStartingPlayers() {
+      return visitorClubStartingPlayers;
    }
 
-   public void setSubstitutePlayers(List<Player> substitutePlayers) {
-      this.substitutePlayers = substitutePlayers;
+   public void setVisitorClubStartingPlayers(List<Player> visitorClubStartingPlayers) {
+      this.visitorClubStartingPlayers = visitorClubStartingPlayers;
    }
 
-   public List<Card> getCardList() {
-      return cardList;
+   public List<Player> getHomeClubSubstitutePlayers() {
+      return homeClubSubstitutePlayers;
    }
 
-   public void setCardList(List<Card> cardList) {
-      this.cardList = cardList;
+   public void setHomeClubSubstitutePlayers(List<Player> homeClubSubstitutePlayers) {
+      this.homeClubSubstitutePlayers = homeClubSubstitutePlayers;
+   }
+
+   public List<Player> getVisitorClubSubstitutePlayers() {
+      return visitorClubSubstitutePlayers;
+   }
+
+   public void setVisitorClubSubstitutePlayers(List<Player> visitorClubSubstitutePlayers) {
+      this.visitorClubSubstitutePlayers = visitorClubSubstitutePlayers;
+   }
+
+   public List<Card> getHomeClubCardList() {
+      return homeClubCardList;
+   }
+
+   public void setHomeClubCardList(List<Card> homeClubCardList) {
+      this.homeClubCardList = homeClubCardList;
+   }
+
+   public List<Card> getVisitorClubCardList() {
+      return visitorClubCardList;
+   }
+
+   public void setVisitorClubCardList(List<Card> visitorClubCardList) {
+      this.visitorClubCardList = visitorClubCardList;
    }
 
    public Date getKickOff() {

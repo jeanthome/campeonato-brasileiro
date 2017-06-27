@@ -74,7 +74,7 @@ public class ClubDto extends ResourceSupport {
    public ClubDto addLinks(Long clubId) throws IOException {
 
       this.add(linkTo(methodOn(ClubController.class).getClubById(clubId)).withSelfRel());
-      this.add(linkTo(methodOn(ClubController.class).getEscudo(clubId)).withRel("badge"));
+      this.add(linkTo(methodOn(ClubController.class).getBadge(clubId)).withRel("badge"));
       this.add(linkTo(methodOn(ClubController.class).getCoachOfClub(clubId)).withRel("coach"));
       this.add(linkTo(methodOn(ClubController.class).getPlayers(clubId)).withRel("players"));
       return this;

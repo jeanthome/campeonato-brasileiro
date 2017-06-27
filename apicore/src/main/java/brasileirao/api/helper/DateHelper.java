@@ -1,4 +1,4 @@
-package brasileirao.api.converter;
+package brasileirao.api.helper;
 
 import java.time.LocalDate;
 import java.time.Period;
@@ -6,9 +6,9 @@ import java.time.ZoneId;
 import java.util.Date;
 
 /**
- * Classe utilitaria a ser usada para conversoes pontuais.
+ * Classe utilitaria a ser usada para conversoes (DTO, Date).
  */
-public class ConvertHelper {
+public class DateHelper {
 
    /**
     * Converte um <i>Date</i> (usado em birthDate ) para  <i>Period</i>. Isso facilita o calculo da

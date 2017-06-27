@@ -48,7 +48,6 @@ public abstract class Person {
    @Column(name = "TWITTER")
    protected String twitter;
 
-
    /**
     * Data de nascimento.
     */
