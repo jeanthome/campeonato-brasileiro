@@ -18,7 +18,7 @@ public class ClubDto extends ResourceSupport {
    /***
     * Id do clube.
     */
-   private Long id;
+   private Long identificator;
 
    /***
     * Nome completo do clube.
@@ -35,8 +35,12 @@ public class ClubDto extends ResourceSupport {
     */
    private String abbreviation;
 
-   public void setId(Long id) {
-      this.id = id;
+   public Long getIdentificator() {
+      return identificator;
+   }
+
+   public void setIdentificator(Long identificator) {
+      this.identificator = identificator;
    }
 
    public String getFullName() {

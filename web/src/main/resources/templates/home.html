@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<!--<html xmlns:th="http://www.thymeleaf.org">-->
+<html lang="en" xmlns:th="http://www.springframework.org/schema/mvc">
+<head>
+    <link rel="stylesheet" href="webjars/bootstrap/3.3.7-1/css/bootstrap.min.css"
+          th:href="@{webjars/bootstrap/3.3.7-1/css/bootstrap.min.css}"/>
+    <link rel="stylesheet" href="webjars/bootstrap/3.3.7-1/css/bo.min.css"
+          th:href="@{webjars/bootstrap/3.3.7-1/css/bootstrap.min.css}"/>
+
+    <link rel="stylesheet" type="text/css" href="/css/main.css"/>
+
+</head>
+<body>
+
+
+
+<div class="container">
+    <div class="col-md-12">
+        <div class="col-md-6 col-md-offset-3">
+
+            <div class="panel panel-default">
+                <label class="teste">TESTE</label>
+                <div class="panel-heading text-center">Jogos</div>
+                <th:block th:each="match : ${matches}">
+
+                    <div class="col-md-5 text-center">
+                        <span class="cor" th:text="${match.homeClub.name}"></span>
+                    </div>
+
+                    <div class="col-md-2 text-center">
+                        <span>x</span>
+                    </div>
+
+                    <div class="col-md-5 text-center">
+                        <span th:text="${match.visitorClub.name}"></span>
+                    </div>
+
+                </th:block>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="webjars/jquery/2.1.4/jquery.min.js"/>
+<script type="text/javascript" th:src="@{/js/offer.js}"/>
+</body>
+</html>

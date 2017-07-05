@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Edição de partida</title>
+    <link rel="stylesheet"
+          href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
+          integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u"
+          crossorigin="anonymous"/>
+    <link rel="stylesheet" type="text/css" href="/css/chosen.min.css"/>
+    <link rel="stylesheet" type="text/css" href="/css/main.css"/>
+</head>
+<body>
+
+<div class="container">
+
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h3 class="panel-title text-center" id="round-number">Campeonato Brasileiro - Rodada
+                X</h3>
+        </div>
+        <div class="panel-body">
+            <div class="row">
+                <div class="score col-md-12">
+                    <div class="col-md-5 score-item">
+                        <div class="col-md-9">
+                            <span class="home-club-name">Time Mandante</span>
+                        </div>
+                        <div class="col-md-3" id="home-badge"></div>
+                    </div>
+
+                    <div class="col-md-2 score-item">
+                        <div class="score-middle">
+
+                            <div class="col-md-4 score-home-goals">
+                                <span>1</span>
+                            </div>
+                            <div class="col-md-2 score-separator">
+                                <span>X</span>
+                            </div>
+                            <div class="col-md-4 score-visitor-goals">
+                                <span>0</span>
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                    <div class="col-md-5 score-item">
+                        <div class="col-md-3" id="visitor-badge"></div>
+                        <div class="col-md-9">
+                            <span class="visitor-club-name">Time Visitante</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="panel panel-default ">
+        <div class="panel-heading">
+            <h3 class="panel-title text-center"> Ficha de Jogo</h3>
+        </div>
+        <div class="panel-body">
+            <div class="row">
+
+                <div class="panel panel-default col-md-6 col-md-offset-3 line-up">
+                    <div class="panel-heading line-up-starting-header">
+                        <h3 class="panel-title text-center">Titulares</h3>
+                    </div>
+
+                    <div class="panel-body">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="col-md-6 text-right">
+                                    <ul class="list-group">
+                                        <li class="list-group-item clearfix">
+                                            <div class="row">
+                                                <div class="col-md-10 line-up-item">
+                                                    <div class="col-md-12">
+                                                        <span class="player-name"> Dapibus ac facilisis in </span>
+                                                    </div>
+                                                    <div class="col-md-12">
+                                                        <span class="player-position">ZAD</span>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-2 player-number">
+                                                    <strong class="">18</strong>
+                                                </div>
+                                            </div>
+                                        </li>
+                                        <li class="list-group-item clearfix">
+                                            <div class="row">
+                                                <div class="col-md-10 line-up-item">
+                                                    <div class="col-md-12">
+                                                        <span class="player-name"> Dapibus ac facilisis in </span>
+                                                    </div>
+                                                    <div class="col-md-12">
+                                                        <span class="player-position">ZAD</span>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-2 player-number">
+                                                    <strong class="">18</strong>
+                                                </div>
+                                            </div>
+                                        </li>
+                                    </ul>
+                                </div>
+                                <!--Line-up do time Mandante-->
+                                <div class="col-md-6">
+                                    <ul class="list-group">
+                                        <li class="list-group-item clearfix">
+                                            <div class="row">
+                                                <div class="col-md-2 player-number">
+                                                    <strong class="">18</strong>
+                                                </div>
+                                                <div class="col-md-10 line-up-item">
+                                                    <div class="col-md-12">
+                                                        <span class="player-name"> Dapibus ac facilisis in </span>
+                                                    </div>
+                                                    <div class="col-md-12">
+                                                        <span class="player-position">ZAD</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </li>
+                                        <li class="list-group-item clearfix">
+                                            <div class="row">
+                                                <div class="col-md-2 player-number">
+                                                    <strong class="">18</strong>
+                                                </div>
+                                                <div class="col-md-10 line-up-item">
+                                                    <div class="col-md-12">
+                                                        <span class="player-name"> Dapibus ac facilisis in </span>
+                                                    </div>
+                                                    <div class="col-md-12">
+                                                        <span class="player-position">ZAD</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </li>
+
+                                    </ul>
+
+                                </div>
+                                <!--Line-up do time visitante-->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<script th:inline="javascript">
+    /*<![CDATA[*/
+    var teste = /*[[${match}]]*/ null;
+    console.log(teste);
+    /*]]>*/
+</script>
+
+<script src="https://code.jquery.com/jquery-3.2.1.js"
+        integrity="sha256-DZAnKJ/6XZ9si04Hgrsxu/8s717jcIzLy3oi35EouyE="
+        crossorigin="anonymous"></script>
+
+<!-- Latest compiled and minified JavaScript -->
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"
+        integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa"
+        crossorigin="anonymous"></script>
+
+<script type="text/javascript" th:src="@{/js/chosen.jquery.min.js}"/>
+<script src="/js/edit-match.js"></script>
+</body>
+</html>

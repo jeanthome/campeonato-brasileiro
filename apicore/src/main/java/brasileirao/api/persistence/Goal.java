@@ -1,5 +1,7 @@
 package brasileirao.api.persistence;
 
+import brasileirao.api.enums.HalfEnum;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -18,64 +20,79 @@ import javax.validation.constraints.NotNull;
 @Table(name = "GOAL")
 public class Goal {
 
-    /**
-     * Id da entidade
-     */
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id;
+   /**
+    * Id da entidade
+    */
+   @Id
+   @GeneratedValue(strategy = GenerationType.AUTO)
+   private Long id;
 
-    /**
-     * Dono do gol
-     */
-    @NotNull
-    @ManyToOne(fetch = FetchType.LAZY)
-    private Player owner;
+   /**
+    * Dono do gol
+    */
+   @NotNull
+   @ManyToOne(fetch = FetchType.LAZY)
+   private Player owner;
 
-    /**
-     * Minuto no qual o gol foi marcado
-     */
-    @Column(name = "MINUTE")
-    @NotNull
-    @Min(0)
-    private Long minute;
+   /**
+    * Minuto no qual o gol foi marcado
+    */
+   @Column(name = "MINUTE")
+   @NotNull
+   @Min(0)
+   private Long minute;
 
-    /**
-     * Jogador que fez a assistência.
-     */
-    @ManyToOne(fetch = FetchType.LAZY)
-    private Player assist;
+   /**
+    * O tempo no qual o gol foi marcado.
+    */
+   @NotNull
+   @Column(name = "HALF")
+   private HalfEnum halfEnum;
 
-    public Player getOwner() {
-        return owner;
-    }
+   /**
+    * Jogador que fez a assistência.
+    */
+   @ManyToOne(fetch = FetchType.LAZY)
+   private Player assist;
 
-    public void setOwner(Player owner) {
-        this.owner = owner;
-    }
+   public Player getOwner() {
+      return owner;
+   }
 
-    public Long getMinute() {
-        return minute;
-    }
+   public void setOwner(Player owner) {
+      this.owner = owner;
+   }
 
-    public void setMinute(Long minute) {
-        this.minute = minute;
-    }
+   public Long getMinute() {
+      return minute;
+   }
 
-    public Player getAssist() {
-        return assist;
-    }
+   public void setMinute(Long minute) {
+      this.minute = minute;
+   }
 
-    public void setAssist(Player assist) {
-        this.assist = assist;
-    }
+   public Player getAssist() {
+      return assist;
+   }
 
-    public Long getId() {
-        return id;
-    }
+   public HalfEnum getHalfEnum() {
+      return halfEnum;
+   }
 
-    public void setId(Long id) {
-        this.id = id;
-    }
+   public void setHalfEnum(HalfEnum halfEnum) {
+      this.halfEnum = halfEnum;
+   }
+
+   public void setAssist(Player assist) {
+      this.assist = assist;
+   }
+
+   public Long getId() {
+      return id;
+   }
+
+   public void setId(Long id) {
+      this.id = id;
+   }
 
 }

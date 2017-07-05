@@ -56,6 +56,13 @@ public class Club {
    private String image;
 
    /**
+    * A cor que representa o time, em hexadecimal.
+    */
+   @NotNull
+   @Column(name = "COLOR")
+   private String color;
+
+   /**
     * Breve história do clube.
     */
    @NotNull
@@ -137,6 +144,14 @@ public class Club {
 
    public void setImage(String image) {
       this.image = image;
+   }
+
+   public String getColor() {
+      return color;
+   }
+
+   public void setColor(String color) {
+      this.color = color;
    }
 
    public String getHistory() {

@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <!-- Latest compiled and minified CSS of Bootstrap-->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
+          integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u"
+          crossorigin="anonymous"/>
+    <link rel="stylesheet" type="text/css" href="/css/chosen.min.css"/>
+</head>
+<body>
+
+<select  multiple="true" style="width:350px;" class="chosen-select">
+    <option value="volvo">Volvo</option>
+    <option value="saab">Saab</option>
+    <option value="mercedes">Mercedes</option>
+    <option value="audi">Audi</option>
+</select>
+
+
+<div class="container">
+    <div class="col-md-12">
+        <div class="col-md-6 col-md-offset-3">
+            <div class="form-area">
+                <form th:action="@{/insert_player}" th:object="${player}" method="post">
+                    <br style="clear:both">
+                    <h3 style="margin-bottom: 25px; text-align: center;">Cadastro de Jogador</h3>
+
+                    <div class="form-group">
+                        <input type="text" class="form-control" id="firstName"
+                               th:field="*{firstName}" placeholder="Nome"/>
+                    </div>
+
+                    <div class="form-group">
+                        <input type="text" class="form-control" id="lastName"
+                               th:field="*{lastName}" placeholder="Sobrenome"/>
+                    </div>
+
+                    <div class="form-group">
+                        <input type="text" class="form-control" id="displayName"
+                               th:field="*{displayName}" placeholder="Nome de exibição"/>
+                    </div>
+
+                    <div class="form-group">
+                        <input type="text" class="form-control" id="height"
+                               th:field="*{height}" placeholder="Altura"/>
+                    </div>
+
+                    <div class="form-group">
+                        <input type="text" class="form-control" id="birthDate"
+                               th:field="*{birthDate}" placeholder="Data de nascimento YYYY/MM/DD"/>
+                    </div>
+
+                    <div class="form-group">
+                        <input type="text" class="form-control" id="nationality"
+                               th:field="*{nationality}" placeholder="Nacionalidade"/>
+                    </div>
+
+                    <div class="form-group">
+                        <input type="text" class="form-control" id="photo"
+                               th:field="*{photo}" placeholder="Nome do arquivo de imagem"/>
+                    </div>
+
+                    <div class="form-group">
+                        <select class="form-control chosen-select" id="positionInput"
+                                th:field="*{positionEnum}">
+                            <option th:each="position : ${T(brasileirao.api.enums.PositionEnum).values()}"
+                                    th:value="${position}" th:text="${position.positionName}">
+                                Posições
+                            </option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <select class="form-control" id="clubInput" th:field="*{actualClubId}">
+                            <option th:each="club : ${clubs}" th:value="${club.id}"
+                                    th:text="${club.name}"> Clubes
+                            </option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <input type="text" class="form-control" id="number"
+                               th:field="*{number}" placeholder="Número da camisa"/>
+                    </div>
+
+
+                    <div class="form-group">
+                        <textarea class="form-control" th:field="*{biography}"
+                                  placeholder="Biografia" maxlength="100000" rows="10">...</textarea>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary" id="btn-send">
+                        CADASTRAR
+                    </button>
+
+
+                    <!--<button type="button" id="submit" name="submit"-->
+                    <!--class="btn btn-primary pull-right">Submit Form-->
+                    <!--</button>-->
+                    </br>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Latest compiled and minified JavaScript of jQuery-->
+<script src="https://code.jquery.com/jquery-3.2.1.js"
+        integrity="sha256-DZAnKJ/6XZ9si04Hgrsxu/8s717jcIzLy3oi35EouyE="
+        crossorigin="anonymous"></script>
+
+<!-- Latest compiled and minified JavaScript of Bootstrap-->
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"
+        integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa"
+        crossorigin="anonymous"></script>
+
+<script type="text/javascript" th:src="@{/js/chosen.jquery.min.js}"/>
+<script type="text/javascript" th:src="@{/js/meuchosen.js}"/>
+
+</body>
+</html>

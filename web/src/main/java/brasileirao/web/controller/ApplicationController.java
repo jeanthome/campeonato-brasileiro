@@ -10,13 +10,17 @@ import brasileirao.web.dto.PlayerRegisterDto;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.validation.Valid;
+import java.util.List;
 
 /**
  * Lida com requisições que não são referentes a nenhuma entidade.
@@ -24,7 +28,9 @@ import javax.validation.Valid;
 @Controller
 public class ApplicationController {
 
-   /**Constante para a palavra "player".*/
+   /**
+    * Constante para a palavra "player".
+    */
    public static final String PLAYER = "player";
 
    /**
@@ -46,14 +52,50 @@ public class ApplicationController {
    private MatchService matchService;
 
    /**
+    * Retorna a home page dos sistema.
+    *
+    * @return ModelAndView com a view a ser carregada.
+    */
+   @GetMapping(value = "/{roundNumber}")
+   public ModelAndView index(@PathVariable Long roundNumber) {
+      final ModelAndView modelAndView = new ModelAndView();
+      modelAndView.setViewName("home");
+
+      final List<Match> matches = this.matchService.getMatchesInRound(roundNumber);
+      modelAndView.addObject("matches", matches);
+      return modelAndView;
+   }
+
+   /**
+    * Retorna a view de edicao de partida com o objeto de contexto.
+    *
+    * @param matchId Identificador da partida a ser editada.
+    * @return Model and view com a view a ser recarregada.
+    */
+   @GetMapping(value = "/edit/{matchId}")
+   public ModelAndView editMatch(@PathVariable Long matchId, Model model) {
+      final ModelAndView modelAndView = new ModelAndView();
+      modelAndView.setViewName("edit_match");
+
+      final Match match = this.matchService.findById(matchId);
+
+      model.addAttribute("club", this.clubService.convertClubToDto(match.getHomeClub()));
+
+      model.addAttribute("match", this.matchService.convertMatchToDto(match));
+
+      System.out.print(match.getHomeClub().getFullName());
+      return modelAndView;
+   }
+
+   /**
     * Retorna formulário de teste.
     *
     * @return ModelAndView com o formulário a ser exibido.
     */
    @RequestMapping(value = "/form", method = RequestMethod.GET)
-   public ModelAndView index() {
+   public ModelAndView form() {
       final ModelAndView modelAndView = new ModelAndView();
-      modelAndView.setViewName("index");
+      modelAndView.setViewName("formRegistryPlayer");
 
       final Iterable<Club> clubs = this.clubService.findAll();
 
@@ -62,7 +104,7 @@ public class ApplicationController {
       return modelAndView;
    }
 
-   /***
+   /**
     * Insere um jogador no banco de dados.
     *
     * @param playerRegisterDto Instância do jogador a ser inserido.
@@ -76,7 +118,7 @@ public class ApplicationController {
       if (result.hasErrors()) {
          return modelAndView;
       } else {
-         this.playerService.save( this.convertPlayerRegisterDtoDoPlayer(playerRegisterDto) );
+         this.playerService.save(this.convertPlayerRegisterDtoToPlayer(playerRegisterDto));
       }
 
       modelAndView.addObject(PLAYER, new Player());
@@ -104,7 +146,7 @@ public class ApplicationController {
    /**
     * Persiste uma partida no banco de dados.
     *
-    * @param match Entidada de {@link Match} a ser persistida.
+    * @param match  Entidada de {@link Match} a ser persistida.
     * @param result Resultado da validação dos campos obrigatórios.
     * @return View de cadsatro de partida.
     */
@@ -122,22 +164,25 @@ public class ApplicationController {
 
    /**
     * Converte DTO da entidade Player em seu respectivo objeto.
+    *
     * @param playerRegisterDto DTO com os dados.
     * @return Instancia de {@link Player}.
     */
-   public Player convertPlayerRegisterDtoDoPlayer(PlayerRegisterDto playerRegisterDto) {
+   public Player convertPlayerRegisterDtoToPlayer(PlayerRegisterDto playerRegisterDto) {
 
       final ModelMapper modelMapper = new ModelMapper();
       final Player player = modelMapper.map(playerRegisterDto, Player.class);
 
-      if (playerRegisterDto.getActualClubId() != null ){
+      if (playerRegisterDto.getActualClubId() != null) {
          final Club club = this.clubService.findById(playerRegisterDto.getActualClubId());
          player.setActualClub(club);
       }
 
-      if (playerRegisterDto.getNationality().length() < 3 ){
+      if (playerRegisterDto.getNationality().length() < 3) {
          player.setNationality("Brasileiro");
       }
       return player;
    }
+
 }
+

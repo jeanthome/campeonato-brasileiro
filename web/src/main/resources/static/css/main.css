@@ -1,0 +1,89 @@
+
+
+.score{
+    display: table;
+}
+
+.score-item{
+    float: none;
+    display: table-cell;
+    vertical-align: middle;
+    height: 100px;
+}
+
+.score-middle{
+    text-align: center;
+}
+
+.score-middle  > span{
+    font-size: 18px;
+}
+
+.home-club-name{
+    line-height: 60px;
+    float: right;
+    font-size: 30px;
+    font-weight: bold;
+}
+
+.visitor-club-name{
+    line-height: 60px;
+    float: left;
+    font-size: 30px;
+    font-weight: bold;
+}
+
+.score-separator{
+    display:table;
+    line-height: 60px;
+}
+
+.score-home-goals, .score-visitor-goals {
+    font-size: 30px;
+    line-height: 60px;
+    font-weight: bold;
+}
+
+.line-up{
+    padding-left: 0px;
+    padding-right: 0px;
+}
+
+.panel-default > .line-up-starting-header {
+    background-color: green;
+    color: white;
+}
+
+.list-players{
+    display: inline-block;
+    vertical-align: middle;
+    background-color: green;
+}
+
+.player-number{
+    color: grey;
+    display: table-cell;
+    vertical-align: middle;
+    float: none;
+}
+
+.player-position{
+    color: grey;
+    font-size: 12px;
+}
+
+.line-up{
+    display: table;
+}
+
+.line-up-item{
+    padding-right: 0px;
+    padding-left: 0px;
+    display: table-cell;
+    float: none;
+}
+
+.line-up-item>div{
+    padding-right: 0px;
+    padding-left: 0px;
+}

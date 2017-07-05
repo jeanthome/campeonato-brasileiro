@@ -63,6 +63,7 @@ public class ClubServiceImpl implements ClubService {
    public ClubDto convertClubToDto(Club club) {
       final ModelMapper modelMapper = new ModelMapper();
       final ClubDto clubDto = modelMapper.map(club, ClubDto.class);
+      clubDto.setIdentificator(club.getId());
       return clubDto;
    }
 }

@@ -1,61 +1,56 @@
 package brasileirao.api.persistence;
 
-import brasileirao.api.enums.CardEnum;
 import brasileirao.api.enums.HalfEnum;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.Table;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 
 /**
- * Representa um cartão dado a um jogador durante uma partida.
+ * Representa uma substituição feita durante um jogo.
  */
 @Entity
-@Table(name = "CARD")
-public class Card {
+public class Substitution {
 
-   /**
-    * Id da entidade
-    */
    @Id
    @GeneratedValue(strategy = GenerationType.AUTO)
    private Long id;
-
    /**
-    * Jogador que recebeu o cartão.
+    * O jogador que foi substituido.
     */
    @NotNull
-   @ManyToOne(fetch = FetchType.LAZY)
-   private Player owner;
+   @ManyToOne
+   @JoinColumn(name = "STARTING_PLAYER_ID")
+   private Player startingPlayer;
 
    /**
-    * Minuto no qual o cartao foi dado.
+    * O jogador que entrou na partida.
     */
+   @NotNull
+   @ManyToOne
+   @JoinColumn(name = "SUBSTITUTE_PLAYER_ID")
+   private Player substitutePlayer;
+
+   /**
+    * O minuto no qual a substituicao ocorreu.
+    */
+   @NotNull
    @Column(name = "MINUTE")
-   @NotNull
    @Min(0)
    private Long minute;
 
    /**
-    * O tempo no qual o cartao foi dado.
+    * O tempo em que a substituicao ocorreu.
     */
    @NotNull
    @Column(name = "HALF")
    private HalfEnum halfEnum;
-
-   /**
-    * Cor do cartão.
-    */
-   @Column(name = "CARD")
-   @NotNull
-   private CardEnum color;
 
    public Long getId() {
       return id;
@@ -65,12 +60,20 @@ public class Card {
       this.id = id;
    }
 
-   public Player getOwner() {
-      return owner;
+   public Player getStartingPlayer() {
+      return startingPlayer;
    }
 
-   public void setOwner(Player owner) {
-      this.owner = owner;
+   public void setStartingPlayer(Player startingPlayer) {
+      this.startingPlayer = startingPlayer;
+   }
+
+   public Player getSubstitutePlayer() {
+      return substitutePlayer;
+   }
+
+   public void setSubstitutePlayer(Player substitutePlayer) {
+      this.substitutePlayer = substitutePlayer;
    }
 
    public Long getMinute() {
@@ -87,13 +90,5 @@ public class Card {
 
    public void setHalfEnum(HalfEnum halfEnum) {
       this.halfEnum = halfEnum;
-   }
-
-   public CardEnum getColor() {
-      return color;
-   }
-
-   public void setColor(CardEnum color) {
-      this.color = color;
    }
 }

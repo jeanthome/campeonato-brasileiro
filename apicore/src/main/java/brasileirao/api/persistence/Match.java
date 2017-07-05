@@ -73,13 +73,6 @@ public class Match {
    private List<Goal> visitorGoals;
 
    /**
-    * Estádio onde a partida foi realizada.
-    */
-   @NotNull
-   @Column(name = "STADIUM")
-   private StadiumEnum stadiumEnum;
-
-   /**
     * Lista de jogadores titulares do clube mandante.
     */
    @OneToMany
@@ -91,7 +84,8 @@ public class Match {
     * Lista de jogadores titulares do clube visitante.
     */
    @OneToMany
-   @JoinTable(name = "MATCH_VISITOR_STARTING_PLAYER", joinColumns = {@JoinColumn(name = "MATCH_ID")},
+   @JoinTable(name = "MATCH_VISITOR_STARTING_PLAYER",
+           joinColumns = {@JoinColumn(name = "MATCH_ID")},
            inverseJoinColumns = {@JoinColumn(name = "PLAYER_ID")})
    private List<Player> visitorClubStartingPlayers;
 
@@ -107,16 +101,17 @@ public class Match {
     * Lista de jogadores reservas do clube visitante.
     */
    @OneToMany
-   @JoinTable(name = "MATCH_VISITOR_SUBSTITUTE_PLAYER", joinColumns = {@JoinColumn(name = "MATCH_ID")},
+   @JoinTable(name = "MATCH_VISITOR_SUBSTITUTE_PLAYER",
+           joinColumns = {@JoinColumn(name = "MATCH_ID")},
            inverseJoinColumns = {@JoinColumn(name = "PLAYER_ID")})
    private List<Player> visitorClubSubstitutePlayers;
 
    /**
     * Lista de cartões da equipe mandante.
     */
+   @OneToMany
    @JoinTable(name = "MATCH_HOME_CARD", joinColumns = {@JoinColumn(name = "MATCH_ID")},
            inverseJoinColumns = {@JoinColumn(name = "CARD_ID")})
-   @OneToMany
    private List<Card> homeClubCardList;
 
    /**
@@ -126,6 +121,29 @@ public class Match {
            inverseJoinColumns = {@JoinColumn(name = "CARD_ID")})
    @OneToMany
    private List<Card> visitorClubCardList;
+
+   /**
+    * Lista de substituicoes do clube mandante.
+    */
+   @OneToMany
+   @JoinTable(name = "MATCH_HOME_SUBSTITUTION", joinColumns = {@JoinColumn(name = "MATCH_ID")},
+           inverseJoinColumns = {@JoinColumn(name = "SUBSTITUTION_ID")})
+   private List<Substitution> homeClubSubstitutionList;
+
+   /**
+    * Lista de substituicoes do clube visitante.
+    */
+   @OneToMany
+   @JoinTable(name = "MATCH_VISITOR_SUBSTITUTION", joinColumns = {@JoinColumn(name = "MATCH_ID")},
+           inverseJoinColumns = {@JoinColumn(name = "SUBSTITUTION_ID")})
+   private List<Substitution> visitorClubSubstitutionList;
+
+   /**
+    * Estádio onde a partida foi realizada.
+    */
+   @NotNull
+   @Column(name = "STADIUM")
+   private StadiumEnum stadiumEnum;
 
    /**
     * Data da partida
@@ -236,6 +254,22 @@ public class Match {
 
    public void setVisitorClubCardList(List<Card> visitorClubCardList) {
       this.visitorClubCardList = visitorClubCardList;
+   }
+
+   public List<Substitution> getHomeClubSubstitutionList() {
+      return homeClubSubstitutionList;
+   }
+
+   public void setHomeClubSubstitutionList(List<Substitution> homeClubSubstitutionList) {
+      this.homeClubSubstitutionList = homeClubSubstitutionList;
+   }
+
+   public List<Substitution> getVisitorClubSubstitutionList() {
+      return visitorClubSubstitutionList;
+   }
+
+   public void setVisitorClubSubstitutionList(List<Substitution> visitorClubSubstitutionList) {
+      this.visitorClubSubstitutionList = visitorClubSubstitutionList;
    }
 
    public Date getKickOff() {
