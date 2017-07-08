@@ -65,6 +65,7 @@ public class PlayerServiceImpl implements PlayerService {
       position.put("name", player.getPositionEnum().getPositionName());
       position.put("abbreviation", player.getPositionEnum().getAbbreviation());
       playerDto.setPosition(position);
+      playerDto.setIdentificator(player.getId());
 
       /*Obtem e setta a idade do jogador*/
       final Date date = player.getBirthDate();
@@ -72,4 +73,5 @@ public class PlayerServiceImpl implements PlayerService {
 
       return playerDto;
    }
+
 }

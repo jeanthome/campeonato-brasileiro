@@ -14,9 +14,9 @@ import static org.springframework.hateoas.mvc.ControllerLinkBuilder.methodOn;
 public class PlayerDto extends ResourceSupport {
 
    /**
-    * Id do jogador.
+    * Identificador do jogador.
     */
-   private Long id;
+   private Long identificator;
 
    /**
     * Nome de exibição do jogador.
@@ -38,8 +38,12 @@ public class PlayerDto extends ResourceSupport {
     */
    private Long number;
 
-   public void setId(Long id) {
-      this.id = id;
+   public Long getIdentificator() {
+      return identificator;
+   }
+
+   public void setIdentificator(Long identificator) {
+      this.identificator = identificator;
    }
 
    public String getDisplayName() {

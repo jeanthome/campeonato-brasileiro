@@ -175,7 +175,7 @@ public class ClubController {
          playerDto.addLinksToPlayer(player.getId(), clubId);
          playerDtoList.add(playerDto);
       }
-      return new ResponseEntity<Object>(playerDtoList, HttpStatus.FOUND);
+      return new ResponseEntity<Object>(playerDtoList, HttpStatus.OK);
    }
 
    @GetMapping(value = "/{clubId}/badge", produces = MediaType.APPLICATION_JSON_VALUE)

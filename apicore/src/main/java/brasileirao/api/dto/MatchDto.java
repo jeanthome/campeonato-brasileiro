@@ -5,9 +5,9 @@ import org.springframework.hateoas.ResourceSupport;
 public class MatchDto extends ResourceSupport {
 
    /**
-    * Id da partida.
+    * Idenficador da partida.
     */
-   private Long id;
+   private Long identificator;
 
    /**
     * A rodada onde a partida foi realizada.
@@ -24,8 +24,12 @@ public class MatchDto extends ResourceSupport {
     */
    private ClubDto visitorClub;
 
-   public void setId(Long id) {
-      this.id = id;
+   public Long getIdentificator() {
+      return identificator;
+   }
+
+   public void setIdentificator(Long identificator) {
+      this.identificator = identificator;
    }
 
    public Long getRoundNumber() {

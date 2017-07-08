@@ -1,9 +1,7 @@
 package brasileirao.api.service.impl;
 
 import brasileirao.api.dao.MatchDao;
-import brasileirao.api.dto.ClubDto;
 import brasileirao.api.dto.MatchDto;
-import brasileirao.api.dto.PlayerDto;
 import brasileirao.api.persistence.Match;
 import brasileirao.api.service.MatchService;
 import org.modelmapper.ModelMapper;
@@ -58,10 +56,11 @@ public class MatchServiceImpl implements MatchService {
     * @param match Instância da classe <i>Club</i>, que será convertida em DTO.
     * @return Instância de <i>ClubDto</i>
     */
-   public MatchDto convertMatchToDto(Match match){
+   public MatchDto convertMatchToDto(Match match) {
 
       final ModelMapper modelMapper = new ModelMapper();
       final MatchDto matchDto = modelMapper.map(match, MatchDto.class);
+      matchDto.setIdentificator(match.getId());
       matchDto.getHomeClub().setIdentificator(match.getHomeClub().getId());
       matchDto.getVisitorClub().setIdentificator(match.getVisitorClub().getId());
       return matchDto;

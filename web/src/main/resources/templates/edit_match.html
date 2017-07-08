@@ -71,9 +71,45 @@
 
                     <div class="panel-body">
                         <div class="row">
-                            <div class="col-md-12">
+                            <div class="col-md-6 match-edit-bottom">
+                                <!-- Single button -->
+                                <div class="btn-group">
+                                    <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown"
+                                            aria-haspopup="true" aria-expanded="false">
+                                        Escalar time mandante&nbsp;<span class="caret"></span>
+                                    </button>
+                                    <ul class="dropdown-menu">
+                                        <li><a data-toggle="modal" href=""
+                                        id="stating-players-home-selector">Selecionar jogadores titulares</a></li>
+                                        <li><a data-toggle="modal" href=""
+                                        id="substitute-players-home-selector">Selecionar jogadores reservas</a></li>
+                                    </ul>
+                                </div>
+
+                            </div>
+
+                            <div class="col-md-6 match-edit-bottom">
+                                <!-- Single button -->
+                                <div class="btn-group ">
+                                    <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                        Escalar time visitante&nbsp;<span class="caret"></span>
+                                    </button>
+                                    <ul class="dropdown-menu">
+                                        <li><a data-toggle="modal" href=""
+                                               id="stating-players-visitor-selector">Selecionar jogadores titulares</a></li>
+                                        <li><a data-toggle="modal" href=""
+                                               id="substitute-players-visitor-selector">Selecionar jogadores reservas</a></li>
+                                    </ul>
+                                </div>
+
+                            </div>
+                        </div>
+
+                        <div class="row">
+
                                 <div class="col-md-6 text-right">
-                                    <ul class="list-group">
+
+                                    <ul class="list-group" id="home-club-line-up">
                                         <li class="list-group-item clearfix">
                                             <div class="row">
                                                 <div class="col-md-10 line-up-item">
@@ -108,7 +144,7 @@
                                 </div>
                                 <!--Line-up do time Mandante-->
                                 <div class="col-md-6">
-                                    <ul class="list-group">
+                                    <ul class="list-group" id="visitor-club-line-up">
                                         <li class="list-group-item clearfix">
                                             <div class="row">
                                                 <div class="col-md-2 player-number">
@@ -144,7 +180,6 @@
 
                                 </div>
                                 <!--Line-up do time visitante-->
-                            </div>
                         </div>
                     </div>
                 </div>
@@ -156,8 +191,7 @@
 
 <script th:inline="javascript">
     /*<![CDATA[*/
-    var teste = /*[[${match}]]*/ null;
-    console.log(teste);
+    var matchLoaded = /*[[${match}]]*/ null;
     /*]]>*/
 </script>
 
@@ -174,3 +208,28 @@
 <script src="/js/edit-match.js"></script>
 </body>
 </html>
+
+<!-- Modal -->
+<div class="modal fade" id="selectPlayersModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                    &times;
+                </button>
+                <h4 class="modal-title">Título</h4>
+            </div>
+            <div class="modal-body">
+                <select data-placeholder=" " multiple="true"
+                        class="chosen-select modal-player-name-list form-control"
+                        id="modal-player-select">
+                </select>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" id="btn-modal-close" data-dismiss="modal">Fechar</button>
+                <button type="button" class="btn btn-primary" id="btn-modal-save">Salvar</button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div>
