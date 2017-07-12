@@ -30,11 +30,22 @@ var PLAYERSTATUS = {
 
 $(document).ready(function () {
 
-    $("#stating-players-home-selector").click(selectHomeClubStartingPlayers);
-    $("#substitute-players-home-selector").click(selectHomeClubSubstitutePlayers);
+    $('#stating-players-home-selector').click(function () {
+        pickPlayersInSelect(CLUBTOBEEDITED.HOMECLUB, true);
+    })
 
-    $("#stating-players-visitor-selector").click(selectVisitorClubStartingPlayers);
-    $("#substitute-players-visitor-selector").click(selectVisitorClubSubstitutePlayers);
+
+    $("#substitute-players-home-selector").click(function () {
+        pickPlayersInSelect(CLUBTOBEEDITED.HOMECLUB, false);
+    });
+
+    $("#stating-players-visitor-selector").click(function () {
+        pickPlayersInSelect(CLUBTOBEEDITED.VISITORCLUB, true);
+    });
+
+    $("#substitute-players-visitor-selector").click(function () {
+        pickPlayersInSelect(CLUBTOBEEDITED.VISITORCLUB, false);
+    });
 
     $('#selectPlayersModal').on('show.bs.modal', function () {
 
@@ -48,7 +59,6 @@ $(document).ready(function () {
     $('#selectPlayersModal').on('hidden.bs.modal', function () {
         $('.chosen-select option').prop('selected', false).trigger('chosen:updated');
     });
-
 
     matchId = matchLoaded.identificator;
 
@@ -77,18 +87,18 @@ function getPlayersFromClubs() {
 
     var urlHomeClub = "/clubs/" + homeClubId + "/players";
     $.get(urlHomeClub, function (data) {
-        homeClubAllPlayers = buildLookup(data);
+        homeClubAllPlayers = buildPlayersLookup(data);
         clubs[CLUBTOBEEDITED.HOMECLUB].allPlayers = homeClubAllPlayers;
     });
 
     var urlHomeClub = "/clubs/" + visitorClubId + "/players";
     $.get(urlHomeClub, function (data) {
-        visitorClubAllPlayers = buildLookup(data);
+        visitorClubAllPlayers = buildPlayersLookup(data);
         clubs[CLUBTOBEEDITED.VISITORCLUB].allPlayers = visitorClubAllPlayers;
     });
 }
 
-function buildLookup(data) {
+function buildPlayersLookup(data) {
 
     var lookup = {};
     for (var i = 0; i < data.length; i++) {
@@ -100,27 +110,27 @@ function buildLookup(data) {
     return lookup;
 }
 
-function populateSelect(CLUBTOBEEDITED, isSelectingStartingPlayers) {
+function populateSelect(clubToBeEdited, isSelectingStartingPlayers) {
 
     var options = "";
 
     $('#modal-player-select').html('');
 
-    for (playerId in clubs[CLUBTOBEEDITED].allPlayers) {
+    for (playerId in clubs[clubToBeEdited].allPlayers) {
 
-        if (clubs[CLUBTOBEEDITED].allPlayers.hasOwnProperty(playerId)) {
+        if (clubs[clubToBeEdited].allPlayers.hasOwnProperty(playerId)) {
 
-            var playerTemp = clubs[CLUBTOBEEDITED].allPlayers[playerId];
-            var playerName = playerTemp.displayName;
-            var playerNumber = playerTemp.number;
+            var tempPlayer = clubs[clubToBeEdited].allPlayers[playerId];
+            var playerName = tempPlayer.displayName;
+            var playerNumber = tempPlayer.number;
 
             /*Verifica se o jogador já foi selecionado*/
-            if ((isSelectingStartingPlayers && playerTemp["status"] == PLAYERSTATUS.STARTING) ||
-                !isSelectingStartingPlayers && playerTemp["status"] == PLAYERSTATUS.SUBSTITUTE) {
+            if ((isSelectingStartingPlayers && tempPlayer["status"] == PLAYERSTATUS.STARTING) ||
+                !isSelectingStartingPlayers && tempPlayer["status"] == PLAYERSTATUS.SUBSTITUTE) {
 
                 options += '<option value="' + playerId + '" selected>' + playerNumber + " - " + playerName + '</option>';
 
-            } else if (playerTemp["status"] == PLAYERSTATUS.RELATED ){
+            } else if (tempPlayer["status"] == PLAYERSTATUS.RELATED) {
                 options += '<option value="' + playerId + '" >' + playerNumber + " - " + playerName + '</option>';
             } else {
                 options += '<option value="' + playerId + '" disabled>' + playerNumber + " - " + playerName + '</option>';
@@ -132,133 +142,51 @@ function populateSelect(CLUBTOBEEDITED, isSelectingStartingPlayers) {
     $(".chosen-select").trigger('chosen:updated');
 }
 
-function selectHomeClubStartingPlayers() {
 
-    $(".modal-title").html("Selecione os 11 jogadores titulares do " + homeClubName);
+function pickPlayersInSelect(club, isSelectingStartingPlayers) {
 
-    populateSelect(CLUBTOBEEDITED.HOMECLUB, true);
+    var clubName = (club === CLUBTOBEEDITED.HOMECLUB ? homeClubName : visitorClubName);
+    var newPlayerStatus;
+
+    if (isSelectingStartingPlayers) {
+        newPlayerStatus = PLAYERSTATUS.STARTING;
+        $(".modal-title").html("Selecione os 11 jogadores titulares do " + clubName);
+    } else {
+        newPlayerStatus = PLAYERSTATUS.SUBSTITUTE;
+        $(".modal-title").html("Selecione os jogadores reservas do " + clubName);
+    }
+
+    populateSelect(club, isSelectingStartingPlayers);
 
     $("#btn-modal-save").unbind("click");
     $("#btn-modal-save").click(function () {
-        saveStartingPlayers(CLUBTOBEEDITED.HOMECLUB);
+        saveStartingPlayers(club);
+        updateLineUp(club);
     });
 
 
     $(".chosen-select").unbind('change');
-    $(".chosen-select").on('change', function(evt, params) {
+    $(".chosen-select").on('change', function (evt, params) {
 
         var editedPlayerId = "";
-        if ( params.hasOwnProperty('selected') ){
+        if (params.hasOwnProperty('selected')) {
             editedPlayerId = params['selected'];
-            clubs[CLUBTOBEEDITED.HOMECLUB].allPlayers[editedPlayerId]["status"] = PLAYERSTATUS.STARTING;
+            clubs[club].allPlayers[editedPlayerId]["status"] = newPlayerStatus;
 
-        } else if (params.hasOwnProperty('deselected') ) {
+        } else if (params.hasOwnProperty('deselected')) {
             editedPlayerId = params['deselected'];
-            clubs[CLUBTOBEEDITED.HOMECLUB].allPlayers[editedPlayerId]["status"] = PLAYERSTATUS.RELATED;
+            clubs[club].allPlayers[editedPlayerId]["status"] = PLAYERSTATUS.RELATED;
         }
     });
 
     $('#selectPlayersModal').modal('show');
 }
 
-
-function selectHomeClubSubstitutePlayers() {
-    console.log("selectHomeClubSubstitutePlayers");
-    $(".modal-title").html("Selecione os jogadores reservas do " + homeClubName);
-
-    populateSelect(CLUBTOBEEDITED.HOMECLUB, false);
-
-    $("#btn-modal-save").unbind("click");
-    $("#btn-modal-save").click(function () {
-        $('#selectPlayersModal').modal('hide');
-        saveSubstitutePlayers(CLUBTOBEEDITED.HOMECLUB);
-    });
-
-    $(".chosen-select").unbind('change');
-    $(".chosen-select").on('change', function(evt, params) {
-
-        var editedPlayerId = "";
-
-        if ( params.hasOwnProperty('selected') ){
-            editedPlayerId = params['selected'];
-            clubs[CLUBTOBEEDITED.HOMECLUB].allPlayers[editedPlayerId]["status"] = PLAYERSTATUS.SUBSTITUTE;
-
-        } else if (params.hasOwnProperty('deselected') ) {
-            editedPlayerId = params['deselected'];
-            clubs[CLUBTOBEEDITED.HOMECLUB].allPlayers[editedPlayerId]["status"] = PLAYERSTATUS.RELATED;
-        }
-    });
-
-    $('#selectPlayersModal').modal('show');
-}
-
-function selectVisitorClubStartingPlayers() {
-
-    console.log("selectVisitorClubStartingPlayers");
-    $(".modal-title").html("Selecione os 11 jogadores titulares do " + visitorClubName);
-
-    populateSelect(CLUBTOBEEDITED.VISITORCLUB, true);
-
-    $("#btn-modal-save").unbind("click");
-    $("#btn-modal-save").click(function () {
-        $('#selectPlayersModal').modal('hide');
-        saveStartingPlayers(CLUBTOBEEDITED.VISITORCLUB);
-    });
-
-    $(".chosen-select").unbind('change');
-    $(".chosen-select").on('change', function(evt, params) {
-
-        var editedPlayerId = "";
-
-        if ( params.hasOwnProperty('selected') ){
-            editedPlayerId = params['selected'];
-            clubs[CLUBTOBEEDITED.VISITORCLUB].allPlayers[editedPlayerId]["status"] = PLAYERSTATUS.STARTING;
-
-        } else if (params.hasOwnProperty('deselected') ) {
-            editedPlayerId = params['deselected'];
-            clubs[CLUBTOBEEDITED.VISITORCLUB].allPlayers[editedPlayerId]["status"] = PLAYERSTATUS.RELATED;
-        }
-    });
-
-    $('#selectPlayersModal').modal('show');
-
-}
-
-function selectVisitorClubSubstitutePlayers() {
-    console.log("selectVisitorClubSubstitutePlayers");
-    $(".modal-title").html("Selecione os jogadores reservas do " + visitorClubName);
-
-    populateSelect(CLUBTOBEEDITED.VISITORCLUB, false);
-
-    $("#btn-modal-save").unbind("click");
-    $("#btn-modal-save").click(function () {
-        $('#selectPlayersModal').modal('hide');
-        saveSubstitutePlayers(CLUBTOBEEDITED.VISITORCLUB);
-    });
-
-    $(".chosen-select").unbind('change');
-    $(".chosen-select").on('change', function(evt, params) {
-
-        var editedPlayerId = "";
-
-        if ( params.hasOwnProperty('selected') ){
-            editedPlayerId = params['selected'];
-            clubs[CLUBTOBEEDITED.VISITORCLUB].allPlayers[editedPlayerId]["status"] = PLAYERSTATUS.SUBSTITUTE;
-
-        } else if (params.hasOwnProperty('deselected') ) {
-            editedPlayerId = params['deselected'];
-            clubs[CLUBTOBEEDITED.VISITORCLUB].allPlayers[editedPlayerId]["status"] = PLAYERSTATUS.RELATED;
-        }
-    });
-
-    $('#selectPlayersModal').modal('show');
-}
-
-function saveStartingPlayers(CLUBTOBEEDITED) {
+function saveStartingPlayers(clubToBeEdited) {
 
     $('#selectPlayersModal').modal('hide');
 
-    console.log("Fechou starting de " + CLUBTOBEEDITED);
+    console.log("Fechou starting de " + clubToBeEdited);
     console.log($(".chosen-select").chosen().val());
 }
 
@@ -269,3 +197,67 @@ function saveSubstitutePlayers(CLUBTOBEEDITED) {
     console.log("Fechou substitute de " + CLUBTOBEEDITED);
     console.log($(".chosen-select").chosen().val());
 }
+
+
+function updateLineUp(club) {
+
+    if (club === CLUBTOBEEDITED.HOMECLUB) {
+        $("#home-club-line-up").html("");
+    } else {
+
+    }
+
+    for (playerId in clubs[club].allPlayers) {
+
+        var listItem = '<li class="list-group-item clearfix"><div class="row">';
+
+        if (clubs[club].allPlayers.hasOwnProperty(playerId)) {
+
+            var tempPlayer = clubs[club].allPlayers[playerId];
+            var playerName = tempPlayer.displayName
+            var playerNumber = tempPlayer.number;
+            var playerPosition = tempPlayer.position.abbreviation;
+
+            if (tempPlayer.status === PLAYERSTATUS.STARTING) {
+
+                if (club === CLUBTOBEEDITED.HOMECLUB) {
+                    listItem += getLineUpDivWithNameAndPosition(playerName, playerPosition);
+                    listItem += getLineUpDivWithNumber(playerNumber);
+                } else {
+                    listItem += getLineUpDivWithNumber(playerNumber);
+                    listItem += getLineUpDivWithNameAndPosition(playerName, playerPosition);
+                }
+
+                listItem += '</div></li>';
+
+                if (club === CLUBTOBEEDITED.HOMECLUB) {
+                    $("#home-club-line-up").append(listItem);
+                } else {
+                    $("#visitor-club-line-up").append(listItem);
+
+                }
+            }
+        }
+    }
+}
+
+function getLineUpDivWithNameAndPosition(playerName, playerPosition) {
+
+    var div = '<div class="col-md-10 line-up-item"><div class="col-md-12 player-name-wrapper">' +
+        '<span class="player-name">' + playerName + '</span></div>' +
+        '<div class="col-md-12 player-position-wrapper">' +
+        '<span class="player-position">' + playerPosition.toUpperCase() + '</span></div></div>';
+    return div;
+}
+
+function getLineUpDivWithNumber(playerNumber) {
+    var div = '<div class="col-md-2 player-number-wrapper">';
+
+    if (playerNumber < 10) {
+        div += '<strong class="player-number">&nbsp' + playerNumber + '</strong></div>';
+    } else {
+        div += '<strong class="player-number">' + playerNumber + '</strong></div>';
+    }
+    return div;
+}
+

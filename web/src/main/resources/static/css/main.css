@@ -60,16 +60,33 @@
     background-color: green;
 }
 
-.player-number{
+.player-name-wrapper{
+    padding-bottom: 5px;
+
+}
+
+.player-name{
+    font-weight: 400;
+}
+
+.player-number-wrapper{
     color: grey;
     display: table-cell;
     vertical-align: middle;
     float: none;
 }
 
+.player-number{
+    font-weight: 300;
+}
+
 .player-position{
     color: grey;
-    font-size: 12px;
+    font-size: 11px;
+}
+
+player-position-wrapper{
+
 }
 
 .line-up{
@@ -86,6 +103,12 @@
 .line-up-item>div{
     padding-right: 0px;
     padding-left: 0px;
+}
+
+.list-group-item{
+    line-height: 12px;
+    padding: 5px 15px;
+
 }
 
 .match-edit-bottom{
