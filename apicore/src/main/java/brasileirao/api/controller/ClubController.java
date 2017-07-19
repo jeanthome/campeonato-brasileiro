@@ -170,7 +170,6 @@ public class ClubController {
       final List<PlayerDto> playerDtoList = new ArrayList<>();
 
       for (Player player : club.getPlayerList()) {
-
          final PlayerDto playerDto = this.playerService.convertPlayerToDto(player);
          playerDto.addLinksToPlayer(player.getId(), clubId);
          playerDtoList.add(playerDto);

@@ -1,7 +1,10 @@
 package brasileirao.api.service;
 
 import brasileirao.api.dto.PlayerDto;
+import brasileirao.api.dto.PlayerMinDto;
 import brasileirao.api.persistence.Player;
+
+import java.util.List;
 
 /**
  * Classe de serviços da entidade <i>Player</i>.
@@ -47,4 +50,14 @@ public interface PlayerService {
     * @return Instância de {@link PlayerDto}
     */
    PlayerDto convertPlayerToDto(Player player);
+
+   /**
+    * Converte uma instância de {@link Player} em seu DTO de informações mínimas.
+    *
+    * @param player Instância da classe {@link Player}, que será convertida em DTO.
+    * @return Instância de {@link PlayerMinDto}
+    */
+   PlayerMinDto convertPlayerToMinDto(Player player);
+
+   List<PlayerMinDto> convertPlayerListToPlayerMinDtoList( List<Player> playerList);
 }

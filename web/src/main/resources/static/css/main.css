@@ -134,3 +134,12 @@ player-position-wrapper{
     text-align: left;
     vertical-align: middle;
 }
+
+hr{
+    margin-top: 0px;
+}
+.line-up-player-status{
+    color: grey;
+    font-weight: 300;
+    letter-spacing: 2px;
+}

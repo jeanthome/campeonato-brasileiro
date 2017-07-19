@@ -2,6 +2,8 @@ package brasileirao.api.dto;
 
 import org.springframework.hateoas.ResourceSupport;
 
+import java.util.List;
+
 public class MatchDto extends ResourceSupport {
 
    /**
@@ -23,6 +25,26 @@ public class MatchDto extends ResourceSupport {
     * O time visitante.
     */
    private ClubDto visitorClub;
+
+   /**
+    * Jogadores titulares da equipe mandante.
+    */
+   private List<PlayerMinDto> homeClubStartingPlayers;
+
+   /**
+    * Jogadores titulares da equipe mandante.
+    */
+   private List<PlayerMinDto> visitorClubStartingPlayers;
+
+   /**
+    * Jogadores reservas do time mandante.
+    */
+   private List<PlayerMinDto> homeClubSubstitutePlayers;
+
+   /**
+    * Jogadores reservas do time visitante.
+    */
+   private List<PlayerMinDto> visitorClubSubstitutePlayers;
 
    public Long getIdentificator() {
       return identificator;
@@ -54,5 +76,37 @@ public class MatchDto extends ResourceSupport {
 
    public void setVisitorClub(ClubDto visitorClub) {
       this.visitorClub = visitorClub;
+   }
+
+   public List<PlayerMinDto> getHomeClubStartingPlayers() {
+      return homeClubStartingPlayers;
+   }
+
+   public void setHomeClubStartingPlayers(List<PlayerMinDto> homeClubStartingPlayers) {
+      this.homeClubStartingPlayers = homeClubStartingPlayers;
+   }
+
+   public List<PlayerMinDto> getVisitorClubStartingPlayers() {
+      return visitorClubStartingPlayers;
+   }
+
+   public void setVisitorClubStartingPlayers(List<PlayerMinDto> visitorClubStartingPlayers) {
+      this.visitorClubStartingPlayers = visitorClubStartingPlayers;
+   }
+
+   public List<PlayerMinDto> getHomeClubSubstitutePlayers() {
+      return homeClubSubstitutePlayers;
+   }
+
+   public void setHomeClubSubstitutePlayers(List<PlayerMinDto> homeClubSubstitutePlayers) {
+      this.homeClubSubstitutePlayers = homeClubSubstitutePlayers;
+   }
+
+   public List<PlayerMinDto> getVisitorClubSubstitutePlayers() {
+      return visitorClubSubstitutePlayers;
+   }
+
+   public void setVisitorClubSubstitutePlayers(List<PlayerMinDto> visitorClubSubstitutePlayers) {
+      this.visitorClubSubstitutePlayers = visitorClubSubstitutePlayers;
    }
 }

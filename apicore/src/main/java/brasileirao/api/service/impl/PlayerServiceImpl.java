@@ -2,6 +2,7 @@ package brasileirao.api.service.impl;
 
 import brasileirao.api.dao.PlayerDao;
 import brasileirao.api.dto.PlayerDto;
+import brasileirao.api.dto.PlayerMinDto;
 import brasileirao.api.helper.DateHelper;
 import brasileirao.api.persistence.Player;
 import brasileirao.api.service.PlayerService;
@@ -9,12 +10,15 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
  * Implementação da classe de serviços da entidade <i>Player</i>.
+ *
  * @see Player
  */
 @Service
@@ -57,7 +61,7 @@ public class PlayerServiceImpl implements PlayerService {
     * @param player Instância da classe {@link Player}, que será convertida em DTO.
     * @return Instância de {@link PlayerDto}
     */
-   public  PlayerDto convertPlayerToDto(Player player) {
+   public PlayerDto convertPlayerToDto(Player player) {
       final ModelMapper modelMapper = new ModelMapper();
       final PlayerDto playerDto = modelMapper.map(player, PlayerDto.class);
 
@@ -74,4 +78,27 @@ public class PlayerServiceImpl implements PlayerService {
       return playerDto;
    }
 
+   /**
+    * Converte uma instância de {@link Player} em seu DTO de informações mínimas.
+    *
+    * @param player Instância da classe {@link Player}, que será convertida em DTO.
+    * @return Instância de {@link PlayerMinDto}
+    */
+   public PlayerMinDto convertPlayerToMinDto(Player player) {
+      final ModelMapper modelMapper = new ModelMapper();
+      final PlayerMinDto playerMinDto = modelMapper.map(player, PlayerMinDto.class);
+      playerMinDto.setPositionAbbreviation(player.getPositionEnum().getAbbreviation());
+      playerMinDto.setIdentificator(player.getId());
+      return playerMinDto;
+   }
+
+   public List<PlayerMinDto> convertPlayerListToPlayerMinDtoList(List<Player> playerList) {
+
+      final List<PlayerMinDto> playerMinDtoList = new ArrayList<>();
+      for (Player player : playerList ) {
+         final PlayerMinDto playerMinDto = this.convertPlayerToMinDto(player);
+         playerMinDtoList.add( playerMinDto);
+      }
+      return playerMinDtoList;
+   }
 }

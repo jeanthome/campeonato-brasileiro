@@ -33,9 +33,7 @@ public class ApplicationController {
     */
    public static final String PLAYER = "player";
 
-   /**
-    * Instância da classe de serviços da entidade <i>Club</i>
-    */
+
    @Autowired
    private ClubService clubService;
 
@@ -63,27 +61,6 @@ public class ApplicationController {
 
       final List<Match> matches = this.matchService.getMatchesInRound(roundNumber);
       modelAndView.addObject("matches", matches);
-      return modelAndView;
-   }
-
-   /**
-    * Retorna a view de edicao de partida com o objeto de contexto.
-    *
-    * @param matchId Identificador da partida a ser editada.
-    * @return Model and view com a view a ser recarregada.
-    */
-   @GetMapping(value = "/edit/{matchId}")
-   public ModelAndView editMatch(@PathVariable Long matchId, Model model) {
-      final ModelAndView modelAndView = new ModelAndView();
-      modelAndView.setViewName("edit_match");
-
-      final Match match = this.matchService.findById(matchId);
-
-      model.addAttribute("club", this.clubService.convertClubToDto(match.getHomeClub()));
-
-      model.addAttribute("match", this.matchService.convertMatchToDto(match));
-
-      System.out.print(match.getHomeClub().getFullName());
       return modelAndView;
    }
 

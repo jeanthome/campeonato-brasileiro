@@ -2,6 +2,7 @@ package brasileirao.api.persistence;
 
 import brasileirao.api.enums.StadiumEnum;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -75,7 +76,7 @@ public class Match {
    /**
     * Lista de jogadores titulares do clube mandante.
     */
-   @OneToMany
+   @OneToMany(fetch = FetchType.LAZY, orphanRemoval = true)
    @JoinTable(name = "MATCH_HOME_STARTING_PLAYER", joinColumns = {@JoinColumn(name = "MATCH_ID")},
            inverseJoinColumns = {@JoinColumn(name = "PLAYER_ID")})
    private List<Player> homeClubStartingPlayers;
@@ -83,7 +84,7 @@ public class Match {
    /**
     * Lista de jogadores titulares do clube visitante.
     */
-   @OneToMany
+   @OneToMany(fetch = FetchType.LAZY, orphanRemoval = true)
    @JoinTable(name = "MATCH_VISITOR_STARTING_PLAYER",
            joinColumns = {@JoinColumn(name = "MATCH_ID")},
            inverseJoinColumns = {@JoinColumn(name = "PLAYER_ID")})
@@ -92,7 +93,7 @@ public class Match {
    /**
     * Lista de jogadores reservas do clube mandante.
     */
-   @OneToMany
+   @OneToMany(fetch = FetchType.LAZY, orphanRemoval = true)
    @JoinTable(name = "MATCH_HOME_SUBSTITUTE_PLAYER", joinColumns = {@JoinColumn(name = "MATCH_ID")},
            inverseJoinColumns = {@JoinColumn(name = "PLAYER_ID")})
    private List<Player> homeClubSubstitutePlayers;
@@ -100,7 +101,7 @@ public class Match {
    /**
     * Lista de jogadores reservas do clube visitante.
     */
-   @OneToMany
+   @OneToMany(fetch = FetchType.LAZY, orphanRemoval = true)
    @JoinTable(name = "MATCH_VISITOR_SUBSTITUTE_PLAYER",
            joinColumns = {@JoinColumn(name = "MATCH_ID")},
            inverseJoinColumns = {@JoinColumn(name = "PLAYER_ID")})
@@ -213,7 +214,10 @@ public class Match {
    }
 
    public void setHomeClubStartingPlayers(List<Player> homeClubStartingPlayers) {
-      this.homeClubStartingPlayers = homeClubStartingPlayers;
+      this.homeClubStartingPlayers.clear();
+      if (homeClubStartingPlayers != null) {
+         this.homeClubStartingPlayers.addAll(homeClubStartingPlayers);
+      }
    }
 
    public List<Player> getVisitorClubStartingPlayers() {
@@ -221,7 +225,10 @@ public class Match {
    }
 
    public void setVisitorClubStartingPlayers(List<Player> visitorClubStartingPlayers) {
-      this.visitorClubStartingPlayers = visitorClubStartingPlayers;
+      this.visitorClubStartingPlayers.clear();
+      if (visitorClubStartingPlayers != null) {
+         this.visitorClubStartingPlayers.addAll(visitorClubStartingPlayers);
+      }
    }
 
    public List<Player> getHomeClubSubstitutePlayers() {
@@ -229,7 +236,10 @@ public class Match {
    }
 
    public void setHomeClubSubstitutePlayers(List<Player> homeClubSubstitutePlayers) {
-      this.homeClubSubstitutePlayers = homeClubSubstitutePlayers;
+      this.homeClubSubstitutePlayers.clear();
+      if (homeClubSubstitutePlayers != null) {
+         this.homeClubSubstitutePlayers.addAll(homeClubSubstitutePlayers);
+      }
    }
 
    public List<Player> getVisitorClubSubstitutePlayers() {
@@ -237,7 +247,10 @@ public class Match {
    }
 
    public void setVisitorClubSubstitutePlayers(List<Player> visitorClubSubstitutePlayers) {
-      this.visitorClubSubstitutePlayers = visitorClubSubstitutePlayers;
+      this.visitorClubSubstitutePlayers.clear();
+      if (visitorClubSubstitutePlayers != null) {
+         this.visitorClubSubstitutePlayers.addAll(visitorClubSubstitutePlayers);
+      }
    }
 
    public List<Card> getHomeClubCardList() {

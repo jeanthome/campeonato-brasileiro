@@ -89,13 +89,45 @@ function getPlayersFromClubs() {
     $.get(urlHomeClub, function (data) {
         homeClubAllPlayers = buildPlayersLookup(data);
         clubs[CLUBTOBEEDITED.HOMECLUB].allPlayers = homeClubAllPlayers;
+
+        updatePlayersStatusFromPersistedPlayers(CLUBTOBEEDITED.HOMECLUB, PLAYERSTATUS.STARTING,
+            matchLoaded.homeClubStartingPlayers);
+        updatePlayersStatusFromPersistedPlayers(CLUBTOBEEDITED.HOMECLUB, PLAYERSTATUS.SUBSTITUTE,
+            matchLoaded.homeClubSubstitutePlayers);
+
+        updateLineUp(CLUBTOBEEDITED.HOMECLUB);
     });
 
     var urlHomeClub = "/clubs/" + visitorClubId + "/players";
     $.get(urlHomeClub, function (data) {
         visitorClubAllPlayers = buildPlayersLookup(data);
         clubs[CLUBTOBEEDITED.VISITORCLUB].allPlayers = visitorClubAllPlayers;
+
+        updatePlayersStatusFromPersistedPlayers(CLUBTOBEEDITED.VISITORCLUB, PLAYERSTATUS.STARTING,
+            matchLoaded.visitorClubStartingPlayers);
+        updatePlayersStatusFromPersistedPlayers(CLUBTOBEEDITED.VISITORCLUB, PLAYERSTATUS.SUBSTITUTE,
+            matchLoaded.visitorClubSubstitutePlayers);
+
+        updateLineUp(CLUBTOBEEDITED.VISITORCLUB);
     });
+}
+
+/**
+ * Verifica quais jogadores da lista geral estão como titulares ou reservas, usando como referência
+ * a lista persistida no banco.
+ *
+ * @param clubToBeEdited Clube pro qual a verificação será feita.
+ * @param newStatus O novo status a ser atribuido caso o jogador estaja na lista.
+ * @param playerList Lista de jogadores para comparação.
+ */
+function updatePlayersStatusFromPersistedPlayers(clubToBeEdited, newStatus, playerList) {
+
+    for (playerId in playerList) {
+        if (playerList.hasOwnProperty(playerId)) {
+            var player = playerList[playerId];
+            clubs[clubToBeEdited].allPlayers[player.identificator].status = newStatus;
+        }
+    }
 }
 
 function buildPlayersLookup(data) {
@@ -142,7 +174,6 @@ function populateSelect(clubToBeEdited, isSelectingStartingPlayers) {
     $(".chosen-select").trigger('chosen:updated');
 }
 
-
 function pickPlayersInSelect(club, isSelectingStartingPlayers) {
 
     var clubName = (club === CLUBTOBEEDITED.HOMECLUB ? homeClubName : visitorClubName);
@@ -158,9 +189,10 @@ function pickPlayersInSelect(club, isSelectingStartingPlayers) {
 
     populateSelect(club, isSelectingStartingPlayers);
 
+
     $("#btn-modal-save").unbind("click");
     $("#btn-modal-save").click(function () {
-        saveStartingPlayers(club);
+        persistePlayers(club, isSelectingStartingPlayers);
         updateLineUp(club);
     });
 
@@ -182,19 +214,26 @@ function pickPlayersInSelect(club, isSelectingStartingPlayers) {
     $('#selectPlayersModal').modal('show');
 }
 
-function saveStartingPlayers(clubToBeEdited) {
+function persistePlayers(clubToBeEdited, isStartingPlayers) {
 
     $('#selectPlayersModal').modal('hide');
 
-    console.log("Fechou starting de " + clubToBeEdited);
-    console.log($(".chosen-select").chosen().val());
-}
+    var idsList = $(".chosen-select").chosen().val().join(";");
 
-function saveSubstitutePlayers(CLUBTOBEEDITED) {
+    $.ajax({
+        type: 'POST',
+        url: '/admin/match/persisteplayers',
+        data: {
+            matchId: matchId,
+            clubType: clubToBeEdited,
+            playersIdList: idsList,
+            isStartingPlayers: isStartingPlayers
+        },
+        success: function (msg) {
+            //alert(msg);
+        }
+    });
 
-    $('#selectPlayersModal').modal('hide');
-
-    console.log("Fechou substitute de " + CLUBTOBEEDITED);
     console.log($(".chosen-select").chosen().val());
 }
 
@@ -204,7 +243,7 @@ function updateLineUp(club) {
     if (club === CLUBTOBEEDITED.HOMECLUB) {
         $("#home-club-line-up").html("");
     } else {
-
+        $("#visitor-club-line-up").html("");
     }
 
     for (playerId in clubs[club].allPlayers) {
