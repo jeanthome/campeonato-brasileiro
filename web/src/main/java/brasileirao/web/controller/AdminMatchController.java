@@ -1,11 +1,16 @@
 package brasileirao.web.controller;
 
+import brasileirao.api.exception.ServiceException;
+import brasileirao.api.exception.ValidationException;
+import brasileirao.api.helper.ValidationHelper;
 import brasileirao.api.persistence.Match;
-import brasileirao.api.persistence.Player;
+import brasileirao.api.persistence.PlayerInMatch;
 import brasileirao.api.service.ClubService;
 import brasileirao.api.service.MatchService;
+import brasileirao.api.service.PlayerInMatchService;
 import brasileirao.api.service.PlayerService;
-import brasileirao.web.enums.ClubTypeEnum;
+import brasileirao.api.dto.GoalInputDto;
+import brasileirao.api.enums.ClubTypeEnum;
 import brasileirao.web.helper.ConverterHelper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -15,6 +20,8 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
@@ -38,7 +45,7 @@ public class AdminMatchController {
    private MatchService matchService;
 
    /**
-    * Classe de serviçoes da entidade Player.
+    * Classe de serviços da entidade Player.
     */
    @Autowired
    private PlayerService playerService;
@@ -48,7 +55,13 @@ public class AdminMatchController {
     */
    @Autowired
    private ClubService clubService;
-   
+
+   /**
+    * Classe de ser serviços da entidade PlayerInMatch
+    */
+   @Autowired
+   private PlayerInMatchService playerInMatchService;
+
    /**
     * Retorna a view de edicao de partida com o objeto de contexto.
     *
@@ -66,46 +79,65 @@ public class AdminMatchController {
       return modelAndView;
    }
 
-   @PostMapping(value = "/persisteplayers")
+   /**
+    * Persiste a escalação de jogadores em um partida.
+    *
+    * @param matchId           Identificador da partida sendo editada.
+    * @param clubType          O tipo do clube sendo editado (mandante ou visitante)
+    * @param isStartingPlayers Flag que indica se a lista recebida é de ids de jogadores escalados
+    *                          como titulares ou não.
+    * @param playersIdList     Lista com os ids dos jogadores, usando (;) como separador.
+    * @return ResponseEntity com a defina resposta.
+    * @throws ValidationException Exceção de validação.
+    */
+   @PostMapping(value = "/persistePlayers")
    public ResponseEntity updateStartingPlayers(@RequestParam(value = "matchId") Long matchId,
                                                @RequestParam(value = "clubType") String clubType,
-                                               @RequestParam(value = "isStartingPlayers") Boolean isStartingPlayers,
-                                               @RequestParam(value = "playersIdList") String playersIdList) {
+                                               @RequestParam(value = "isStartingPlayers") Boolean
+                                                       isStartingPlayers,
+                                               @RequestParam(value = "playersIdList") String
+                                                       playersIdList) throws ValidationException {
 
       final Match match = this.matchService.findById(matchId);
-      final List<Player> playerList = new ArrayList<>();
+      List<PlayerInMatch> playerInMatchList = new ArrayList<>();
 
       if (match != null) {
+         System.out.print(playersIdList);
 
-         final List<Long> idsList = ConverterHelper.convertStringWithIdsToList(playersIdList);
+         List<Long> idsList = new ArrayList<>();
 
-         for (Long playerId : idsList) {
-            final Player player = this.playerService.findById(playerId);
-            playerList.add(player);
+         if (!ValidationHelper.isEmptyOrVoid(playersIdList)) {
+            idsList = ConverterHelper.convertStringWithIdsToList(playersIdList);
          }
 
+         playerInMatchList = this.playerInMatchService.getPlayerListByIdList(idsList);
 
          if (clubType.equals(ClubTypeEnum.HOME_CLUB.getClubType())) {
 
             if (isStartingPlayers) {
-               match.setHomeClubStartingPlayers(playerList);
+               match.setHomeClubStartingPlayers(playerInMatchList);
             } else {
-               match.setHomeClubSubstitutePlayers(playerList);
+               match.setHomeClubSubstitutePlayers(playerInMatchList);
             }
 
          } else if (clubType.equals(ClubTypeEnum.VISITOR_CLUB.getClubType())) {
 
             if (isStartingPlayers) {
-               match.setVisitorClubStartingPlayers(playerList);
+               match.setVisitorClubStartingPlayers(playerInMatchList);
             } else {
-               match.setVisitorClubSubstitutePlayers(playerList);
+               match.setVisitorClubSubstitutePlayers(playerInMatchList);
             }
          }
-
          this.matchService.save(match);
-
       }
-
       return new ResponseEntity<Object>("Jogadores salvos", HttpStatus.OK);
+   }
+
+   @PutMapping(value = "/goal")
+   public ResponseEntity insertGoal(@RequestBody GoalInputDto goalInputDto ) throws ServiceException{
+
+      this.matchService.insertGoalInMatch(goalInputDto);
+      return new ResponseEntity<Object>("Jogadores salvos", HttpStatus.OK);
+
    }
 }

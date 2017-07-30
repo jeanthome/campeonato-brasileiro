@@ -47,13 +47,25 @@ public class Goal {
     */
    @NotNull
    @Column(name = "HALF")
-   private HalfEnum halfEnum;
+   private HalfEnum half;
 
    /**
-    * Jogador que fez a assistência.
+    * Flag que indica se o gol foi contra.
     */
-   @ManyToOne(fetch = FetchType.LAZY)
-   private Player assist;
+   @Column(name = "IS_OWN_GOAL")
+   private Boolean isOwnGoal;
+
+   /**
+    * Título do texto que descreve o gol.
+    */
+   @Column(name = "TITLE", length = 65)
+   private String title;
+
+   /**
+    * Descrição do lance do gol.
+    */
+   @Column(name = "DESCRIPTION", length = 350)
+   private String description;
 
    public Player getOwner() {
       return owner;
@@ -71,20 +83,12 @@ public class Goal {
       this.minute = minute;
    }
 
-   public Player getAssist() {
-      return assist;
+   public HalfEnum getHalf() {
+      return half;
    }
 
-   public HalfEnum getHalfEnum() {
-      return halfEnum;
-   }
-
-   public void setHalfEnum(HalfEnum halfEnum) {
-      this.halfEnum = halfEnum;
-   }
-
-   public void setAssist(Player assist) {
-      this.assist = assist;
+   public void setHalf(HalfEnum half) {
+      this.half = half;
    }
 
    public Long getId() {
@@ -95,4 +99,27 @@ public class Goal {
       this.id = id;
    }
 
+   public Boolean getOwnGoal() {
+      return isOwnGoal;
+   }
+
+   public void setOwnGoal(Boolean ownGoal) {
+      isOwnGoal = ownGoal;
+   }
+
+   public String getTitle() {
+      return title;
+   }
+
+   public void setTitle(String title) {
+      this.title = title;
+   }
+
+   public String getDescription() {
+      return description;
+   }
+
+   public void setDescription(String description) {
+      this.description = description;
+   }
 }

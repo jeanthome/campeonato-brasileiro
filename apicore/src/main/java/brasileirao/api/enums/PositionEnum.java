@@ -8,43 +8,47 @@ public enum PositionEnum {
    /**
     * Goleiro
     */
-   GOALKEEPER("Goleiro", "Gol"),
+   GOALKEEPER(1L, "Goleiro", "Gol"),
 
    /**
     * Zagueiro Esquerdo
     */
-   LEFT_DEFENDER("Zagueiro Esquerdo", "ZAE"),
+   LEFT_DEFENDER(4L, "Zagueiro Esquerdo", "ZAE"),
 
    /**
     * Zagueiro Direito
     */
-   RIGHT_DEFENDER("Zagueiro Direito", "ZAD"),
+   RIGHT_DEFENDER(3L, "Zagueiro Direito", "ZAD"),
 
    /**
     * Lateral Esquerdo
     */
-   LEFT_BACK("Lateral Esquerdo", "LAE"),
+   LEFT_BACK(5L, "Lateral Esquerdo", "LAE"),
 
    /**
     * Lateral Direito
     */
-   RIGHT_BACK("Lateral Direito", "LAD"),
+   RIGHT_BACK(2L, "Lateral Direito", "LAD"),
 
    /**
     * Volante
     */
-   DEFENSIVE_MIDFIELDER("Volante", "VOL"),
+   DEFENSIVE_MIDFIELDER(6L, "Volante", "VOL"),
 
    /**
     * Meia Central
     */
-   MIDFIELDER("Meia Central", "MEC"),
+   MIDFIELDER(7L, "Meia Central", "MEC"),
 
    /**
     * Atacante
     */
-   STRIKER("Atacante", "ATA");
+   STRIKER(8L, "Atacante", "ATA");
 
+   /**
+    * Valor usado para Players por posicões
+    */
+   private Long order;
    /**
     * Nome da posicão.
     */
@@ -58,10 +62,12 @@ public enum PositionEnum {
    /**
     * Cria o item do ENUM representa uma posicão de jogador.
     *
+    * @param order A ordem da posicão na hora de ordenar.
     * @param positionName O nome da posicão.
     * @param abbreviation A abreviação da posição.
     */
-   PositionEnum(String positionName, String abbreviation) {
+   PositionEnum(Long order, String positionName, String abbreviation) {
+      this.order = order;
       this.positionName = positionName;
       this.abbreviation = abbreviation;
    }
@@ -72,5 +78,9 @@ public enum PositionEnum {
 
    public String getAbbreviation() {
       return abbreviation;
+   }
+
+   public Long getOrder() {
+      return order;
    }
 }

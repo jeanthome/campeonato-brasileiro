@@ -1,5 +1,6 @@
 package brasileirao.api.dto;
 
+import brasileirao.api.persistence.Goal;
 import org.springframework.hateoas.ResourceSupport;
 
 import java.util.List;
@@ -40,6 +41,17 @@ public class MatchDto extends ResourceSupport {
     * Jogadores reservas do time mandante.
     */
    private List<PlayerMinDto> homeClubSubstitutePlayers;
+
+
+   /**
+    * Lista de gols do time mandante.
+    */
+   private List<GoalDto> homeClubGoals;
+
+   /**
+    * Lita de gols do time visitante.
+    */
+   private List<GoalDto> visitorClubGoals;
 
    /**
     * Jogadores reservas do time visitante.
@@ -108,5 +120,21 @@ public class MatchDto extends ResourceSupport {
 
    public void setVisitorClubSubstitutePlayers(List<PlayerMinDto> visitorClubSubstitutePlayers) {
       this.visitorClubSubstitutePlayers = visitorClubSubstitutePlayers;
+   }
+
+   public List<GoalDto> getHomeClubGoals() {
+      return homeClubGoals;
+   }
+
+   public void setHomeClubGoals(List<GoalDto> homeClubGoals) {
+      this.homeClubGoals = homeClubGoals;
+   }
+
+   public List<GoalDto> getVisitorClubGoals() {
+      return visitorClubGoals;
+   }
+
+   public void setVisitorClubGoals(List<GoalDto> visitorClubGoals) {
+      this.visitorClubGoals = visitorClubGoals;
    }
 }

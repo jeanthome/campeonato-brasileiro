@@ -24,6 +24,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 
@@ -168,6 +169,9 @@ public class ClubController {
 
       final Club club = this.clubService.findById(clubId);
       final List<PlayerDto> playerDtoList = new ArrayList<>();
+
+      /*Ordena jogadores por posição*/
+      Collections.sort(club.getPlayerList());
 
       for (Player player : club.getPlayerList()) {
          final PlayerDto playerDto = this.playerService.convertPlayerToDto(player);

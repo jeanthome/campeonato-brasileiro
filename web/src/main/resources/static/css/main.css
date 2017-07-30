@@ -38,7 +38,7 @@
     line-height: 60px;
 }
 
-.score-home-goals, .score-visitor-goals {
+.score-home-goals-wrapper, .score-visitor-goals-wrapper {
     font-size: 30px;
     line-height: 60px;
     font-weight: bold;
@@ -50,14 +50,14 @@
 }
 
 .panel-default > .line-up-starting-header {
-    background-color: green;
+    background-color: #4cae4c;
     color: white;
 }
 
 .list-players{
     display: inline-block;
     vertical-align: middle;
-    background-color: green;
+    background-color: #4cae4c;
 }
 
 .player-name-wrapper{
@@ -77,7 +77,7 @@
 }
 
 .player-number{
-    font-weight: 300;
+    font-weight: 400;
 }
 
 .player-position{
@@ -143,3 +143,31 @@ hr{
     font-weight: 300;
     letter-spacing: 2px;
 }
+
+.btn-success{
+    width: 100%;
+    color: #4cae4c;
+    background-color: white;
+}
+
+
+
+/*Modal de gol*/
+
+.modal-goal-wrapper{
+    display: table;
+}
+.modal-goal-item{
+    float: none;
+    display: table-cell;
+    vertical-align: middle;
+}
+
+li.search-field {
+    width: 100%;
+}
+li.search-field input.default {
+    width: auto !important;
+}
+
+

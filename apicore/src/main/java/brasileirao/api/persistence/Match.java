@@ -61,51 +61,51 @@ public class Match {
     * Lista de gols do time mandante.
     */
    @OneToMany
-   @JoinTable(name = "MATCH_GOAL", joinColumns = {@JoinColumn(name = "MATCH_ID")},
+   @JoinTable(name = "MATCH_HOME_GOAL", joinColumns = {@JoinColumn(name = "MATCH_ID")},
            inverseJoinColumns = {@JoinColumn(name = "GOAL_ID")})
-   private List<Goal> homeGoals;
+   private List<Goal> homeClubGoals;
 
    /**
     * Lista de gols do time visitante.
     */
    @OneToMany
-   @JoinTable(name = "MATCH_GOAL", joinColumns = {@JoinColumn(name = "MATCH_ID")},
+   @JoinTable(name = "MATCH_VISITOR_GOAL", joinColumns = {@JoinColumn(name = "MATCH_ID")},
            inverseJoinColumns = {@JoinColumn(name = "GOAL_ID")})
-   private List<Goal> visitorGoals;
+   private List<Goal> visitorClubGoals;
 
    /**
     * Lista de jogadores titulares do clube mandante.
     */
-   @OneToMany(fetch = FetchType.LAZY, orphanRemoval = true)
+   @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
    @JoinTable(name = "MATCH_HOME_STARTING_PLAYER", joinColumns = {@JoinColumn(name = "MATCH_ID")},
-           inverseJoinColumns = {@JoinColumn(name = "PLAYER_ID")})
-   private List<Player> homeClubStartingPlayers;
+           inverseJoinColumns = {@JoinColumn(name = "PLAYER_IN_MATCH_ID")})
+   private List<PlayerInMatch> homeClubStartingPlayers;
 
    /**
     * Lista de jogadores titulares do clube visitante.
     */
-   @OneToMany(fetch = FetchType.LAZY, orphanRemoval = true)
+   @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
    @JoinTable(name = "MATCH_VISITOR_STARTING_PLAYER",
            joinColumns = {@JoinColumn(name = "MATCH_ID")},
-           inverseJoinColumns = {@JoinColumn(name = "PLAYER_ID")})
-   private List<Player> visitorClubStartingPlayers;
+           inverseJoinColumns = {@JoinColumn(name = "PLAYER_IN_MATCH_ID")})
+   private List<PlayerInMatch> visitorClubStartingPlayers;
 
    /**
     * Lista de jogadores reservas do clube mandante.
     */
-   @OneToMany(fetch = FetchType.LAZY, orphanRemoval = true)
+   @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
    @JoinTable(name = "MATCH_HOME_SUBSTITUTE_PLAYER", joinColumns = {@JoinColumn(name = "MATCH_ID")},
-           inverseJoinColumns = {@JoinColumn(name = "PLAYER_ID")})
-   private List<Player> homeClubSubstitutePlayers;
+           inverseJoinColumns = {@JoinColumn(name = "PLAYER_IN_MATCH_ID")})
+   private List<PlayerInMatch> homeClubSubstitutePlayers;
 
    /**
     * Lista de jogadores reservas do clube visitante.
     */
-   @OneToMany(fetch = FetchType.LAZY, orphanRemoval = true)
+   @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
    @JoinTable(name = "MATCH_VISITOR_SUBSTITUTE_PLAYER",
            joinColumns = {@JoinColumn(name = "MATCH_ID")},
-           inverseJoinColumns = {@JoinColumn(name = "PLAYER_ID")})
-   private List<Player> visitorClubSubstitutePlayers;
+           inverseJoinColumns = {@JoinColumn(name = "PLAYER_IN_MATCH_ID")})
+   private List<PlayerInMatch> visitorClubSubstitutePlayers;
 
    /**
     * Lista de cartões da equipe mandante.
@@ -194,59 +194,63 @@ public class Match {
    }
 
    public List<Goal> getHomeGoals() {
-      return homeGoals;
+      return homeClubGoals;
    }
 
    public void setHomeGoals(List<Goal> homeGoals) {
-      this.homeGoals = homeGoals;
+      this.homeClubGoals = homeGoals;
    }
 
    public List<Goal> getVisitorGoals() {
-      return visitorGoals;
+      return visitorClubGoals;
    }
 
    public void setVisitorGoals(List<Goal> visitorGoals) {
-      this.visitorGoals = visitorGoals;
+      this.visitorClubGoals = visitorGoals;
    }
 
-   public List<Player> getHomeClubStartingPlayers() {
+
+   public List<PlayerInMatch> getHomeClubStartingPlayers() {
       return homeClubStartingPlayers;
    }
 
-   public void setHomeClubStartingPlayers(List<Player> homeClubStartingPlayers) {
+
+
+
+   public void setHomeClubStartingPlayers(List<PlayerInMatch> homeClubStartingPlayers) {
       this.homeClubStartingPlayers.clear();
       if (homeClubStartingPlayers != null) {
          this.homeClubStartingPlayers.addAll(homeClubStartingPlayers);
       }
    }
 
-   public List<Player> getVisitorClubStartingPlayers() {
+   public List<PlayerInMatch> getVisitorClubStartingPlayers() {
       return visitorClubStartingPlayers;
    }
 
-   public void setVisitorClubStartingPlayers(List<Player> visitorClubStartingPlayers) {
+   public void setVisitorClubStartingPlayers(List<PlayerInMatch> visitorClubStartingPlayers) {
       this.visitorClubStartingPlayers.clear();
       if (visitorClubStartingPlayers != null) {
          this.visitorClubStartingPlayers.addAll(visitorClubStartingPlayers);
       }
    }
 
-   public List<Player> getHomeClubSubstitutePlayers() {
+   public List<PlayerInMatch> getHomeClubSubstitutePlayers() {
       return homeClubSubstitutePlayers;
    }
 
-   public void setHomeClubSubstitutePlayers(List<Player> homeClubSubstitutePlayers) {
+   public void setHomeClubSubstitutePlayers(List<PlayerInMatch> homeClubSubstitutePlayers) {
       this.homeClubSubstitutePlayers.clear();
       if (homeClubSubstitutePlayers != null) {
          this.homeClubSubstitutePlayers.addAll(homeClubSubstitutePlayers);
       }
    }
 
-   public List<Player> getVisitorClubSubstitutePlayers() {
+   public List<PlayerInMatch> getVisitorClubSubstitutePlayers() {
       return visitorClubSubstitutePlayers;
    }
 
-   public void setVisitorClubSubstitutePlayers(List<Player> visitorClubSubstitutePlayers) {
+   public void setVisitorClubSubstitutePlayers(List<PlayerInMatch> visitorClubSubstitutePlayers) {
       this.visitorClubSubstitutePlayers.clear();
       if (visitorClubSubstitutePlayers != null) {
          this.visitorClubSubstitutePlayers.addAll(visitorClubSubstitutePlayers);

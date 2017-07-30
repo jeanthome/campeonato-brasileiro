@@ -88,7 +88,6 @@ public class PlayerServiceImpl implements PlayerService {
       final ModelMapper modelMapper = new ModelMapper();
       final PlayerMinDto playerMinDto = modelMapper.map(player, PlayerMinDto.class);
       playerMinDto.setPositionAbbreviation(player.getPositionEnum().getAbbreviation());
-      playerMinDto.setIdentificator(player.getId());
       return playerMinDto;
    }
 

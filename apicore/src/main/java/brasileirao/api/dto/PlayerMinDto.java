@@ -1,13 +1,11 @@
 package brasileirao.api.dto;
 
-import org.springframework.hateoas.ResourceSupport;
-
-public class PlayerMinDto extends ResourceSupport {
+public class PlayerMinDto {
 
    /**
     * Identificador do jogador.
     */
-   private Long identificator;
+   private Long id;
    /**
     * Nome de exibição do jogador.
     */
@@ -23,12 +21,12 @@ public class PlayerMinDto extends ResourceSupport {
     */
    private Long number;
 
-   public Long getIdentificator() {
-      return identificator;
+   public Long getId() {
+      return id;
    }
 
-   public void setIdentificator(Long identificator) {
-      this.identificator = identificator;
+   public void setId(Long id) {
+      this.id = id;
    }
 
    public String getDisplayName() {

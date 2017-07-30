@@ -6,19 +6,16 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
-import java.util.List;
 
 /**
  * Entidade que representa um jogador.
  */
 @Entity
 @Table(name = "PLAYER")
-public class Player extends Person {
+public class Player extends Person implements Comparable<Player> {
 
    /**
     * Posição do jogador
@@ -32,7 +29,6 @@ public class Player extends Person {
     */
    @NotNull
    @Column(name = "NUMBER")
-
    private Long number;
 
    /**
@@ -72,4 +68,8 @@ public class Player extends Person {
       this.actualClub = actualClub;
    }
 
+   @Override
+   public int compareTo(Player player) {
+      return this.getPositionEnum().getOrder().compareTo(player.getPositionEnum().getOrder());
+   }
 }

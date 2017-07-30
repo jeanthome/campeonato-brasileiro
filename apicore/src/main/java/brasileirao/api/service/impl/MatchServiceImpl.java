@@ -1,9 +1,16 @@
 package brasileirao.api.service.impl;
 
 import brasileirao.api.dao.MatchDao;
+import brasileirao.api.dto.GoalInputDto;
 import brasileirao.api.dto.MatchDto;
+import brasileirao.api.enums.ClubTypeEnum;
+import brasileirao.api.enums.ServiceExceptionMessageEnum;
+import brasileirao.api.exception.ServiceException;
+import brasileirao.api.persistence.Goal;
 import brasileirao.api.persistence.Match;
+import brasileirao.api.service.GoalService;
 import brasileirao.api.service.MatchService;
+import brasileirao.api.service.PlayerInMatchService;
 import brasileirao.api.service.PlayerService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,8 +30,23 @@ public class MatchServiceImpl implements MatchService {
    @Autowired
    private MatchDao matchDao;
 
+   /**
+    * Classe de serviços da entidade Player.
+    */
    @Autowired
    private PlayerService playerService;
+
+   /**
+    * Classe de serviços da entidade PlayerInMatch.
+    */
+   @Autowired
+   private PlayerInMatchService playerInMatchService;
+
+   /**
+    * Classe de serviços da entidae Goal.
+    */
+   @Autowired
+   private GoalService goalService;
 
    @Override
    public Match save(Match match) {
@@ -67,18 +89,60 @@ public class MatchServiceImpl implements MatchService {
       matchDto.getHomeClub().setIdentificator(match.getHomeClub().getId());
       matchDto.getVisitorClub().setIdentificator(match.getVisitorClub().getId());
 
-      matchDto.setHomeClubStartingPlayers(this.playerService.convertPlayerListToPlayerMinDtoList(
-              match.getHomeClubStartingPlayers()));
+      matchDto.setHomeClubStartingPlayers(this.playerInMatchService
+              .convertPlayerInMatchListToPlayerMinDtoList(match.getHomeClubStartingPlayers()));
 
-      matchDto.setVisitorClubStartingPlayers(this.playerService.convertPlayerListToPlayerMinDtoList(
-              match.getVisitorClubStartingPlayers()));
+      matchDto.setHomeClubSubstitutePlayers(this.playerInMatchService
+              .convertPlayerInMatchListToPlayerMinDtoList(match.getHomeClubSubstitutePlayers()));
 
-      matchDto.setHomeClubSubstitutePlayers(this.playerService.convertPlayerListToPlayerMinDtoList(
-              match.getHomeClubSubstitutePlayers()));
+      matchDto.setVisitorClubStartingPlayers(this.playerInMatchService
+              .convertPlayerInMatchListToPlayerMinDtoList(match.getVisitorClubStartingPlayers()));
 
-      matchDto.setVisitorClubSubstitutePlayers(this.playerService.convertPlayerListToPlayerMinDtoList(
-              match.getVisitorClubSubstitutePlayers()));
+      matchDto.setVisitorClubSubstitutePlayers(this.playerInMatchService
+              .convertPlayerInMatchListToPlayerMinDtoList(match.getVisitorClubSubstitutePlayers()));
+
+
+      matchDto.setHomeClubGoals(this.goalService.convertGoalListToGoalDtoList(match
+              .getHomeGoals()));
+
+      matchDto.setVisitorClubGoals(this.goalService.convertGoalListToGoalDtoList(match
+              .getVisitorGoals()));
 
       return matchDto;
+   }
+
+
+   /**
+    * Insere um gol em uma partida.
+    *
+    * @param goalInputDto Dto de entrada com os dados do gol.
+    * @throws ServiceException Exceção das classes de serviço.
+    */
+   public void insertGoalInMatch(GoalInputDto goalInputDto) throws ServiceException {
+
+      final Goal goal = this.goalService.convertGoalInputDtoToGoal(goalInputDto);
+      final Match match = this.matchDao.findById(goalInputDto.getMatch());
+
+      if (match == null) {
+         throw new ServiceException(ServiceExceptionMessageEnum.MATCH_NOT_FOUND.getMessage());
+      }
+
+      if (goalInputDto.getClubType().equals(ClubTypeEnum.HOME_CLUB.getClubType())) {
+
+         if (goalInputDto.getOwnGoal()) {
+            match.getVisitorGoals().add(goal);
+         } else {
+            match.getHomeGoals().add(goal);
+         }
+
+      } else {
+
+         if (goalInputDto.getOwnGoal()) {
+            match.getHomeGoals().add(goal);
+         } else {
+            match.getVisitorGoals().add(goal);
+         }
+      }
+      matchDao.save(match);
    }
 }

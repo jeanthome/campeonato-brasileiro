@@ -23,7 +23,7 @@
                 <div class="score col-md-12">
                     <div class="col-md-5 score-item">
                         <div class="col-md-9">
-                            <span class="home-club-name">Time Mandante</span>
+                            <span class="home-club-name"></span>
                         </div>
                         <div class="col-md-3" id="home-badge"></div>
                     </div>
@@ -31,14 +31,14 @@
                     <div class="col-md-2 score-item">
                         <div class="score-middle">
 
-                            <div class="col-md-4 score-home-goals">
-                                <span>1</span>
+                            <div class="col-md-4 score-home-goals-wrapper">
+                                <span id="score-home-goals"></span>
                             </div>
                             <div class="col-md-2 score-separator">
                                 <span>X</span>
                             </div>
-                            <div class="col-md-4 score-visitor-goals">
-                                <span>0</span>
+                            <div class="col-md-4 score-visitor-goals-wrapper">
+                                <span id="score-visitor-goals"></span>
                             </div>
 
                         </div>
@@ -48,7 +48,7 @@
                     <div class="col-md-5 score-item">
                         <div class="col-md-3" id="visitor-badge"></div>
                         <div class="col-md-9">
-                            <span class="visitor-club-name">Time Visitante</span>
+                            <span class="visitor-club-name"></span>
                         </div>
                     </div>
                 </div>
@@ -74,15 +74,26 @@
                             <div class="col-md-6 match-edit-bottom">
                                 <!-- Single button -->
                                 <div class="btn-group">
-                                    <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown"
+                                    <button type="button" class="btn btn-default dropdown-toggle"
+                                            data-toggle="dropdown"
                                             aria-haspopup="true" aria-expanded="false">
-                                        Escalar time mandante&nbsp;<span class="caret"></span>
+                                        Ações referentes ao mandante&nbsp;<span
+                                            class="caret"></span>
                                     </button>
                                     <ul class="dropdown-menu">
                                         <li><a data-toggle="modal" href=""
-                                        id="stating-players-home-selector">Selecionar jogadores titulares</a></li>
+                                               id="stating-players-home-selector">Selecionar
+                                            jogadores titulares</a></li>
                                         <li><a data-toggle="modal" href=""
-                                        id="substitute-players-home-selector">Selecionar jogadores reservas</a></li>
+                                               id="substitute-players-home-selector">Selecionar
+                                            jogadores reservas</a></li>
+
+                                        <li role="separator" class="divider"></li>
+
+                                        <li><a data-toggle="modal" data-target="#modal-goal"
+                                               href="" id="insert-goal-home-selector">Inserir gol</a></li>
+                                        <li><a href="">Inserir cartão</a></li>
+                                        <li><a href="">Inserir substituição</a></li>
                                     </ul>
                                 </div>
 
@@ -91,14 +102,24 @@
                             <div class="col-md-6 match-edit-bottom">
                                 <!-- Single button -->
                                 <div class="btn-group ">
-                                    <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                        Escalar time visitante&nbsp;<span class="caret"></span>
+                                    <button type="button" class="btn btn-default dropdown-toggle"
+                                            data-toggle="dropdown" aria-haspopup="true"
+                                            aria-expanded="false">
+                                        Ações referentes ao visitante&nbsp;<span
+                                            class="caret"></span>
                                     </button>
                                     <ul class="dropdown-menu">
                                         <li><a data-toggle="modal" href=""
-                                               id="stating-players-visitor-selector">Selecionar jogadores titulares</a></li>
+                                               id="stating-players-visitor-selector">Selecionar
+                                            jogadores titulares</a></li>
                                         <li><a data-toggle="modal" href=""
-                                               id="substitute-players-visitor-selector">Selecionar jogadores reservas</a></li>
+                                               id="substitute-players-visitor-selector">Selecionar
+                                            jogadores reservas</a></li>
+                                        <li role="separator" class="divider"></li>
+                                        <li><a data-toggle="modal" data-target="#modal-goal"
+                                               href="" id="insert-goal-visitor-selector">Inserir gol</a></li>
+                                        <li><a href="">Inserir cartão</a></li>
+                                        <li><a href="">Inserir substituição</a></li>
                                     </ul>
                                 </div>
 
@@ -112,27 +133,60 @@
                                 <h4 class="line-up-player-status">TITULARES</h4>
                             </div>
                         </div>
-                        <hr />
+                        <hr/>
                         <div class="row">
-
-                                <div class="col-md-6 text-right">
-                                    <ul class="list-group" id="home-club-line-up"></ul>
-                                </div>
-                                <!--Line-up do time Mandante-->
-
-                                <div class="col-md-6">
-                                    <ul class="list-group" id="visitor-club-line-up"></ul>
-                                </div>
-                                <!--Line-up do time visitante-->
+                            <div class="col-md-6 text-right">
+                                <ul class="list-group" id="home-club-starting-line-up"></ul>
+                            </div>
+                            <!--Line-up do time Mandante-->
+                            <div class="col-md-6">
+                                <ul class="list-group" id="visitor-club-starting-line-up"></ul>
+                            </div>
+                            <!--Line-up do time visitante-->
                         </div>
                         <!--Line-up dos times-->
 
-                        <div class="row">
+                        <div class="row collapse in" id="btn-full-line-up">
                             <div class="col-md-12 text-center">
-                                <h4 class="line-up-player-status">RESERVAS</h4>
+                                <button type="button" class="btn btn-success" data-toggle="collapse"
+                                        data-target="#substitute-players,#btn-full-line-up">Ficha
+                                    completa
+                                </button>
                             </div>
                         </div>
-                        <hr />
+
+                        <div id="substitute-players" class="collapse">
+                            <div class="row">
+                                <div class="col-md-12 text-center">
+                                    <h4 class="line-up-player-status">RESERVAS</h4>
+                                </div>
+                            </div>
+                            <hr/>
+
+                            <div class="row">
+                                <div class="col-md-6 text-right">
+                                    <ul class="list-group" id="home-club-substitute-line-up"></ul>
+                                </div>
+                                <!--Line-up de reservas do time Mandante-->
+                                <div class="col-md-6">
+                                    <ul class="list-group"
+                                        id="visitor-club-substitute-line-up"></ul>
+                                </div>
+                                <!--Line-up de reservas do time visitante-->
+                            </div>
+                            <!--Line-up dos times-->
+
+                            <div class="row">
+                                <div class="col-md-12 text-center">
+                                    <button type="button" class="btn btn-success"
+                                            data-toggle="collapse"
+                                            data-target="#substitute-players,#btn-full-line-up">
+                                        Fechar
+                                    </button>
+                                </div>
+                            </div>
+
+                        </div>
                     </div>
                 </div>
             </div>
@@ -140,6 +194,8 @@
     </div>
 
 </div>
+
+
 
 <script th:inline="javascript">
     /*<![CDATA[*/
@@ -157,12 +213,13 @@
 
 <script type="text/javascript" th:src="@{/js/chosen.jquery.min.js}"/>
 <script src="/js/edit-match.js"></script>
+<script src="/js/edit-match-goal.js"></script>
+
 </body>
 </html>
 
-<!-- Modal -->
-<div class="modal fade" id="selectPlayersModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
-     aria-hidden="true">
+<!-- Modal para line-up-->
+<div class="modal fade" id="selectPlayersModal" tabindex="-1" role="dialog" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
@@ -172,14 +229,95 @@
                 <h4 class="modal-title">Título</h4>
             </div>
             <div class="modal-body">
-                <select data-placeholder=" " multiple="true"
+                <select data-placeholder=" " multiple="false"
                         class="chosen-select modal-player-name-list form-control"
                         id="modal-player-select">
                 </select>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-default" id="btn-modal-close" data-dismiss="modal">Fechar</button>
+                <button type="button" class="btn btn-default" id="btn-modal-close"
+                        data-dismiss="modal">Fechar
+                </button>
                 <button type="button" class="btn btn-primary" id="btn-modal-save">Salvar</button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div>
+
+<!-- Modal para line-up-->
+<div class="modal fade" id="modal-goal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                    &times;
+                </button>
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="col-md-12">
+                            <h4 class="modal-goal-title">Inserir gol</h4>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-12 modal-goal-wrapper">
+                        <div class="col-md-6 modal-goal-item">
+                            <select data-placeholder="Quem fez o gol?" multiple="false"
+                                    class="chosen-select  modal-player-name-list form-control"
+                                    id="modal-goal-owner-player-select">
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <br/>
+
+                <div class="row">
+                    <div class="col-md-12 modal-goal-wrapper">
+                        <div class="col-md-6 modal-goal-item">
+                            <label class="radio-inline col-md-6"><input type="radio" name="goal-half"
+                                                                        value="0" checked="checked"/>1° Tempo</label>
+                            <label class="radio-inline col-md-5"><input type="radio" name="goal-half"
+                                                                        value="1"/>2° Tempo</label>
+                        </div>
+
+                        <div class="col-md-3 modal-goal-item">
+                            <input type="number" id="goal-minute" min="0" placeholder="Minuto"
+                                   onkeypress="return isNumberKey(event)" class="form-control"/>
+                        </div>
+                        <div class="col-md-3 modal-goal-item">
+                            <input type="checkbox" id="own-goal" name="isOwnGoal" value="true"/> É gol contra?
+                        </div>
+                    </div>
+                </div>
+                <br/>
+
+                <div class="row">
+                    <div class="col-md-12 modal-goal-wrapper">
+                        <div class="col-md-12 modal-goal-item">
+                            <input class="form-control" type="text" id="goal-title" maxlength="65" placeholder="Título do lance"/>
+                        </div>
+                    </div>
+                </div>
+                <br/>
+                <div class="row">
+                    <div class="col-md-12 modal-goal-wrapper">
+                        <div class="col-md-12 modal-goal-item">
+                            <textarea class="form-control" id="goal-description" rows="5" maxlength="350" placeholder="Descrição do lance"></textarea>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" id="btn-modal-goal-close"
+                        data-dismiss="modal">Fechar
+                </button>
+                <button type="button" class="btn btn-primary" id="btn-modal-goal-save">Salvar
+                </button>
             </div>
         </div><!-- /.modal-content -->
     </div><!-- /.modal-dialog -->

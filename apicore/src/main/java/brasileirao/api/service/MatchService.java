@@ -1,7 +1,9 @@
 package brasileirao.api.service;
 
 import brasileirao.api.dto.ClubDto;
+import brasileirao.api.dto.GoalInputDto;
 import brasileirao.api.dto.MatchDto;
+import brasileirao.api.exception.ServiceException;
 import brasileirao.api.persistence.Club;
 import brasileirao.api.persistence.Match;
 
@@ -43,4 +45,6 @@ public interface MatchService {
     * @return Instância de <i>ClubDto</i>
     */
    MatchDto convertMatchToDto(Match match);
+
+   void insertGoalInMatch(GoalInputDto goalInputDto) throws ServiceException;
 }
