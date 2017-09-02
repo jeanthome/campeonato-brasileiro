@@ -2,7 +2,10 @@ package brasileirao.api.service;
 
 import brasileirao.api.dto.PlayerDto;
 import brasileirao.api.dto.PlayerMinDto;
+import brasileirao.api.dto.PlayerRegisterDto;
+import brasileirao.api.persistence.Club;
 import brasileirao.api.persistence.Player;
+import org.modelmapper.ModelMapper;
 
 import java.util.List;
 
@@ -60,4 +63,12 @@ public interface PlayerService {
    PlayerMinDto convertPlayerToMinDto(Player player);
 
    List<PlayerMinDto> convertPlayerListToPlayerMinDtoList( List<Player> playerList);
+
+   /**
+    * Converte DTO PlayerRegister em um objeto da entidade Player.
+    *
+    * @param playerRegisterDto DTO com os dados.
+    * @return Instancia de {@link Player}.
+    */
+    Player convertPlayerRegisterDtoToPlayer(PlayerRegisterDto playerRegisterDto);
 }

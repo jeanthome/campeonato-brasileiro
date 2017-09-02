@@ -1,5 +1,7 @@
 package brasileirao.web.controller;
 
+import brasileirao.api.dto.GoalInputDto;
+import brasileirao.api.enums.ClubTypeEnum;
 import brasileirao.api.exception.ServiceException;
 import brasileirao.api.exception.ValidationException;
 import brasileirao.api.helper.ValidationHelper;
@@ -9,11 +11,10 @@ import brasileirao.api.service.ClubService;
 import brasileirao.api.service.MatchService;
 import brasileirao.api.service.PlayerInMatchService;
 import brasileirao.api.service.PlayerService;
-import brasileirao.api.dto.GoalInputDto;
-import brasileirao.api.enums.ClubTypeEnum;
 import brasileirao.web.helper.ConverterHelper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -34,7 +35,7 @@ import java.util.List;
  * Lida com as requisicões da aplicação Web que são referentes à entidade Match.
  */
 @Controller
-@RequestMapping(value = "admin/match")
+@RequestMapping("admin/match")
 public class AdminMatchController {
 
 
@@ -66,9 +67,10 @@ public class AdminMatchController {
     * Retorna a view de edicao de partida com o objeto de contexto.
     *
     * @param matchId Identificador da partida a ser editada.
+    * @param model   Model da página
     * @return Model and view com a view a ser recarregada.
     */
-   @GetMapping(value = "/{matchId}")
+   @GetMapping("/{matchId}")
    public ModelAndView editMatch(@PathVariable Long matchId, Model model) {
       final ModelAndView modelAndView = new ModelAndView();
       modelAndView.setViewName("edit_match");
@@ -90,19 +92,18 @@ public class AdminMatchController {
     * @return ResponseEntity com a defina resposta.
     * @throws ValidationException Exceção de validação.
     */
-   @PostMapping(value = "/persistePlayers")
-   public ResponseEntity updateStartingPlayers(@RequestParam(value = "matchId") Long matchId,
-                                               @RequestParam(value = "clubType") String clubType,
-                                               @RequestParam(value = "isStartingPlayers") Boolean
+   @PostMapping("/persistePlayers")
+   public ResponseEntity updateStartingPlayers(@RequestParam("matchId") Long matchId,
+                                               @RequestParam("clubType") String clubType,
+                                               @RequestParam("isStartingPlayers") Boolean
                                                        isStartingPlayers,
-                                               @RequestParam(value = "playersIdList") String
+                                               @RequestParam("playersIdList") String
                                                        playersIdList) throws ValidationException {
 
       final Match match = this.matchService.findById(matchId);
       List<PlayerInMatch> playerInMatchList = new ArrayList<>();
 
       if (match != null) {
-         System.out.print(playersIdList);
 
          List<Long> idsList = new ArrayList<>();
 
@@ -133,11 +134,19 @@ public class AdminMatchController {
       return new ResponseEntity<Object>("Jogadores salvos", HttpStatus.OK);
    }
 
-   @PutMapping(value = "/goal")
-   public ResponseEntity insertGoal(@RequestBody GoalInputDto goalInputDto ) throws ServiceException{
+   /**
+    * Insere um gol e uma partida.
+    *
+    * @param goalInputDto Dto com as informações do gol.
+    * @return ResponseEntity com o status da resposta.
+    * @throws ServiceException Exceção das classes de serviço.
+    */
+   @PutMapping(value = "/goal", produces = MediaType.APPLICATION_JSON_VALUE)
+   public ResponseEntity insertGoal(@RequestBody GoalInputDto goalInputDto)
+           throws ServiceException {
 
       this.matchService.insertGoalInMatch(goalInputDto);
-      return new ResponseEntity<Object>("Jogadores salvos", HttpStatus.OK);
+      return new ResponseEntity<Object>("Gol inserido.", HttpStatus.OK);
 
    }
 }

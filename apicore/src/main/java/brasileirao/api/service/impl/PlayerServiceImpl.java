@@ -3,8 +3,11 @@ package brasileirao.api.service.impl;
 import brasileirao.api.dao.PlayerDao;
 import brasileirao.api.dto.PlayerDto;
 import brasileirao.api.dto.PlayerMinDto;
+import brasileirao.api.dto.PlayerRegisterDto;
 import brasileirao.api.helper.DateHelper;
+import brasileirao.api.persistence.Club;
 import brasileirao.api.persistence.Player;
+import brasileirao.api.service.ClubService;
 import brasileirao.api.service.PlayerService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,6 +32,12 @@ public class PlayerServiceImpl implements PlayerService {
     */
    @Autowired
    private PlayerDao playerDao;
+
+   /**
+    * Classe de serviços da entidade {@link Club}
+    * */
+   @Autowired
+   private ClubService clubService;
 
    @Override
    public Player findByDisplayName(String displayName) {
@@ -99,5 +108,29 @@ public class PlayerServiceImpl implements PlayerService {
          playerMinDtoList.add( playerMinDto);
       }
       return playerMinDtoList;
+   }
+
+
+   /**
+    * Converte DTO da entidade Player em seu respectivo objeto.
+    *
+    * @param playerRegisterDto DTO com os dados.
+    * @return Instancia de {@link Player}.
+    */
+   @Override
+   public Player convertPlayerRegisterDtoToPlayer(PlayerRegisterDto playerRegisterDto) {
+
+      final ModelMapper modelMapper = new ModelMapper();
+      final Player player = modelMapper.map(playerRegisterDto, Player.class);
+
+      if (playerRegisterDto.getActualClubId() != null) {
+         final Club club = this.clubService.findById(playerRegisterDto.getActualClubId());
+         player.setActualClub(club);
+      }
+
+      if (playerRegisterDto.getNationality().length() < 3) {
+         player.setNationality("Brasileiro");
+      }
+      return player;
    }
 }

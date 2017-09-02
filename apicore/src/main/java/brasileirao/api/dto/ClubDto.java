@@ -35,6 +35,11 @@ public class ClubDto extends ResourceSupport {
     */
    private String abbreviation;
 
+   /**
+    * A cor que representa o time, em hexadecimal.
+    */
+   private String color;
+
    public Long getIdentificator() {
       return identificator;
    }
@@ -67,6 +72,13 @@ public class ClubDto extends ResourceSupport {
       this.abbreviation = abbreviation;
    }
 
+   public String getColor() {
+      return color;
+   }
+
+   public void setColor(String color) {
+      this.color = color;
+   }
 
    /**
     * Adiciona links (self e escudo) no JSON de {@link Club}

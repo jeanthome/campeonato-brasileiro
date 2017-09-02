@@ -10,7 +10,13 @@ import java.util.List;
 /**
  * Classe para conversões auxiliares.
  */
-public class ConverterHelper {
+public final class ConverterHelper {
+
+   /**
+    * Construtor privado.
+    */
+   private ConverterHelper() {
+   }
 
    /**
     * Converte uma String com ids, separados por (;), em um array de ids do tipo Long.
@@ -19,7 +25,8 @@ public class ConverterHelper {
     * @return Lista de Long com os valores convertidos.
     * @throws ValidationException Exceção de validação.
     */
-   public static final List<Long> convertStringWithIdsToList(String stringWithIds) throws ValidationException {
+   public static List<Long> convertStringWithIdsToList(String stringWithIds)
+           throws ValidationException {
 
       final List<Long> returnList = new ArrayList<>();
 
@@ -30,8 +37,8 @@ public class ConverterHelper {
             if (ValidationHelper.isNumber(array[i])) {
                returnList.add(convertStringToLong(array[i]));
             } else {
-               throw new ValidationException(ValidationExceptionMessageEnum.INVALID_NUMBER.
-                       getMessage());
+               throw new ValidationException(ValidationExceptionMessageEnum.INVALID_NUMBER
+                       .getMessage());
             }
          }
       }
@@ -44,7 +51,7 @@ public class ConverterHelper {
     * @param number String com o número a ser convertido.
     * @return Long com o número convertido.
     */
-   public static final Long convertStringToLong(String number) {
+   public static Long convertStringToLong(String number) {
 
       //TODO Adicionar regex para validar se é número ou não e lancár exceção.
       return Long.valueOf(number);

@@ -32,7 +32,7 @@ import java.util.List;
  * Lida com requisições referentes à entidade <i>Club</i>.
  */
 @RestController
-@RequestMapping(value = "/clubs")
+@RequestMapping("/clubs")
 public class ClubController {
 
    /**
@@ -73,11 +73,8 @@ public class ClubController {
          clubDtoList.add(clubDto);
       }
 
-      if (!clubDtoList.isEmpty()) {
-         return new ResponseEntity<>(clubDtoList, HttpStatus.FOUND);
-      } else {
-         return new ResponseEntity<>("Não encontrado", HttpStatus.NOT_FOUND);
-      }
+      return new ResponseEntity<>(clubDtoList, HttpStatus.OK);
+
    }
 
    /**
@@ -136,7 +133,8 @@ public class ClubController {
       if (club != null) {
          coach.setActualClub(club);
          this.coachService.save(coach);
-         return new ResponseEntity<>(this.coachService.convertCoachToDto(coach), HttpStatus.CREATED);
+         final CoachDto coachDto = this.coachService.convertCoachToDto(coach);
+         return new ResponseEntity<>(coachDto, HttpStatus.CREATED);
       } else {
          return new ResponseEntity<>("Clube não encontrado", HttpStatus.NOT_FOUND);
       }

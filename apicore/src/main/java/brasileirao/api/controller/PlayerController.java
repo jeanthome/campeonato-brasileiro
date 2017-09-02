@@ -1,6 +1,7 @@
 package brasileirao.api.controller;
 
 import brasileirao.api.dto.PlayerDto;
+import brasileirao.api.dto.PlayerRegisterDto;
 import brasileirao.api.persistence.Player;
 import brasileirao.api.service.PlayerService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,8 +10,12 @@ import org.springframework.core.io.InputStreamResource;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -22,6 +27,7 @@ import java.util.List;
 /**
  * Lida com requisições referentes à entidade <i>Player</i>
  */
+@CrossOrigin
 @RestController
 @RequestMapping(value = "/players")
 public class PlayerController {
@@ -115,4 +121,18 @@ public class PlayerController {
          return new ResponseEntity<>("Jogador não encontrado.", HttpStatus.NOT_FOUND);
       }
    }
+
+   @PostMapping
+   public ResponseEntity<?> insertPlayer(@RequestBody PlayerRegisterDto playerRegisterDto,
+                                         BindingResult result) {
+      if (result.hasErrors()) {
+         return new ResponseEntity<>("Dados inválidos", HttpStatus.BAD_REQUEST);
+      } else {
+         this.playerService.save(this.playerService
+                 .convertPlayerRegisterDtoToPlayer(playerRegisterDto));
+      }
+
+      return new ResponseEntity<Object>("Jogador cadastrado.", HttpStatus.OK);
+   }
+
 }

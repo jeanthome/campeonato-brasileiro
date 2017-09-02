@@ -3,7 +3,7 @@ package brasileirao.api.helper;
 /**
  * Classe para validacões pontuais.
  */
-final class ValidationHelper {
+public final class ValidationHelper {
 
    /**
     * Regex para validar números.
