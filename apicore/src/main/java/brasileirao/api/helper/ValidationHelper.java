@@ -11,6 +11,11 @@ public final class ValidationHelper {
    private static final String NUMBER = "\\d+";
 
    /**
+    * Número máximo de rodadas.
+    */
+   public static final int MAX_ROUND = 38;
+
+   /**
     * Contrutor privado
     */
    private ValidationHelper() {
@@ -42,6 +47,39 @@ public final class ValidationHelper {
       if (isEmptyOrVoid(number)) {
          return false;
       } else if (number.matches(NUMBER)) {
+         return true;
+      }
+      return false;
+   }
+
+   /**
+    * Verifica se uma dada String representa uma rodada válida.
+    *
+    * @param roundNumber A string a ser validada.
+    * @return true, se e somente se a string rerpesenta um número de rodada. false, caso contrário.
+    */
+   public static boolean isRoundNumber(final String roundNumber) {
+
+      if (isNumber(roundNumber)) {
+
+         final Long converted = ConverterHelper.convertStringToLong(roundNumber);
+
+         if (converted > 0 && converted <= MAX_ROUND) {
+            return true;
+         }
+      }
+      return false;
+   }
+
+   /**
+    * Verifica se um dado Long representa uma rodada válida.
+    *
+    * @param roundNumber A string a ser validada.
+    * @return true, se e somente se a string rerpesenta um número de rodada. false, caso contrário.
+    */
+   public static boolean isRoundNumber(final Long roundNumber) {
+
+      if (roundNumber > 0 && roundNumber <= MAX_ROUND) {
          return true;
       }
       return false;

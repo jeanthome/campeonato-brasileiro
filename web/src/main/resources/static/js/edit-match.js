@@ -77,7 +77,6 @@ $(document).ready(function () {
     $(".home-club-name").html(homeClubName);
     $(".visitor-club-name").html(visitorClubName);
 
-
     setRound();
 
 });

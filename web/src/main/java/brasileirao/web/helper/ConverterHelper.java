@@ -55,6 +55,5 @@ public final class ConverterHelper {
 
       //TODO Adicionar regex para validar se é número ou não e lancár exceção.
       return Long.valueOf(number);
-
    }
 }

@@ -104,24 +104,5 @@ public class ApplicationController {
       modelAndView.addObject(CLUBS, clubs);
       return modelAndView;
    }
-
-   /**
-    * Persiste uma partida no banco de dados.
-    *
-    * @param match  Entidada de {@link Match} a ser persistida.
-    * @param result Resultado da validação dos campos obrigatórios.
-    * @return View de cadsatro de partida.
-    */
-   @PostMapping("insert_match")
-   public ModelAndView insertNewMatch(@Valid Match match, BindingResult result) {
-
-      final ModelAndView modelAndView = new ModelAndView("redirect:/match");
-      if (result.hasErrors()) {
-         return modelAndView;
-      } else {
-         this.matchService.save(match);
-      }
-      return modelAndView;
-   }
 }
 

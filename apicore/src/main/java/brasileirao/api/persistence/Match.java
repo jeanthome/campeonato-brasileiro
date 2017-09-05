@@ -1,5 +1,6 @@
 package brasileirao.api.persistence;
 
+import brasileirao.api.dto.MatchInputDto;
 import brasileirao.api.enums.StadiumEnum;
 
 import javax.persistence.CascadeType;

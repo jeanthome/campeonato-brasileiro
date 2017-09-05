@@ -13,7 +13,12 @@ public enum ServiceExceptionMessageEnum {
    /**
     * Partida não encontrada.
     */
-   MATCH_NOT_FOUND("Partida não encontrada.");
+   MATCH_NOT_FOUND("Partida não encontrada."),
+
+   /**
+    * Clube não encontrado.
+    */
+   CLUB_NOT_FOUND("Clube não encontrado.");
 
    /**
     * Mensagem a ser lançada junta com a exceção.

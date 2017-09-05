@@ -1,12 +1,12 @@
 package brasileirao.api.service;
 
-import brasileirao.api.dto.ClubDto;
 import brasileirao.api.dto.GoalInputDto;
 import brasileirao.api.dto.MatchDto;
+import brasileirao.api.dto.MatchInputDto;
 import brasileirao.api.exception.ServiceException;
-import brasileirao.api.persistence.Club;
 import brasileirao.api.persistence.Match;
 
+import java.text.ParseException;
 import java.util.List;
 
 /**
@@ -25,6 +25,7 @@ public interface MatchService {
 
    /**
     * Retorna as partidas de uma dada rodada.
+    *
     * @param roundNumber O número da rodada.
     * @return List com as partidas encontradas.
     */
@@ -47,4 +48,11 @@ public interface MatchService {
    MatchDto convertMatchToDto(Match match);
 
    void insertGoalInMatch(GoalInputDto goalInputDto) throws ServiceException;
+
+   /**
+    * @param matchInputDto Dto com as informações da partida a ser inserida.
+    * @throws ServiceException Exceção caso não sejam encontrados os times.
+    * @throws ParseException   Excecão que pode ser lançada ao converter a data.
+    */
+   void insertMatch(MatchInputDto matchInputDto) throws ServiceException, ParseException;
 }

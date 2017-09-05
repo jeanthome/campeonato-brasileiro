@@ -1,11 +1,15 @@
 package brasileirao.api.service.impl;
 
+import brasileirao.api.dao.ClubDao;
 import brasileirao.api.dao.MatchDao;
 import brasileirao.api.dto.GoalInputDto;
 import brasileirao.api.dto.MatchDto;
+import brasileirao.api.dto.MatchInputDto;
 import brasileirao.api.enums.ClubTypeEnum;
 import brasileirao.api.enums.ServiceExceptionMessageEnum;
 import brasileirao.api.exception.ServiceException;
+import brasileirao.api.helper.ConverterHelper;
+import brasileirao.api.persistence.Club;
 import brasileirao.api.persistence.Goal;
 import brasileirao.api.persistence.Match;
 import brasileirao.api.service.GoalService;
@@ -16,6 +20,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.text.ParseException;
 import java.util.List;
 
 /**
@@ -29,6 +34,12 @@ public class MatchServiceImpl implements MatchService {
     */
    @Autowired
    private MatchDao matchDao;
+
+   /**
+    * Objeto de acesso de dados da classe {@link brasileirao.api.persistence.Club}.
+    */
+   @Autowired
+   private ClubDao clubDao;
 
    /**
     * Classe de serviços da entidade Player.
@@ -144,5 +155,28 @@ public class MatchServiceImpl implements MatchService {
          }
       }
       matchDao.save(match);
+   }
+
+   @Override
+   public void insertMatch(MatchInputDto matchInputDto) throws ServiceException, ParseException {
+
+      final Club homeClub = this.clubDao.findById(matchInputDto.getHomeClubId());
+      final Club visitorClub = this.clubDao.findById(matchInputDto.getVisitorClubId());
+
+      /* Verifica se os clubes existem */
+      if (homeClub == null || visitorClub == null) {
+         throw new ServiceException(ServiceExceptionMessageEnum.CLUB_NOT_FOUND.getMessage());
+      }
+
+      /* Cria instância da entidade Match */
+      final Match match = new Match();
+      match.setStadiumEnum(matchInputDto.getStadiumEnum());
+      match.setRoundNumber(matchInputDto.getRoundNumber());
+      match.setHomeClub(homeClub);
+      match.setVisitorClub(visitorClub);
+      match.setKickOff(ConverterHelper.convertStringToDate(matchInputDto.getKickOff()));
+
+      /* Persiste a nova instância */
+      this.matchDao.save(match);
    }
 }

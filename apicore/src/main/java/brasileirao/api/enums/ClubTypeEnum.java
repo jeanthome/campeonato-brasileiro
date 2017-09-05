@@ -20,7 +20,6 @@ public enum ClubTypeEnum {
     */
    private String clubType;
 
-
    /**
     * Contrutor padrão.
     * @param clubType A descrição do tipo.
