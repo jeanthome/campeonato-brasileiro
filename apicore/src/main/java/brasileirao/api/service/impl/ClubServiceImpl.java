@@ -60,7 +60,7 @@ public class ClubServiceImpl implements ClubService {
     * @return Instância de <i>ClubDto</i>
     */
    @Override
-   public ClubDto convertClubToDto(Club club) {
+   public ClubDto convertClubToClubDto(Club club) {
       final ModelMapper modelMapper = new ModelMapper();
       final ClubDto clubDto = modelMapper.map(club, ClubDto.class);
       clubDto.setIdentificator(club.getId());

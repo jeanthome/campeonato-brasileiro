@@ -8,7 +8,12 @@ public enum ValidationExceptionMessageEnum {
    /**
     * Número inválido.
     */
-   INVALID_NUMBER("Número inválido");
+   INVALID_NUMBER("Número inválido"),
+
+   /**
+    * Rodada inválida
+    */
+   INVALID_ROUND_NUMBER("Rodada inválida");
 
    /**
     * Mensagem a ser lançada junta com a exceção.

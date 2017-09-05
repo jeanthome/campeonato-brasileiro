@@ -37,7 +37,7 @@ public interface ClubService {
     * @param club Instância da classe <i>Club</i>, que será convertida em DTO.
     * @return Instância de <i>ClubDto</i>
     */
-   ClubDto convertClubToDto(Club club);
+   ClubDto convertClubToClubDto(Club club);
 
 
 }

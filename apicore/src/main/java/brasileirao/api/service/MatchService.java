@@ -3,6 +3,7 @@ package brasileirao.api.service;
 import brasileirao.api.dto.GoalInputDto;
 import brasileirao.api.dto.MatchDto;
 import brasileirao.api.dto.MatchInputDto;
+import brasileirao.api.dto.MatchMinDto;
 import brasileirao.api.exception.ServiceException;
 import brasileirao.api.persistence.Match;
 
@@ -29,7 +30,7 @@ public interface MatchService {
     * @param roundNumber O número da rodada.
     * @return List com as partidas encontradas.
     */
-   List<Match> getMatchesInRound(Long roundNumber);
+   List<MatchMinDto> getMatchesInRound(Long roundNumber);
 
    /**
     * Busca uma partida usando como critério o seu identifador.

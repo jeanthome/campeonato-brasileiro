@@ -26,16 +26,4 @@ public final class ConverterHelper {
       //TODO Adicionar regex para validar se é número ou não e lancár exceção.
       return Long.valueOf(number);
    }
-
-   /**
-    * Converte uma String no formato dd/MM/yyyy HH:mm para um objeto da classe Date.
-    *
-    * @param date String com a data a ser convertida.
-    * @return Date com a data convertida.
-    * @throws ParseException Lançada caso ocorra algum erro durante a conversão.
-    */
-   public static Date convertStringToDate(String date) throws ParseException{
-      final SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy HH:mm");
-      return format.parse(date);
-   }
 }

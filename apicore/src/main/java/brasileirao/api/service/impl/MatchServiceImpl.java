@@ -5,13 +5,15 @@ import brasileirao.api.dao.MatchDao;
 import brasileirao.api.dto.GoalInputDto;
 import brasileirao.api.dto.MatchDto;
 import brasileirao.api.dto.MatchInputDto;
+import brasileirao.api.dto.MatchMinDto;
 import brasileirao.api.enums.ClubTypeEnum;
 import brasileirao.api.enums.ServiceExceptionMessageEnum;
 import brasileirao.api.exception.ServiceException;
-import brasileirao.api.helper.ConverterHelper;
+import brasileirao.api.helper.DateHelper;
 import brasileirao.api.persistence.Club;
 import brasileirao.api.persistence.Goal;
 import brasileirao.api.persistence.Match;
+import brasileirao.api.service.ClubService;
 import brasileirao.api.service.GoalService;
 import brasileirao.api.service.MatchService;
 import brasileirao.api.service.PlayerInMatchService;
@@ -21,6 +23,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.text.ParseException;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -59,6 +62,12 @@ public class MatchServiceImpl implements MatchService {
    @Autowired
    private GoalService goalService;
 
+   /**
+    * Classe de serviços da entidade {@link Club}
+    */
+   @Autowired
+   private ClubService clubService;
+
    @Override
    public Match save(Match match) {
       return this.matchDao.save(match);
@@ -71,8 +80,15 @@ public class MatchServiceImpl implements MatchService {
     * @return List com as partidas encontradas.
     */
    @Override
-   public List<Match> getMatchesInRound(Long roundNumber) {
-      return this.matchDao.findByRoundNumberOrderByKickOffAsc(roundNumber);
+   public List<MatchMinDto> getMatchesInRound(Long roundNumber) {
+
+      final List<Match> matchList = this.matchDao.findByRoundNumberOrderByKickOffAsc(roundNumber);
+      final List<MatchMinDto> matchMinDtos = new ArrayList<>();
+      for (Match match : matchList) {
+         matchMinDtos.add(this.convertMatchToMatchMinDto(match));
+      }
+
+      return matchMinDtos;
    }
 
    /**
@@ -120,6 +136,24 @@ public class MatchServiceImpl implements MatchService {
               .getVisitorGoals()));
 
       return matchDto;
+   }
+
+   /**
+    * Converte uma entidade {@link Match} em seu D.T.O. {@link MatchMinDto}.
+    *
+    * @param match Entidade a ser convertida.
+    * @return o DTO convertido.
+    */
+   public MatchMinDto convertMatchToMatchMinDto(Match match) {
+      final ModelMapper modelMapper = new ModelMapper();
+      final MatchMinDto matchMinDto = modelMapper.map(match, MatchMinDto.class);
+      matchMinDto.setIdentifier(match.getId());
+      matchMinDto.setHomeClub(this.clubService.convertClubToClubDto(match.getHomeClub()));
+      matchMinDto.setVisitorClub(this.clubService.convertClubToClubDto(match.getVisitorClub()));
+      matchMinDto.setStadiumName(match.getStadiumEnum().getName());
+      matchMinDto.setKickOff(DateHelper.getFormattedDate(match.getKickOff()));
+      matchMinDto.setHour(DateHelper.getFormattedHour(match.getKickOff()));
+      return matchMinDto;
    }
 
 
@@ -174,7 +208,7 @@ public class MatchServiceImpl implements MatchService {
       match.setRoundNumber(matchInputDto.getRoundNumber());
       match.setHomeClub(homeClub);
       match.setVisitorClub(visitorClub);
-      match.setKickOff(ConverterHelper.convertStringToDate(matchInputDto.getKickOff()));
+      match.setKickOff(DateHelper.convertStringToDate(matchInputDto.getKickOff()));
 
       /* Persiste a nova instância */
       this.matchDao.save(match);

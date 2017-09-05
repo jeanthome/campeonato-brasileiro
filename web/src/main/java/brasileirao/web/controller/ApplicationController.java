@@ -55,23 +55,7 @@ public class ApplicationController {
     */
    @Autowired
    private MatchService matchService;
-
-   /**
-    * Retorna a home page dos sistema.
-    *
-    * @param roundNumber Número da rodada.
-    * @return ModelAndView com a view a ser carregada.
-    */
-   @GetMapping("/{roundNumber}")
-   public ModelAndView index(@PathVariable Long roundNumber) {
-      final ModelAndView modelAndView = new ModelAndView();
-      modelAndView.setViewName("home");
-
-      final List<Match> matches = this.matchService.getMatchesInRound(roundNumber);
-      modelAndView.addObject("matches", matches);
-      return modelAndView;
-   }
-
+   
    /**
     * Retorna formulário de cadastro de jogador..
     *

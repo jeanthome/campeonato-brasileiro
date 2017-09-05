@@ -2,8 +2,12 @@ package brasileirao.api.controller;
 
 import brasileirao.api.dto.MatchDto;
 import brasileirao.api.dto.MatchInputDto;
+import brasileirao.api.dto.MatchMinDto;
 import brasileirao.api.enums.StadiumEnum;
+import brasileirao.api.enums.ValidationExceptionMessageEnum;
 import brasileirao.api.exception.ServiceException;
+import brasileirao.api.exception.ValidationException;
+import brasileirao.api.helper.ValidationHelper;
 import brasileirao.api.persistence.Match;
 import brasileirao.api.service.MatchService;
 import brasileirao.api.validator.MatchInputDtoValidator;
@@ -101,5 +105,17 @@ public class MatchController {
          stadiumEnumList.add(hashMap);
       }
       return new ResponseEntity<Object>(stadiumEnumList, HttpStatus.OK);
+   }
+
+   @GetMapping(value = "/round/{roundNumber}", produces = MediaType.APPLICATION_JSON_VALUE)
+   public ResponseEntity<?> getMatchesInRound(@PathVariable Long roundNumber)
+           throws ValidationException {
+
+      if (!ValidationHelper.isRoundNumber(roundNumber)) {
+         throw new ValidationException(
+                 ValidationExceptionMessageEnum.INVALID_ROUND_NUMBER.getMessage());
+      }
+      final List<MatchMinDto> matchMinDtos = this.matchService.getMatchesInRound(roundNumber);
+      return new ResponseEntity<Object>(matchMinDtos, HttpStatus.OK);
    }
 }

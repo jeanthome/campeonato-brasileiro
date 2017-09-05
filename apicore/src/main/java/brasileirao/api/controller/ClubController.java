@@ -68,7 +68,7 @@ public class ClubController {
       final List<ClubDto> clubDtoList = new ArrayList<>();
       while (clubIterator.hasNext()) {
          final Club club = clubIterator.next();
-         final ClubDto clubDto = this.clubService.convertClubToDto(club);
+         final ClubDto clubDto = this.clubService.convertClubToClubDto(club);
          clubDto.addLinks(club.getId());
          clubDtoList.add(clubDto);
       }
@@ -90,7 +90,7 @@ public class ClubController {
       final Club club = this.clubService.findById(id);
       if (club != null) {
 
-         final ClubDto clubDto = this.clubService.convertClubToDto(club);
+         final ClubDto clubDto = this.clubService.convertClubToClubDto(club);
          clubDto.addLinks(club.getId());
          return new ResponseEntity<>(clubDto, HttpStatus.FOUND);
 
