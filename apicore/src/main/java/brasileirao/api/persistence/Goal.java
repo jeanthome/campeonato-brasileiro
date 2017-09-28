@@ -1,5 +1,6 @@
 package brasileirao.api.persistence;
 
+import brasileirao.api.enums.GoalTypeEnum;
 import brasileirao.api.enums.HalfEnum;
 
 import javax.persistence.Column;
@@ -50,10 +51,10 @@ public class Goal {
    private HalfEnum half;
 
    /**
-    * Flag que indica se o gol foi contra.
+    * Tipo de gol.
     */
-   @Column(name = "IS_OWN_GOAL")
-   private Boolean isOwnGoal;
+   @Column(name = "GOAL_TYPE")
+   private GoalTypeEnum goalTypeEnum;
 
    /**
     * Título do texto que descreve o gol.
@@ -99,12 +100,12 @@ public class Goal {
       this.id = id;
    }
 
-   public Boolean getOwnGoal() {
-      return isOwnGoal;
+   public GoalTypeEnum getGoalTypeEnum() {
+      return goalTypeEnum;
    }
 
-   public void setOwnGoal(Boolean ownGoal) {
-      isOwnGoal = ownGoal;
+   public void setGoalTypeEnum(GoalTypeEnum goalTypeEnum) {
+      this.goalTypeEnum = goalTypeEnum;
    }
 
    public String getTitle() {

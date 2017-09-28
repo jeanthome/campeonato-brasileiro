@@ -88,7 +88,7 @@ public enum StadiumEnum {
    /**
     * São Januário
     */
-   SÃO_JANUARIO("São Januário"),
+   SAO_JANUARIO("São Januário"),
 
    /**
     * Serra Dourada
@@ -118,7 +118,12 @@ public enum StadiumEnum {
    /**
     * Barradão.
     */
-   BARRADAO("Barradão");
+   BARRADAO("Barradão"),
+
+   /**
+    * Arena de Pernambuco
+    */
+   ARENA_DE_PERNAMBUCO("Arena de Pernambuco");
 
 
    /**

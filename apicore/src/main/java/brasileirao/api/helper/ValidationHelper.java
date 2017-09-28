@@ -13,7 +13,7 @@ public final class ValidationHelper {
    /**
     * Número máximo de rodadas.
     */
-   public static final int MAX_ROUND = 38;
+   private static final int MAX_ROUND = 38;
 
    /**
     * Contrutor privado

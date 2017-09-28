@@ -91,6 +91,30 @@ public class MatchServiceImpl implements MatchService {
       return matchMinDtos;
    }
 
+   @Override
+   public void insertMatch(MatchInputDto matchInputDto) throws ServiceException, ParseException {
+
+      final Club homeClub = this.clubDao.findById(matchInputDto.getHomeClubId());
+      final Club visitorClub = this.clubDao.findById(matchInputDto.getVisitorClubId());
+
+      /* Verifica se os clubes existem */
+      if (homeClub == null || visitorClub == null) {
+         throw new ServiceException(ServiceExceptionMessageEnum.CLUB_NOT_FOUND.getMessage());
+      }
+
+      /* Cria instância da entidade Match */
+      final Match match = new Match();
+      match.setStadiumEnum(matchInputDto.getStadiumEnum());
+      match.setRoundNumber(matchInputDto.getRoundNumber());
+      match.setHomeClub(homeClub);
+      match.setVisitorClub(visitorClub);
+      match.setKickOff(DateHelper.convertStringToDate(matchInputDto.getKickOff()));
+
+      /* Persiste a nova instância */
+      this.matchDao.save(match);
+   }
+
+
    /**
     * Busca uma partida usando como critério o seu identifador.
     *
@@ -101,7 +125,6 @@ public class MatchServiceImpl implements MatchService {
    public Match findById(Long matchId) {
       return this.matchDao.findById(matchId);
    }
-
 
    /**
     * Converte uma instância de <i>Match</i> ao seu respectivo DTO.
@@ -138,6 +161,7 @@ public class MatchServiceImpl implements MatchService {
       return matchDto;
    }
 
+
    /**
     * Converte uma entidade {@link Match} em seu D.T.O. {@link MatchMinDto}.
     *
@@ -155,7 +179,6 @@ public class MatchServiceImpl implements MatchService {
       matchMinDto.setHour(DateHelper.getFormattedHour(match.getKickOff()));
       return matchMinDto;
    }
-
 
    /**
     * Insere um gol em uma partida.
@@ -189,28 +212,5 @@ public class MatchServiceImpl implements MatchService {
          }
       }
       matchDao.save(match);
-   }
-
-   @Override
-   public void insertMatch(MatchInputDto matchInputDto) throws ServiceException, ParseException {
-
-      final Club homeClub = this.clubDao.findById(matchInputDto.getHomeClubId());
-      final Club visitorClub = this.clubDao.findById(matchInputDto.getVisitorClubId());
-
-      /* Verifica se os clubes existem */
-      if (homeClub == null || visitorClub == null) {
-         throw new ServiceException(ServiceExceptionMessageEnum.CLUB_NOT_FOUND.getMessage());
-      }
-
-      /* Cria instância da entidade Match */
-      final Match match = new Match();
-      match.setStadiumEnum(matchInputDto.getStadiumEnum());
-      match.setRoundNumber(matchInputDto.getRoundNumber());
-      match.setHomeClub(homeClub);
-      match.setVisitorClub(visitorClub);
-      match.setKickOff(DateHelper.convertStringToDate(matchInputDto.getKickOff()));
-
-      /* Persiste a nova instância */
-      this.matchDao.save(match);
    }
 }
