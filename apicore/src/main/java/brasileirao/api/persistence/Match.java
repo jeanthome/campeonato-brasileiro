@@ -154,6 +154,12 @@ public class Match {
    @Column(name = "KICK_OFF")
    private Date kickOff;
 
+   /**
+    * Indica se a partida já foi finalizada.
+    */
+   @Column(name = "FINISHED")
+   private Boolean finished;
+
    public Long getId() {
       return id;
    }
@@ -194,28 +200,25 @@ public class Match {
       this.visitorClub = visitorClub;
    }
 
-   public List<Goal> getHomeGoals() {
+   public List<Goal> getHomeClubGoals() {
       return homeClubGoals;
    }
 
-   public void setHomeGoals(List<Goal> homeGoals) {
-      this.homeClubGoals = homeGoals;
+   public void setHomeClubGoals(List<Goal> homeClubGoals) {
+      this.homeClubGoals = homeClubGoals;
    }
 
-   public List<Goal> getVisitorGoals() {
+   public List<Goal> getVisitorClubGoals() {
       return visitorClubGoals;
    }
 
-   public void setVisitorGoals(List<Goal> visitorGoals) {
-      this.visitorClubGoals = visitorGoals;
+   public void setVisitorClubGoals(List<Goal> visitorClubGoals) {
+      this.visitorClubGoals = visitorClubGoals;
    }
-
 
    public List<PlayerInMatch> getHomeClubStartingPlayers() {
       return homeClubStartingPlayers;
    }
-
-
 
 
    public void setHomeClubStartingPlayers(List<PlayerInMatch> homeClubStartingPlayers) {
@@ -297,5 +300,14 @@ public class Match {
    public void setKickOff(Date kickOff) {
       this.kickOff = kickOff;
    }
+
+   public Boolean getFinished() {
+      return finished;
+   }
+
+   public void setFinished(Boolean finished) {
+      this.finished = finished;
+   }
+
 
 }

@@ -1,5 +1,9 @@
 package brasileirao.api.enums;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+
 /**
  * Tipos de gols
  */
@@ -34,7 +38,7 @@ public enum GoalTypeEnum {
    /**
     * Construtor padrão.
     *
-    * @param description
+    * @param description A descrição do tipo de gol.
     */
    GoalTypeEnum(String description) {
       this.description = description;
@@ -42,5 +46,22 @@ public enum GoalTypeEnum {
 
    public String getDescription() {
       return description;
+   }
+
+   /**
+    * Obtém uma lista com os tipos de gols.
+    *
+    * @return Lista com os tipos de gols.
+    */
+   public static List<HashMap<String, String>> getGoalTypeEnumList() {
+      final List<HashMap<String, String>> goalsTypeEnumList = new ArrayList<>();
+
+      for (GoalTypeEnum goalTypeEnum : GoalTypeEnum.values()) {
+         final HashMap<String, String> hashMap = new HashMap<>();
+         hashMap.put("value", goalTypeEnum.name());
+         hashMap.put("label", goalTypeEnum.getDescription());
+         goalsTypeEnumList.add(hashMap);
+      }
+      return goalsTypeEnumList;
    }
 }

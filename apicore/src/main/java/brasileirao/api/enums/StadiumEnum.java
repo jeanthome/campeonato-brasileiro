@@ -1,5 +1,9 @@
 package brasileirao.api.enums;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+
 /**
  * Enum que mapeia todos os estádios onde os jogos podem ocorrer.
  */
@@ -142,5 +146,22 @@ public enum StadiumEnum {
 
    public String getName() {
       return name;
+   }
+
+   /**
+    * Retorna a lista dos estádios onde os jogos podem ser realizados.
+    *
+    * @return Lista com as informações do estádios em StadiumEnum.
+    */
+   public static List<HashMap<String, String>> getStadiumEnumList() {
+      final List<HashMap<String, String>> stadiumEnumList = new ArrayList<>();
+
+      for (StadiumEnum stadiumEnum : StadiumEnum.values()) {
+         final HashMap<String, String> hashMap = new HashMap<>();
+         hashMap.put("value", stadiumEnum.name());
+         hashMap.put("label", stadiumEnum.getName());
+         stadiumEnumList.add(hashMap);
+      }
+      return stadiumEnumList;
    }
 }

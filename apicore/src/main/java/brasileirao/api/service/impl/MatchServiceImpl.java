@@ -109,6 +109,7 @@ public class MatchServiceImpl implements MatchService {
       match.setHomeClub(homeClub);
       match.setVisitorClub(visitorClub);
       match.setKickOff(DateHelper.convertStringToDate(matchInputDto.getKickOff()));
+      match.setFinished(false);
 
       /* Persiste a nova instância */
       this.matchDao.save(match);
@@ -153,10 +154,10 @@ public class MatchServiceImpl implements MatchService {
 
 
       matchDto.setHomeClubGoals(this.goalService.convertGoalListToGoalDtoList(match
-              .getHomeGoals()));
+              .getHomeClubGoals()));
 
       matchDto.setVisitorClubGoals(this.goalService.convertGoalListToGoalDtoList(match
-              .getVisitorGoals()));
+              .getVisitorClubGoals()));
 
       return matchDto;
    }
@@ -169,14 +170,27 @@ public class MatchServiceImpl implements MatchService {
     * @return o DTO convertido.
     */
    public MatchMinDto convertMatchToMatchMinDto(Match match) {
-      final ModelMapper modelMapper = new ModelMapper();
-      final MatchMinDto matchMinDto = modelMapper.map(match, MatchMinDto.class);
+
+      final MatchMinDto matchMinDto = new MatchMinDto();
+
       matchMinDto.setIdentifier(match.getId());
+      matchMinDto.setRoundNumber(match.getRoundNumber());
+      matchMinDto.setFinished(match.getFinished());
       matchMinDto.setHomeClub(this.clubService.convertClubToClubDto(match.getHomeClub()));
       matchMinDto.setVisitorClub(this.clubService.convertClubToClubDto(match.getVisitorClub()));
       matchMinDto.setStadiumName(match.getStadiumEnum().getName());
       matchMinDto.setKickOff(DateHelper.getFormattedDate(match.getKickOff()));
       matchMinDto.setHour(DateHelper.getFormattedHour(match.getKickOff()));
+      matchMinDto.setFinished(match.getFinished());
+
+      /**
+       * Se a partida já começou/terminou, adiciona o número de gols.
+       */
+      if (match.getKickOff().before(DateHelper.now())) {
+         matchMinDto.setHomeClubGoals( Long.valueOf(match.getHomeClubGoals().size()));
+         matchMinDto.setVisitorClubGoals( Long.valueOf(match.getVisitorClubGoals().size()));
+      }
+
       return matchMinDto;
    }
 
@@ -198,17 +212,17 @@ public class MatchServiceImpl implements MatchService {
       if (goalInputDto.getClubType().equals(ClubTypeEnum.HOME_CLUB.getClubType())) {
 
          if (goalInputDto.getOwnGoal()) {
-            match.getVisitorGoals().add(goal);
+            match.getVisitorClubGoals().add(goal);
          } else {
-            match.getHomeGoals().add(goal);
+            match.getHomeClubGoals().add(goal);
          }
 
       } else {
 
          if (goalInputDto.getOwnGoal()) {
-            match.getHomeGoals().add(goal);
+            match.getHomeClubGoals().add(goal);
          } else {
-            match.getVisitorGoals().add(goal);
+            match.getVisitorClubGoals().add(goal);
          }
       }
       matchDao.save(match);

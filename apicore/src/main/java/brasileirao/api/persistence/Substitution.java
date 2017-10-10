@@ -26,16 +26,16 @@ public class Substitution {
     */
    @NotNull
    @ManyToOne
-   @JoinColumn(name = "STARTING_PLAYER_ID")
-   private Player startingPlayer;
+   @JoinColumn(name = "PLAYER_WHO_LEAVES")
+   private PlayerInMatch playerWhoLeaves;
 
    /**
     * O jogador que entrou na partida.
     */
    @NotNull
    @ManyToOne
-   @JoinColumn(name = "SUBSTITUTE_PLAYER_ID")
-   private Player substitutePlayer;
+   @JoinColumn(name = "PLAYER_WHO_ENTERS")
+   private PlayerInMatch playerWhoEnters;
 
    /**
     * O minuto no qual a substituicao ocorreu.
@@ -60,20 +60,20 @@ public class Substitution {
       this.id = id;
    }
 
-   public Player getStartingPlayer() {
-      return startingPlayer;
+   public PlayerInMatch getPlayerWhoLeaves() {
+      return playerWhoLeaves;
    }
 
-   public void setStartingPlayer(Player startingPlayer) {
-      this.startingPlayer = startingPlayer;
+   public void setPlayerWhoLeaves(PlayerInMatch playerWhoLeaves) {
+      this.playerWhoLeaves = playerWhoLeaves;
    }
 
-   public Player getSubstitutePlayer() {
-      return substitutePlayer;
+   public PlayerInMatch getPlayerWhoEnters() {
+      return playerWhoEnters;
    }
 
-   public void setSubstitutePlayer(Player substitutePlayer) {
-      this.substitutePlayer = substitutePlayer;
+   public void setPlayerWhoEnters(PlayerInMatch playerWhoEnters) {
+      this.playerWhoEnters = playerWhoEnters;
    }
 
    public Long getMinute() {

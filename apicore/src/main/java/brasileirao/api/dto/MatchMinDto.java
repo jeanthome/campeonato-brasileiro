@@ -27,6 +27,16 @@ public class MatchMinDto extends ResourceSupport {
    private ClubDto visitorClub;
 
    /**
+    * O número de gol do time mandante.
+    */
+   private Long homeClubGoals;
+
+   /**
+    * O número de gol do time visitante;
+    */
+   private Long visitorClubGoals;
+
+   /**
     * O estádio onde a partida foi realizada.
     */
    private String stadiumName;
@@ -40,6 +50,11 @@ public class MatchMinDto extends ResourceSupport {
     * A hora de realização da partida.
     */
    private String hour;
+
+   /**
+    * Indica se a partida já foi finalizada.
+    */
+   private Boolean finished;
 
    public Long getIdentifier() {
       return identifier;
@@ -95,5 +110,29 @@ public class MatchMinDto extends ResourceSupport {
 
    public void setHour(String hour) {
       this.hour = hour;
+   }
+
+   public Boolean getFinished() {
+      return finished;
+   }
+
+   public void setFinished(Boolean finished) {
+      this.finished = finished;
+   }
+
+   public Long getHomeClubGoals() {
+      return homeClubGoals;
+   }
+
+   public void setHomeClubGoals(Long homeClubGoals) {
+      this.homeClubGoals = homeClubGoals;
+   }
+
+   public Long getVisitorClubGoals() {
+      return visitorClubGoals;
+   }
+
+   public void setVisitorClubGoals(Long visitorClubGoals) {
+      this.visitorClubGoals = visitorClubGoals;
    }
 }

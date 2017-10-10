@@ -46,6 +46,14 @@ public final class DateHelper {
    }
 
    /**
+    * Retorna a data atual.
+    * @return Date com a data atual.
+    */
+   public static Date now() {
+      return Calendar.getInstance().getTime();
+   }
+
+   /**
     * Converte um objeto Date em uma String representativa da data pro formato (DAY dd/MM/yyy).
     *
     * @param date Data a ser convertida.

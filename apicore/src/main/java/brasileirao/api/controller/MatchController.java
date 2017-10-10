@@ -3,11 +3,13 @@ package brasileirao.api.controller;
 import brasileirao.api.dto.MatchDto;
 import brasileirao.api.dto.MatchInputDto;
 import brasileirao.api.dto.MatchMinDto;
+import brasileirao.api.enums.GoalTypeEnum;
 import brasileirao.api.enums.StadiumEnum;
 import brasileirao.api.enums.ValidationExceptionMessageEnum;
 import brasileirao.api.exception.ServiceException;
 import brasileirao.api.exception.ValidationException;
 import brasileirao.api.helper.ValidationHelper;
+import brasileirao.api.persistence.Goal;
 import brasileirao.api.persistence.Match;
 import brasileirao.api.service.MatchService;
 import brasileirao.api.validator.MatchInputDtoValidator;
@@ -95,15 +97,7 @@ public class MatchController {
     */
    @GetMapping(value = "/stadiums", produces = MediaType.APPLICATION_JSON_VALUE)
    public ResponseEntity<?> getStadiums() {
-
-      final List<HashMap<String, String>> stadiumEnumList = new ArrayList<>();
-
-      for (StadiumEnum stadiumEnum : StadiumEnum.values()) {
-         final HashMap<String, String> hashMap = new HashMap<>();
-         hashMap.put("value", stadiumEnum.name());
-         hashMap.put("label", stadiumEnum.getName());
-         stadiumEnumList.add(hashMap);
-      }
+      final List<HashMap<String, String>> stadiumEnumList = StadiumEnum.getStadiumEnumList();
       return new ResponseEntity<Object>(stadiumEnumList, HttpStatus.OK);
    }
 
@@ -117,5 +111,16 @@ public class MatchController {
       }
       final List<MatchMinDto> matchMinDtos = this.matchService.getMatchesInRound(roundNumber);
       return new ResponseEntity<Object>(matchMinDtos, HttpStatus.OK);
+   }
+
+   /**
+    * Obtém uma lista com os tipos de gols.
+    *
+    * @return Lista com os tipos de gols.
+    */
+   @GetMapping(value = "/goalType", produces = MediaType.APPLICATION_JSON_VALUE)
+   public ResponseEntity<?> getGoalType() {
+      final List<HashMap<String, String>> goalsTypeList = GoalTypeEnum.getGoalTypeEnumList();
+      return new ResponseEntity<Object>(goalsTypeList, HttpStatus.OK);
    }
 }

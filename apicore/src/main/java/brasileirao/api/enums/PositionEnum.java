@@ -8,7 +8,7 @@ public enum PositionEnum {
    /**
     * Goleiro
     */
-   GOALKEEPER(1L, "Goleiro", "Gol"),
+   GOALKEEPER(1L, "Goleiro", "GOL"),
 
    /**
     * Zagueiro Esquerdo
