@@ -39,6 +39,14 @@ public class MatchInputDto {
    @NotNull
    private Long visitorClubId;
 
+   public MatchInputDto(Long roundNumber, String kickOff, StadiumEnum stadiumEnum, Long homeClubId, Long visitorClubId) {
+      this.roundNumber = roundNumber;
+      this.kickOff = kickOff;
+      this.stadiumEnum = stadiumEnum;
+      this.homeClubId = homeClubId;
+      this.visitorClubId = visitorClubId;
+   }
+
    public Long getRoundNumber() {
       return roundNumber;
    }

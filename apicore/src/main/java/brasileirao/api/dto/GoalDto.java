@@ -1,5 +1,7 @@
 package brasileirao.api.dto;
 
+import brasileirao.api.enums.GoalTypeEnum;
+
 /**
  * Classe para representação de um gol.
  */
@@ -23,7 +25,7 @@ public class GoalDto {
    /**
     * Flag que indica se é gol contra.
     */
-   private Boolean isOwnGoal;
+   private GoalTypeEnum goalType;
 
    /**
     * Título do gol.
@@ -59,12 +61,12 @@ public class GoalDto {
       this.half = half;
    }
 
-   public Boolean getOwnGoal() {
-      return isOwnGoal;
+   public GoalTypeEnum getGoalType() {
+      return goalType;
    }
 
-   public void setOwnGoal(Boolean ownGoal) {
-      isOwnGoal = ownGoal;
+   public void setGoalType(GoalTypeEnum goalType) {
+      this.goalType = goalType;
    }
 
    public String getTitle() {

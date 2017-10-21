@@ -1,13 +1,16 @@
 package brasileirao.api.service.impl;
 
 import brasileirao.api.dao.GoalDao;
+import brasileirao.api.dao.PlayerInMatchDao;
 import brasileirao.api.dto.GoalDto;
 import brasileirao.api.dto.GoalInputDto;
 import brasileirao.api.enums.ServiceExceptionMessageEnum;
 import brasileirao.api.exception.ServiceException;
 import brasileirao.api.persistence.Goal;
 import brasileirao.api.persistence.Player;
+import brasileirao.api.persistence.PlayerInMatch;
 import brasileirao.api.service.GoalService;
+import brasileirao.api.service.PlayerInMatchService;
 import brasileirao.api.service.PlayerService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,10 +32,16 @@ public class GoalServiceImpl implements GoalService {
    private GoalDao goalDao;
 
    /**
-    * Classe de acesso de dados da entidade Player.
+    * Classe de serviços da entidade Player.
     */
    @Autowired
    private PlayerService playerService;
+
+   /**
+    * Classe de acesso de dados da entidade {@link brasileirao.api.persistence.PlayerInMatch}
+    */
+   @Autowired
+   private PlayerInMatchDao playerInMatchDao;
 
    @Override
    public Goal save(Goal goal) {
@@ -43,8 +52,10 @@ public class GoalServiceImpl implements GoalService {
    public Goal convertGoalInputDtoToGoal(GoalInputDto goalInputDto) throws ServiceException {
       final ModelMapper modelMapper = new ModelMapper();
       final Goal goal = modelMapper.map(goalInputDto, Goal.class);
+      goal.setId(null);
 
-      final Player goalOwnerPlayer = this.playerService.findById(goalInputDto.getGoalOwner());
+      final PlayerInMatch goalOwnerPlayer =
+              this.playerInMatchDao.findOne(goalInputDto.getGoalOwner());
 
       if (goalOwnerPlayer == null) {
          throw new ServiceException(ServiceExceptionMessageEnum.PLAYER_NOT_FOUND.getMessage());

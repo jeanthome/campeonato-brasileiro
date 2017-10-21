@@ -113,7 +113,7 @@ public class AdminMatchController {
 
          playerInMatchList = this.playerInMatchService.getPlayerListByIdList(idsList);
 
-         if (clubType.equals(ClubTypeEnum.HOME_CLUB.getClubType())) {
+         if (clubType.equals(ClubTypeEnum.HOME_CLUB.name())) {
 
             if (isStartingPlayers) {
                match.setHomeClubStartingPlayers(playerInMatchList);
@@ -121,7 +121,7 @@ public class AdminMatchController {
                match.setHomeClubSubstitutePlayers(playerInMatchList);
             }
 
-         } else if (clubType.equals(ClubTypeEnum.VISITOR_CLUB.getClubType())) {
+         } else if (clubType.equals(ClubTypeEnum.VISITOR_CLUB.name())) {
 
             if (isStartingPlayers) {
                match.setVisitorClubStartingPlayers(playerInMatchList);
@@ -132,21 +132,5 @@ public class AdminMatchController {
          this.matchService.save(match);
       }
       return new ResponseEntity<Object>("Jogadores salvos", HttpStatus.OK);
-   }
-
-   /**
-    * Insere um gol e uma partida.
-    *
-    * @param goalInputDto Dto com as informações do gol.
-    * @return ResponseEntity com o status da resposta.
-    * @throws ServiceException Exceção das classes de serviço.
-    */
-   @PutMapping(value = "/goal", produces = MediaType.APPLICATION_JSON_VALUE)
-   public ResponseEntity insertGoal(@RequestBody GoalInputDto goalInputDto)
-           throws ServiceException {
-
-      this.matchService.insertGoalInMatch(goalInputDto);
-      return new ResponseEntity<Object>("Gol inserido.", HttpStatus.OK);
-
    }
 }

@@ -2,11 +2,13 @@ package brasileirao.api.service.impl;
 
 import brasileirao.api.dao.ClubDao;
 import brasileirao.api.dao.MatchDao;
+import brasileirao.api.dto.GoalDto;
 import brasileirao.api.dto.GoalInputDto;
 import brasileirao.api.dto.MatchDto;
 import brasileirao.api.dto.MatchInputDto;
 import brasileirao.api.dto.MatchMinDto;
 import brasileirao.api.enums.ClubTypeEnum;
+import brasileirao.api.enums.GoalTypeEnum;
 import brasileirao.api.enums.ServiceExceptionMessageEnum;
 import brasileirao.api.exception.ServiceException;
 import brasileirao.api.helper.DateHelper;
@@ -200,31 +202,32 @@ public class MatchServiceImpl implements MatchService {
     * @param goalInputDto Dto de entrada com os dados do gol.
     * @throws ServiceException Exceção das classes de serviço.
     */
-   public void insertGoalInMatch(GoalInputDto goalInputDto) throws ServiceException {
+   public GoalDto insertGoalInMatch(GoalInputDto goalInputDto) throws ServiceException {
 
       final Goal goal = this.goalService.convertGoalInputDtoToGoal(goalInputDto);
-      final Match match = this.matchDao.findById(goalInputDto.getMatch());
+      final Match match = this.matchDao.findById(goalInputDto.getMatchId());
 
       if (match == null) {
          throw new ServiceException(ServiceExceptionMessageEnum.MATCH_NOT_FOUND.getMessage());
       }
 
-      if (goalInputDto.getClubType().equals(ClubTypeEnum.HOME_CLUB.getClubType())) {
+      if (goalInputDto.getClubType().equals(ClubTypeEnum.HOME_CLUB)) {
 
-         if (goalInputDto.getOwnGoal()) {
+         if (goalInputDto.getGoalType().equals(GoalTypeEnum.OWN_GOAL)) {
             match.getVisitorClubGoals().add(goal);
          } else {
             match.getHomeClubGoals().add(goal);
          }
 
       } else {
-
-         if (goalInputDto.getOwnGoal()) {
+         if (goalInputDto.getGoalType().equals(GoalTypeEnum.OWN_GOAL)) {
             match.getHomeClubGoals().add(goal);
          } else {
             match.getVisitorClubGoals().add(goal);
          }
       }
       matchDao.save(match);
+
+      return this.goalService.convertGoalToGoalDto(goal);
    }
 }

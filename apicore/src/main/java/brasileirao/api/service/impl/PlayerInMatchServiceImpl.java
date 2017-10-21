@@ -69,7 +69,7 @@ public class PlayerInMatchServiceImpl implements PlayerInMatchService {
       final ModelMapper modelMapper = new ModelMapper();
       final PlayerMinDto playerMinDto = modelMapper.map(playerInMatch, PlayerMinDto.class);
       playerMinDto.setPositionAbbreviation(playerInMatch.getPositionEnum().getAbbreviation());
-      playerMinDto.setId(playerInMatch.getSourcePlayer().getId());
+      playerMinDto.setId(playerInMatch.getId());
       return playerMinDto;
    }
 

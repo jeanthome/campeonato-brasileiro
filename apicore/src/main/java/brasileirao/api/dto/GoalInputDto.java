@@ -1,5 +1,9 @@
 package brasileirao.api.dto;
 
+import javax.validation.constraints.NotNull;
+
+import brasileirao.api.enums.ClubTypeEnum;
+import brasileirao.api.enums.GoalTypeEnum;
 import brasileirao.api.enums.HalfEnum;
 
 /**
@@ -7,109 +11,117 @@ import brasileirao.api.enums.HalfEnum;
  */
 public class GoalInputDto {
 
-   /**
-    * Id da partida onde o gol foi marcado.
-    */
-   private Long match;
+	/**
+	 * Id da partida onde o gol foi marcado.
+	 */
+	@NotNull
+	private Long matchId;
 
-   /**
-    * Clube dono do gol. (HOMECLUB || VISITORCLUB)
-    *
-    * @see brasileirao.api.enums.ClubTypeEnum
-    */
-   private String clubType;
+	/**
+	 * Clube dono do gol. (HOMECLUB || VISITORCLUB)
+	 *
+	 * @see brasileirao.api.enums.ClubTypeEnum
+	 */
+	@NotNull
+	private ClubTypeEnum clubType;
 
-   /**
-    * Id do jogador que fez o gol.
-    */
-   private Long goalOwner;
+	/**
+	 * Id do jogador que fez o gol.
+	 */
+	@NotNull
+	private Long goalOwner;
 
-   /**
-    * Tempo em que o gol foi marcado.
-    */
-   private HalfEnum half;
+	/**
+	 * Tempo em que o gol foi marcado.
+	 */
+	@NotNull
+	private HalfEnum goalHalf;
 
-   /**
-    * Minuto em que o gol foi marcado.
-    */
-   private Long minute;
+	/**
+	 * Minuto em que o gol foi marcado.
+	 */
+	@NotNull
+	private Long goalMinute;
 
-   /**
-    * Flag que indica se é gol contra.
-    */
-   private Boolean isOwnGoal;
+	/**
+	 * Tipo de gol.
+	 */
+	@NotNull
+	private GoalTypeEnum goalType;
 
-   /**
-    * Título do gol.
-    */
-   private String title;
+	/**
+	 * Título do gol.
+	 */
+	@NotNull
+	private String title;
 
-   /**
-    * Descrição do lance do gol.
-    */
-   private String description;
+	/**
+	 * Descrição do lance do gol.
+	 */
+	@NotNull
+	private String description;
 
-   public Long getMatch() {
-      return match;
-   }
+	public Long getMatchId() {
+		return matchId;
+	}
 
-   public void setMatch(Long match) {
-      this.match = match;
-   }
+	public void setMatchId(Long matchId) {
+		this.matchId = matchId;
+	}
 
-   public String getClubType() {
-      return clubType;
-   }
+	public ClubTypeEnum getClubType() {
+		return clubType;
+	}
 
-   public void setClubType(String clubType) {
-      this.clubType = clubType;
-   }
+	public void setClubType(ClubTypeEnum clubType) {
+		this.clubType = clubType;
+	}
 
-   public Long getGoalOwner() {
-      return goalOwner;
-   }
+	public Long getGoalOwner() {
+		return goalOwner;
+	}
 
-   public void setGoalOwner(Long goalOwner) {
-      this.goalOwner = goalOwner;
-   }
+	public void setGoalOwner(Long goalOwner) {
+		this.goalOwner = goalOwner;
+	}
 
-   public HalfEnum getHalf() {
-      return half;
-   }
+	public HalfEnum getGoalHalf() {
+		return goalHalf;
+	}
 
-   public void setHalf(HalfEnum half) {
-      this.half = half;
-   }
+	public void setGoalHalf(HalfEnum goalHalf) {
+		this.goalHalf = goalHalf;
+	}
 
-   public Long getMinute() {
-      return minute;
-   }
+	public Long getGoalMinute() {
+		return goalMinute;
+	}
 
-   public void setMinute(Long minute) {
-      this.minute = minute;
-   }
+	public void setGoalMinute(Long goalMinute) {
+		this.goalMinute = goalMinute;
+	}
 
-   public Boolean getOwnGoal() {
-      return isOwnGoal;
-   }
+	public GoalTypeEnum getGoalType() {
+		return goalType;
+	}
 
-   public void setOwnGoal(Boolean ownGoal) {
-      isOwnGoal = ownGoal;
-   }
+	public void setGoalType(GoalTypeEnum goalType) {
+		this.goalType = goalType;
+	}
 
-   public String getTitle() {
-      return title;
-   }
+	public String getTitle() {
+		return title;
+	}
 
-   public void setTitle(String title) {
-      this.title = title;
-   }
+	public void setTitle(String title) {
+		this.title = title;
+	}
 
-   public String getDescription() {
-      return description;
-   }
+	public String getDescription() {
+		return description;
+	}
 
-   public void setDescription(String description) {
-      this.description = description;
-   }
+	public void setDescription(String description) {
+		this.description = description;
+	}
 }

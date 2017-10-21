@@ -1,5 +1,6 @@
 package brasileirao.api.service;
 
+import brasileirao.api.dto.GoalDto;
 import brasileirao.api.dto.GoalInputDto;
 import brasileirao.api.dto.MatchDto;
 import brasileirao.api.dto.MatchInputDto;
@@ -48,7 +49,14 @@ public interface MatchService {
     */
    MatchDto convertMatchToDto(Match match);
 
-   void insertGoalInMatch(GoalInputDto goalInputDto) throws ServiceException;
+   /**
+    * Insere um gol em uma partida.
+    *
+    * @param goalInputDto Dto com as informações do gol.
+    * @return Dto com os dados do gol inserido.
+    * @throws ServiceException Exceção que pode ser lançada ao não encontrar uma entidade.
+    */
+   GoalDto insertGoalInMatch(GoalInputDto goalInputDto) throws ServiceException;
 
    /**
     * @param matchInputDto Dto com as informações da partida a ser inserida.

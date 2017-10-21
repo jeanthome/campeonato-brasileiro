@@ -33,7 +33,7 @@ public class Goal {
     */
    @NotNull
    @ManyToOne(fetch = FetchType.LAZY)
-   private Player owner;
+   private PlayerInMatch owner;
 
    /**
     * Minuto no qual o gol foi marcado
@@ -68,11 +68,11 @@ public class Goal {
    @Column(name = "DESCRIPTION", length = 350)
    private String description;
 
-   public Player getOwner() {
+   public PlayerInMatch getOwner() {
       return owner;
    }
 
-   public void setOwner(Player owner) {
+   public void setOwner(PlayerInMatch owner) {
       this.owner = owner;
    }
 
