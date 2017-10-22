@@ -1,7 +1,9 @@
 package brasileirao.api.service.impl;
 
 import brasileirao.api.dao.ClubDao;
+import brasileirao.api.dao.GoalDao;
 import brasileirao.api.dao.MatchDao;
+import brasileirao.api.dto.CardInputDto;
 import brasileirao.api.dto.GoalDto;
 import brasileirao.api.dto.GoalInputDto;
 import brasileirao.api.dto.MatchDto;
@@ -12,9 +14,11 @@ import brasileirao.api.enums.GoalTypeEnum;
 import brasileirao.api.enums.ServiceExceptionMessageEnum;
 import brasileirao.api.exception.ServiceException;
 import brasileirao.api.helper.DateHelper;
+import brasileirao.api.persistence.Card;
 import brasileirao.api.persistence.Club;
 import brasileirao.api.persistence.Goal;
 import brasileirao.api.persistence.Match;
+import brasileirao.api.service.CardService;
 import brasileirao.api.service.ClubService;
 import brasileirao.api.service.GoalService;
 import brasileirao.api.service.MatchService;
@@ -69,6 +73,19 @@ public class MatchServiceImpl implements MatchService {
     */
    @Autowired
    private ClubService clubService;
+
+   /**
+    * Classe de acesso de dados da entidade Goal.
+    */
+   @Autowired
+   private GoalDao goalDao;
+
+   /**
+    * Classe de serviços da entidade {@link Card}
+    */
+   @Autowired
+   private CardService cardService;
+
 
    @Override
    public Match save(Match match) {
@@ -142,6 +159,9 @@ public class MatchServiceImpl implements MatchService {
       matchDto.getHomeClub().setIdentificator(match.getHomeClub().getId());
       matchDto.getVisitorClub().setIdentificator(match.getVisitorClub().getId());
 
+      /**
+       * Converte os jogadores em seus respectivos DTOs.
+       */
       matchDto.setHomeClubStartingPlayers(this.playerInMatchService
               .convertPlayerInMatchListToPlayerMinDtoList(match.getHomeClubStartingPlayers()));
 
@@ -154,12 +174,23 @@ public class MatchServiceImpl implements MatchService {
       matchDto.setVisitorClubSubstitutePlayers(this.playerInMatchService
               .convertPlayerInMatchListToPlayerMinDtoList(match.getVisitorClubSubstitutePlayers()));
 
-
+      /**
+       * Converte os gols em seus respectivos DTOs.
+       */
       matchDto.setHomeClubGoals(this.goalService.convertGoalListToGoalDtoList(match
               .getHomeClubGoals()));
 
       matchDto.setVisitorClubGoals(this.goalService.convertGoalListToGoalDtoList(match
               .getVisitorClubGoals()));
+
+      /**
+       * Converte os cartões em seus respectivos DTOs.
+       */
+
+      matchDto.setHomeClubCards(this.cardService.convertCardListToCardDtoList(
+              match.getHomeClubCardList()));
+      matchDto.setVisitorClubCards(this.cardService.convertCardListToCardDtoList(
+              match.getVisitorClubCardList()));
 
       return matchDto;
    }
@@ -189,8 +220,8 @@ public class MatchServiceImpl implements MatchService {
        * Se a partida já começou/terminou, adiciona o número de gols.
        */
       if (match.getKickOff().before(DateHelper.now())) {
-         matchMinDto.setHomeClubGoals( Long.valueOf(match.getHomeClubGoals().size()));
-         matchMinDto.setVisitorClubGoals( Long.valueOf(match.getVisitorClubGoals().size()));
+         matchMinDto.setHomeClubGoals(Long.valueOf(match.getHomeClubGoals().size()));
+         matchMinDto.setVisitorClubGoals(Long.valueOf(match.getVisitorClubGoals().size()));
       }
 
       return matchMinDto;
@@ -200,11 +231,13 @@ public class MatchServiceImpl implements MatchService {
     * Insere um gol em uma partida.
     *
     * @param goalInputDto Dto de entrada com os dados do gol.
+    * @return Dto com as informações do gol inserido.
     * @throws ServiceException Exceção das classes de serviço.
     */
    public GoalDto insertGoalInMatch(GoalInputDto goalInputDto) throws ServiceException {
 
       final Goal goal = this.goalService.convertGoalInputDtoToGoal(goalInputDto);
+      this.goalService.save(goal);
       final Match match = this.matchDao.findById(goalInputDto.getMatchId());
 
       if (match == null) {
@@ -229,5 +262,27 @@ public class MatchServiceImpl implements MatchService {
       matchDao.save(match);
 
       return this.goalService.convertGoalToGoalDto(goal);
+   }
+
+   @Override
+   public void insertCardInMatch(CardInputDto cardInputDto) throws ServiceException {
+
+      final Card card = this.cardService.convertCardInputDtoToCard(cardInputDto);
+      this.cardService.save(card);
+
+      final Match match = this.matchDao.findById(cardInputDto.getMatchId());
+
+      if (match == null) {
+         throw new ServiceException(ServiceExceptionMessageEnum.MATCH_NOT_FOUND.getMessage());
+      }
+
+      if (cardInputDto.getClubType().equals(ClubTypeEnum.HOME_CLUB)) {
+         match.getHomeClubCardList().add(card);
+      } else if (cardInputDto.getClubType().equals(ClubTypeEnum.VISITOR_CLUB)) {
+         match.getVisitorClubCardList().add(card);
+      }
+
+      matchDao.save(match);
+
    }
 }

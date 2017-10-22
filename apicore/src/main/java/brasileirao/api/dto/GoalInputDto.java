@@ -1,5 +1,6 @@
 package brasileirao.api.dto;
 
+import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 
 import brasileirao.api.enums.ClubTypeEnum;
@@ -35,11 +36,12 @@ public class GoalInputDto {
 	 * Tempo em que o gol foi marcado.
 	 */
 	@NotNull
-	private HalfEnum goalHalf;
+	private HalfEnum half;
 
 	/**
 	 * Minuto em que o gol foi marcado.
 	 */
+	@Min(0)
 	@NotNull
 	private Long goalMinute;
 
@@ -85,12 +87,12 @@ public class GoalInputDto {
 		this.goalOwner = goalOwner;
 	}
 
-	public HalfEnum getGoalHalf() {
-		return goalHalf;
+	public HalfEnum getHalf() {
+		return half;
 	}
 
-	public void setGoalHalf(HalfEnum goalHalf) {
-		this.goalHalf = goalHalf;
+	public void setHalf(HalfEnum half) {
+		this.half = half;
 	}
 
 	public Long getGoalMinute() {

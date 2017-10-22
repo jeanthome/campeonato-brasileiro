@@ -33,14 +33,14 @@ public class Card {
     */
    @NotNull
    @ManyToOne(fetch = FetchType.LAZY)
-   private Player owner;
+   private PlayerInMatch cardOwner;
 
    /**
     * Minuto no qual o cartao foi dado.
     */
-   @Column(name = "MINUTE")
-   @NotNull
    @Min(0)
+   @NotNull
+   @Column(name = "MINUTE")
    private Long minute;
 
    /**
@@ -48,14 +48,21 @@ public class Card {
     */
    @NotNull
    @Column(name = "HALF")
-   private HalfEnum halfEnum;
+   private HalfEnum half;
 
    /**
     * Cor do cartão.
     */
-   @Column(name = "CARD")
    @NotNull
-   private CardEnum color;
+   @Column(name = "CARD")
+   private CardEnum cardColor;
+
+   /**
+    * O motivo pelo qual o jogador recebeu o cartão.
+    */
+   @NotNull
+   @Column(name = "REASON", length = 350)
+   private String reason;
 
    public Long getId() {
       return id;
@@ -65,12 +72,12 @@ public class Card {
       this.id = id;
    }
 
-   public Player getOwner() {
-      return owner;
+   public PlayerInMatch getCardOwner() {
+      return cardOwner;
    }
 
-   public void setOwner(Player owner) {
-      this.owner = owner;
+   public void setCardOwner(PlayerInMatch cardOwner) {
+      this.cardOwner = cardOwner;
    }
 
    public Long getMinute() {
@@ -81,19 +88,27 @@ public class Card {
       this.minute = minute;
    }
 
-   public HalfEnum getHalfEnum() {
-      return halfEnum;
+   public HalfEnum getHalf() {
+      return half;
    }
 
-   public void setHalfEnum(HalfEnum halfEnum) {
-      this.halfEnum = halfEnum;
+   public void setHalf(HalfEnum half) {
+      this.half = half;
    }
 
-   public CardEnum getColor() {
-      return color;
+   public CardEnum getCardColor() {
+      return cardColor;
    }
 
-   public void setColor(CardEnum color) {
-      this.color = color;
+   public void setCardColor(CardEnum cardColor) {
+      this.cardColor = cardColor;
+   }
+
+   public String getReason() {
+      return reason;
+   }
+
+   public void setReason(String reason) {
+      this.reason = reason;
    }
 }

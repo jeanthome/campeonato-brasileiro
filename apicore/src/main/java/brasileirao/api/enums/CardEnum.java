@@ -8,12 +8,12 @@ public enum CardEnum {
     /**
      * Cartão Amarelo
      * */
-    YELLOW("Amarelo"),
+    YELLOW("Cartão Amarelo"),
 
     /**
      * Cartão Vermelho
      * */
-    RED("Vermelho");
+    RED("Cartão Vermelho");
 
     /**
      * Cor do cartão

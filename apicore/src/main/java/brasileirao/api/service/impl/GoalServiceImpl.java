@@ -62,7 +62,6 @@ public class GoalServiceImpl implements GoalService {
       }
 
       goal.setOwner(goalOwnerPlayer);
-      goalDao.save(goal);
       return goal;
    }
 
@@ -70,7 +69,6 @@ public class GoalServiceImpl implements GoalService {
    public GoalDto convertGoalToGoalDto(Goal goal) {
       final ModelMapper modelMapper = new ModelMapper();
       final GoalDto goalDto = modelMapper.map(goal, GoalDto.class);
-
       return goalDto;
    }
 

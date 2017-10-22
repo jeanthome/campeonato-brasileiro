@@ -5,6 +5,9 @@ import org.springframework.hateoas.ResourceSupport;
 
 import java.util.List;
 
+/**
+ * DTO com as informações de uma partida.
+ */
 public class MatchDto extends ResourceSupport {
 
    /**
@@ -49,9 +52,19 @@ public class MatchDto extends ResourceSupport {
    private List<GoalDto> homeClubGoals;
 
    /**
-    * Lita de gols do time visitante.
+    * Lista de gols do time visitante.
     */
    private List<GoalDto> visitorClubGoals;
+
+   /**
+    * Lista com os cartões aplicados aos jogadores do time mandante.
+    */
+   private List<CardDto> homeClubCards;
+
+   /**
+    * Lista com os cartões aplicados aos jogadores do time visitante.
+    */
+   private List<CardDto> visitorClubCards;
 
    /**
     * Jogadores reservas do time visitante.
@@ -136,5 +149,21 @@ public class MatchDto extends ResourceSupport {
 
    public void setVisitorClubGoals(List<GoalDto> visitorClubGoals) {
       this.visitorClubGoals = visitorClubGoals;
+   }
+
+   public List<CardDto> getHomeClubCards() {
+      return homeClubCards;
+   }
+
+   public void setHomeClubCards(List<CardDto> homeClubCards) {
+      this.homeClubCards = homeClubCards;
+   }
+
+   public List<CardDto> getVisitorClubCards() {
+      return visitorClubCards;
+   }
+
+   public void setVisitorClubCards(List<CardDto> visitorClubCards) {
+      this.visitorClubCards = visitorClubCards;
    }
 }
