@@ -1,7 +1,7 @@
 package brasileirao.api.service;
 
 import brasileirao.api.dto.CardDto;
-import brasileirao.api.dto.CardInputDto;
+import brasileirao.api.dto.input.CardInputDto;
 import brasileirao.api.exception.ServiceException;
 import brasileirao.api.persistence.Card;
 

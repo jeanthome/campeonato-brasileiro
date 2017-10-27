@@ -1,7 +1,7 @@
 package brasileirao.api.service;
 
 import brasileirao.api.dto.GoalDto;
-import brasileirao.api.dto.GoalInputDto;
+import brasileirao.api.dto.input.GoalInputDto;
 import brasileirao.api.exception.ServiceException;
 import brasileirao.api.persistence.Goal;
 

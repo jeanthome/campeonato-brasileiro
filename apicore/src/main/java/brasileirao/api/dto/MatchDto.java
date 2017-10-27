@@ -71,6 +71,16 @@ public class MatchDto extends ResourceSupport {
     */
    private List<PlayerMinDto> visitorClubSubstitutePlayers;
 
+   /**
+    * Lista de substituições do time mandante.
+    */
+   private List<SubstitutionDto> homeClubSubstitutions;
+
+   /**
+    * Lista de substituições do time visitante.
+    */
+   private List<SubstitutionDto> visitorClubSubstitutions;
+
    public Long getIdentificator() {
       return identificator;
    }
@@ -165,5 +175,21 @@ public class MatchDto extends ResourceSupport {
 
    public void setVisitorClubCards(List<CardDto> visitorClubCards) {
       this.visitorClubCards = visitorClubCards;
+   }
+
+   public List<SubstitutionDto> getHomeClubSubstitutions() {
+      return homeClubSubstitutions;
+   }
+
+   public void setHomeClubSubstitutions(List<SubstitutionDto> homeClubSubstitutions) {
+      this.homeClubSubstitutions = homeClubSubstitutions;
+   }
+
+   public List<SubstitutionDto> getVisitorClubSubstitutions() {
+      return visitorClubSubstitutions;
+   }
+
+   public void setVisitorClubSubstitutions(List<SubstitutionDto> visitorClubSubstitutions) {
+      this.visitorClubSubstitutions = visitorClubSubstitutions;
    }
 }

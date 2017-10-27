@@ -18,6 +18,9 @@ import javax.validation.constraints.NotNull;
 @Entity
 public class Substitution {
 
+   /**
+    * ID do jogador. É a P.K. da entidade.
+    */
    @Id
    @GeneratedValue(strategy = GenerationType.AUTO)
    private Long id;

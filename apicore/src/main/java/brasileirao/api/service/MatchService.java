@@ -1,11 +1,12 @@
 package brasileirao.api.service;
 
-import brasileirao.api.dto.CardInputDto;
+import brasileirao.api.dto.input.CardInputDto;
 import brasileirao.api.dto.GoalDto;
-import brasileirao.api.dto.GoalInputDto;
+import brasileirao.api.dto.input.GoalInputDto;
 import brasileirao.api.dto.MatchDto;
-import brasileirao.api.dto.MatchInputDto;
+import brasileirao.api.dto.input.MatchInputDto;
 import brasileirao.api.dto.MatchMinDto;
+import brasileirao.api.dto.input.SubstitutionInputDto;
 import brasileirao.api.exception.ServiceException;
 import brasileirao.api.persistence.Match;
 
@@ -68,9 +69,17 @@ public interface MatchService {
    void insertCardInMatch(CardInputDto cardInputDto) throws ServiceException;
 
    /**
+    * Insere uma substituição em uma partida.
+    *
+    * @param substitutionInputDto Dto com as informações da substituição a ser inserida.
+    * @throws ServiceException
+    */
+   void insertSubstitutionInMatch(SubstitutionInputDto substitutionInputDto) throws ServiceException;
+   /**
     * @param matchInputDto Dto com as informações da partida a ser inserida.
     * @throws ServiceException Exceção caso não sejam encontrados os times.
     * @throws ParseException   Excecão que pode ser lançada ao converter a data.
     */
    void insertMatch(MatchInputDto matchInputDto) throws ServiceException, ParseException;
+
 }

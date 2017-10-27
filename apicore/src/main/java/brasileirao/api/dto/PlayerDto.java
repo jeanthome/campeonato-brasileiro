@@ -11,6 +11,9 @@ import java.util.Map;
 import static org.springframework.hateoas.mvc.ControllerLinkBuilder.linkTo;
 import static org.springframework.hateoas.mvc.ControllerLinkBuilder.methodOn;
 
+/**
+ * Dto para a representação de um jogador.
+ */
 public class PlayerDto extends ResourceSupport {
 
    /**

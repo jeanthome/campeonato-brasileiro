@@ -53,6 +53,7 @@ public class Goal {
    /**
     * Tipo de gol.
     */
+   @NotNull
    @Column(name = "GOAL_TYPE")
    private GoalTypeEnum goalTypeEnum;
 

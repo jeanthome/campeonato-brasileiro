@@ -1,6 +1,6 @@
 package brasileirao.api.validator;
 
-import brasileirao.api.dto.MatchInputDto;
+import brasileirao.api.dto.input.MatchInputDto;
 import brasileirao.api.helper.ValidationHelper;
 import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;

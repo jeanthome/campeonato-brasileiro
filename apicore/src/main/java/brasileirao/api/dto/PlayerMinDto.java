@@ -1,5 +1,8 @@
 package brasileirao.api.dto;
 
+/**
+ * DTO para a representação mínima de um jogador.
+ */
 public class PlayerMinDto {
 
    /**
