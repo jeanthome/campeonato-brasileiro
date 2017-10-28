@@ -8,68 +8,68 @@ import brasileirao.api.enums.HalfEnum;
  */
 public class CardDto {
 
-   /**
-    * Jogador que recebeu o cartão.
-    */
-   private PlayerMinDto cardOwner;
+  /**
+   * Jogador que recebeu o cartão.
+   */
+  private PlayerMinDto cardOwner;
 
-   /**
-    * Minuto no qual o cartao foi dado.
-    */
-   private Long minute;
+  /**
+   * Minuto no qual o cartao foi dado.
+   */
+  private Long minute;
 
-   /**
-    * O tempo no qual o cartao foi dado.
-    */
-   private HalfEnum half;
+  /**
+   * O tempo no qual o cartao foi dado.
+   */
+  private HalfEnum half;
 
-   /**
-    * Cor do cartão.
-    */
-   private CardEnum cardColor;
+  /**
+   * Cor do cartão.
+   */
+  private CardEnum cardColor;
 
-   /**
-    * O motivo pelo qual o jogador recebeu o cartão.
-    */
-   private String reason;
+  /**
+   * O motivo pelo qual o jogador recebeu o cartão.
+   */
+  private String reason;
 
-   public PlayerMinDto getCardOwner() {
-      return cardOwner;
-   }
+  public PlayerMinDto getCardOwner() {
+    return cardOwner;
+  }
 
-   public void setCardOwner(PlayerMinDto cardOwner) {
-      this.cardOwner = cardOwner;
-   }
+  public void setCardOwner(PlayerMinDto cardOwner) {
+    this.cardOwner = cardOwner;
+  }
 
-   public Long getMinute() {
-      return minute;
-   }
+  public Long getMinute() {
+    return minute;
+  }
 
-   public void setMinute(Long minute) {
-      this.minute = minute;
-   }
+  public void setMinute(Long minute) {
+    this.minute = minute;
+  }
 
-   public HalfEnum getHalf() {
-      return half;
-   }
+  public HalfEnum getHalf() {
+    return half;
+  }
 
-   public void setHalf(HalfEnum half) {
-      this.half = half;
-   }
+  public void setHalf(HalfEnum half) {
+    this.half = half;
+  }
 
-   public CardEnum getCardColor() {
-      return cardColor;
-   }
+  public CardEnum getCardColor() {
+    return cardColor;
+  }
 
-   public void setCardColor(CardEnum cardColor) {
-      this.cardColor = cardColor;
-   }
+  public void setCardColor(CardEnum cardColor) {
+    this.cardColor = cardColor;
+  }
 
-   public String getReason() {
-      return reason;
-   }
+  public String getReason() {
+    return reason;
+  }
 
-   public void setReason(String reason) {
-      this.reason = reason;
-   }
+  public void setReason(String reason) {
+    this.reason = reason;
+  }
 }

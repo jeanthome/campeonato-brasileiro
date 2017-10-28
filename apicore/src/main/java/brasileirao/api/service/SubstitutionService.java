@@ -1,6 +1,8 @@
 package brasileirao.api.service;
 
 import brasileirao.api.dto.SubstitutionDto;
+import brasileirao.api.dto.input.SubstitutionInputDto;
+import brasileirao.api.exception.ServiceException;
 import brasileirao.api.persistence.Substitution;
 
 import java.util.List;
@@ -18,20 +20,30 @@ public interface SubstitutionService {
    */
   Substitution save(Substitution substitution);
 
-   /**
-    * Converte uma instância de {@link Substitution} em seu DTO {@link SubstitutionDto};
-    *
-    * @param substitution Instância a ser convertida.
-    * @return Instância do DTO.
-    */
+  /**
+   * Converte uma instância de {@link SubstitutionInputDto} em sua respectiva instância de
+   * {@link Substitution}.
+   * 
+   * @param substitutionInputDto A instância a ser convertida.
+   * @return A instância convertida.
+   */
+  Substitution convertSubstitutionInputDtoToSubstitution(SubstitutionInputDto substitutionInputDto)
+      throws ServiceException;
+
+  /**
+   * Converte uma instância de {@link Substitution} em seu DTO {@link SubstitutionDto};
+   *
+   * @param substitution Instância a ser convertida.
+   * @return Instância do DTO.
+   */
   SubstitutionDto convertSubstitutionToSubstitutionDto(Substitution substitution);
 
-   /**
-    * Converte lista de {@link Substitution} em uma lista de {@link SubstitutionDto}.
-    *
-    * @param substitutionList Lista com as instâncias a serem convertidas.
-    * @return Lista com os DTOs convertidos.
-    */
+  /**
+   * Converte lista de {@link Substitution} em uma lista de {@link SubstitutionDto}.
+   *
+   * @param substitutionList Lista com as instâncias a serem convertidas.
+   * @return Lista com os DTOs convertidos.
+   */
   List<SubstitutionDto> convertSubstitutionListToSubstitutionDtoList(
       List<Substitution> substitutionList);
 }

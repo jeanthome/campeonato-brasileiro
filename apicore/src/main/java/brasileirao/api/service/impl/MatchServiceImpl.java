@@ -1,14 +1,22 @@
 package brasileirao.api.service.impl;
 
+import java.text.ParseException;
+import java.util.ArrayList;
+import java.util.List;
+
+import org.modelmapper.ModelMapper;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
 import brasileirao.api.dao.ClubDao;
 import brasileirao.api.dao.GoalDao;
 import brasileirao.api.dao.MatchDao;
-import brasileirao.api.dto.input.CardInputDto;
 import brasileirao.api.dto.GoalDto;
-import brasileirao.api.dto.input.GoalInputDto;
 import brasileirao.api.dto.MatchDto;
-import brasileirao.api.dto.input.MatchInputDto;
 import brasileirao.api.dto.MatchMinDto;
+import brasileirao.api.dto.input.CardInputDto;
+import brasileirao.api.dto.input.GoalInputDto;
+import brasileirao.api.dto.input.MatchInputDto;
 import brasileirao.api.dto.input.SubstitutionInputDto;
 import brasileirao.api.enums.ClubTypeEnum;
 import brasileirao.api.enums.GoalTypeEnum;
@@ -27,13 +35,6 @@ import brasileirao.api.service.MatchService;
 import brasileirao.api.service.PlayerInMatchService;
 import brasileirao.api.service.PlayerService;
 import brasileirao.api.service.SubstitutionService;
-import org.modelmapper.ModelMapper;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
-import java.text.ParseException;
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Implementação da classe de serviços da entidade {@link Match}.
@@ -94,7 +95,6 @@ public class MatchServiceImpl implements MatchService {
    */
   @Autowired
   private SubstitutionService substitutionService;
-
 
   @Override
   public Match save(Match match) {
@@ -312,7 +312,17 @@ public class MatchServiceImpl implements MatchService {
       throw new ServiceException((ServiceExceptionMessageEnum.MATCH_NOT_FOUND).getMessage());
     }
 
+    final Substitution substitution =
+        this.substitutionService.convertSubstitutionInputDtoToSubstitution(substitutionInputDto);
 
+    this.substitutionService.save(substitution);
 
+    if (substitutionInputDto.getClubType().equals(ClubTypeEnum.HOME_CLUB)) {
+      match.getHomeClubSubstitutionList().add(substitution);
+    } else if (substitutionInputDto.getClubType().equals(ClubTypeEnum.VISITOR_CLUB)) {
+      match.getVisitorClubSubstitutionList().add(substitution);
+    }
+
+    matchDao.save(match);
   }
 }
