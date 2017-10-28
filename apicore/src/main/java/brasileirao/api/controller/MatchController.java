@@ -96,7 +96,7 @@ public class MatchController {
     return new ResponseEntity<Object>("Partida inserida", HttpStatus.OK);
   }
 
-  // TODO ESTE MÉTODO DEVE SER REMOVIDO. USADO SOMENTE COMO FACILITADOR PARA INSERÇÃO DE PARTIDAS.
+  // TODO: ESTE MÉTODO DEVE SER REMOVIDO. USADO SOMENTE COMO FACILITADOR PARA INSERÇÃO DE PARTIDAS.
   @GetMapping(value = "/insert", produces = MediaType.APPLICATION_JSON_VALUE)
   public ResponseEntity<Object> insertMatches() throws ParseException, ServiceException {
 
@@ -160,19 +160,18 @@ public class MatchController {
     }
 
     return new ResponseEntity<Object>("Inserido", HttpStatus.OK);
-
   }
 
   /**
-   * Insere um gol e uma partida.
+   * Insere um gol em uma partida.
    *
    * @param goalInputDto Dto com as informações do gol.
    * @return ResponseEntity com o status da resposta.
    * @throws ServiceException Exceção das classes de serviço.
    */
-  @PutMapping(value = "/goals", produces = MediaType.APPLICATION_JSON_VALUE)
-  public ResponseEntity insertGoal(@RequestBody GoalInputDto goalInputDto, BindingResult result)
-      throws ServiceException {
+  @PutMapping(value = "/{matchId}/goals", produces = MediaType.APPLICATION_JSON_VALUE)
+  public ResponseEntity insertGoal(@PathVariable Long matchId,
+      @RequestBody GoalInputDto goalInputDto, BindingResult result) throws ServiceException {
 
     if (result.hasErrors()) {
       return new ResponseEntity<>("Dados inválidos", HttpStatus.BAD_REQUEST);
@@ -183,24 +182,33 @@ public class MatchController {
   }
 
   /**
-   * Insere um cartão.
+   * Insere um cartão em uma partida.
    *
    * @param cardInputDto Dto com as informações do cartão.
    * @return ResponseEntity com o status da resposta.
    * @throws ServiceException Exceção das classes de serviço.
    */
-  @PutMapping(value = "/cards", produces = MediaType.APPLICATION_JSON_VALUE)
-  public ResponseEntity insertCard(@RequestBody CardInputDto cardInputDto, BindingResult result)
-      throws ServiceException {
+  @PutMapping(value = "/{matchId}/cards", produces = MediaType.APPLICATION_JSON_VALUE)
+  public ResponseEntity insertCard(@PathVariable Long matchId,
+      @RequestBody CardInputDto cardInputDto, BindingResult result) throws ServiceException {
 
     if (result.hasErrors()) {
       return new ResponseEntity<>("Dados inválidos", HttpStatus.BAD_REQUEST);
     }
 
     this.matchService.insertCardInMatch(cardInputDto);
-    return new ResponseEntity<Object>("Teste", HttpStatus.OK);
+    return new ResponseEntity<Object>("Cartão inserido com sucesso.", HttpStatus.OK);
   }
 
+  /**
+   * Insere uma substituição em uma partida.
+   *
+   * @param matchId O identificador da partida onde o gol será inserido.
+   * @param substitutionInputDto DTO com as informações a respeito da substituição.
+   * @param result Objeto que valida o DTO.
+   * @return ResponseEntity com o status da resposta.
+   * @throws ServiceException Exceção das classes de serviço.
+   */
   @PutMapping(value = "/{matchId}/substitutions", produces = MediaType.APPLICATION_JSON_VALUE)
   public ResponseEntity insertSubstitution(@PathVariable Long matchId,
       @RequestBody SubstitutionInputDto substitutionInputDto, BindingResult result)
@@ -210,10 +218,9 @@ public class MatchController {
       return new ResponseEntity<>("Dados inválidos", HttpStatus.BAD_REQUEST);
     }
 
-    substitutionInputDto.setMatchId(matchId);
     this.matchService.insertSubstitutionInMatch(substitutionInputDto);
 
-    return new ResponseEntity<Object>("Teste", HttpStatus.OK);
+    return new ResponseEntity<Object>("Substituição inserida com sucesso.", HttpStatus.OK);
   }
 
 
