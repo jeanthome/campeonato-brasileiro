@@ -35,21 +35,15 @@ public interface MatchService {
     */
    List<MatchMinDto> getMatchesInRound(Long roundNumber);
 
-   /**
-    * Busca uma partida usando como critério o seu identifador.
-    *
-    * @param matchId Identificador da partida
-    * @return Instância de {@link Match} se existe. null, caso contrário.
-    */
-   Match findById(Long matchId);
 
    /**
-    * Converte uma instância de <i>Match</i> ao seu respectivo DTO.
-    *
-    * @param match Instância da classe <i>Club</i>, que será convertida em DTO.
-    * @return Instância de <i>ClubDto</i>
+    * Busca uma partida usando como critério o seu identifador.
+    * @param matchId Identificador da partida.
+    * @return Instância de {@link MatchDto}.
+    * @throws ServiceException Caso a partida não seja encontrada.
     */
-   MatchDto convertMatchToDto(Match match);
+   MatchDto findById(Long matchId) throws ServiceException;
+
 
    /**
     * Insere um gol em uma partida.

@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import brasileirao.api.helper.ConverterHelper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -58,16 +59,15 @@ public class MatchController {
    *         contrário
    */
   @GetMapping("/{id}")
-  public ResponseEntity<?> getMatchById(@PathVariable Long id) {
+  public ResponseEntity<?> getMatchById(@PathVariable String id) throws ValidationException,
+      ServiceException {
 
-    final Match match = this.matchService.findById(id);
-
-    if (match != null) {
-      final MatchDto matchDto = this.matchService.convertMatchToDto(match);
-      return new ResponseEntity<>(matchDto, HttpStatus.OK);
-    } else {
-      return new ResponseEntity<>("Não encontrado", HttpStatus.NOT_FOUND);
+    if (!ValidationHelper.isNumber(id)) {
+      throw new ValidationException(ValidationExceptionMessageEnum.INVALID_NUMBER.getMessage());
     }
+    
+    final MatchDto matchDto = this.matchService.findById(ConverterHelper.convertStringToLong(id));
+    return new ResponseEntity<Object>(matchDto, HttpStatus.OK);
   }
 
   /**

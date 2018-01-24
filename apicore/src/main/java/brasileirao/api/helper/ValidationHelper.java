@@ -1,5 +1,8 @@
 package brasileirao.api.helper;
 
+import brasileirao.api.exception.ServiceException;
+import brasileirao.api.exception.ValidationException;
+
 /**
  * Classe para validacões pontuais.
  */
@@ -58,7 +61,7 @@ public final class ValidationHelper {
     * @param roundNumber A string a ser validada.
     * @return true, se e somente se a string rerpesenta um número de rodada. false, caso contrário.
     */
-   public static boolean isRoundNumber(final String roundNumber) {
+   public static boolean isRoundNumber(final String roundNumber) throws ValidationException{
 
       if (isNumber(roundNumber)) {
 

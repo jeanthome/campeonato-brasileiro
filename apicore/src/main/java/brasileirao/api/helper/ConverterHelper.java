@@ -1,5 +1,8 @@
 package brasileirao.api.helper;
 
+import brasileirao.api.enums.ValidationExceptionMessageEnum;
+import brasileirao.api.exception.ValidationException;
+
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -21,9 +24,12 @@ public final class ConverterHelper {
     * @param number String com o número a ser convertido.
     * @return Long com o número convertido.
     */
-   public static Long convertStringToLong(String number) {
+  public static Long convertStringToLong(String number) throws ValidationException {
 
-      //TODO Adicionar regex para validar se é número ou não e lancár exceção.
-      return Long.valueOf(number);
-   }
+    if (!ValidationHelper.isNumber(number)) {
+      throw new ValidationException(ValidationExceptionMessageEnum.INVALID_NUMBER.getMessage());
+    }
+
+    return Long.valueOf(number);
+  }
 }

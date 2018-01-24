@@ -6,6 +6,8 @@ import java.util.List;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import brasileirao.api.dao.ClubDao;
@@ -143,16 +145,16 @@ public class MatchServiceImpl implements MatchService {
     this.matchDao.save(match);
   }
 
-
-  /**
-   * Busca uma partida usando como critério o seu identifador.
-   *
-   * @param matchId Identificador da partida
-   * @return Instância de {@link Match} se existe. null, caso contrário.
-   */
   @Override
-  public Match findById(Long matchId) {
-    return this.matchDao.findById(matchId);
+  public MatchDto findById(Long matchId) throws ServiceException {
+
+    final Match match = this.matchDao.findById(matchId);
+
+    if (match == null) {
+      throw new ServiceException(ServiceExceptionMessageEnum.MATCH_NOT_FOUND.getMessage());
+    }
+
+    return this.convertMatchToDto(match);
   }
 
   /**
@@ -161,7 +163,7 @@ public class MatchServiceImpl implements MatchService {
    * @param match Instância da classe <i>Club</i>, que será convertida em DTO.
    * @return Instância de <i>ClubDto</i>
    */
-  public MatchDto convertMatchToDto(Match match) {
+  private MatchDto convertMatchToDto(Match match) {
     final ModelMapper modelMapper = new ModelMapper();
     final MatchDto matchDto = modelMapper.map(match, MatchDto.class);
     matchDto.setIdentificator(match.getId());
@@ -218,7 +220,7 @@ public class MatchServiceImpl implements MatchService {
    * @param match Entidade a ser convertida.
    * @return o DTO convertido.
    */
-  public MatchMinDto convertMatchToMatchMinDto(Match match) {
+  private MatchMinDto convertMatchToMatchMinDto(Match match) {
 
     final MatchMinDto matchMinDto = new MatchMinDto();
 
