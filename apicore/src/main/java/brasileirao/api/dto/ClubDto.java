@@ -1,6 +1,7 @@
 package brasileirao.api.dto;
 
 import brasileirao.api.controller.ClubController;
+import brasileirao.api.exception.ValidationException;
 import brasileirao.api.persistence.Club;
 import org.springframework.hateoas.ResourceSupport;
 
@@ -18,7 +19,7 @@ public class ClubDto extends ResourceSupport {
    /***
     * Id do clube.
     */
-   private Long identificator;
+   private Long identifier;
 
    /***
     * Nome completo do clube.
@@ -40,12 +41,12 @@ public class ClubDto extends ResourceSupport {
     */
    private String color;
 
-   public Long getIdentificator() {
-      return identificator;
+   public Long getIdentifier() {
+      return identifier;
    }
 
-   public void setIdentificator(Long identificator) {
-      this.identificator = identificator;
+   public void setIdentifier(Long identifier) {
+      this.identifier = identifier;
    }
 
    public String getFullName() {
@@ -87,9 +88,9 @@ public class ClubDto extends ResourceSupport {
     * @return Instância de {@link ClubDto} com os links adicionados.
     * @throws IOException
     */
-   public ClubDto addLinks(Long clubId) throws IOException {
+   public ClubDto addLinks(Long clubId) throws IOException, ValidationException {
 
-      this.add(linkTo(methodOn(ClubController.class).getClubById(clubId)).withSelfRel());
+      this.add(linkTo(methodOn(ClubController.class).getClubById(clubId.toString())).withSelfRel());
       this.add(linkTo(methodOn(ClubController.class).getBadge(clubId)).withRel("badge"));
       this.add(linkTo(methodOn(ClubController.class).getCoachOfClub(clubId)).withRel("coach"));
       this.add(linkTo(methodOn(ClubController.class).getPlayers(clubId)).withRel("players"));

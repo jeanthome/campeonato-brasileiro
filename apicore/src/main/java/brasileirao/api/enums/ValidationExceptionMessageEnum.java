@@ -5,31 +5,36 @@ package brasileirao.api.enums;
  */
 public enum ValidationExceptionMessageEnum {
 
-   /**
-    * Número inválido.
-    */
-   INVALID_NUMBER("Número inválido"),
+  /**
+   * Número inválido.
+   */
+  INVALID_NUMBER("Número inválido"),
 
-   /**
-    * Rodada inválida
-    */
-   INVALID_ROUND_NUMBER("Rodada inválida");
+  /**
+   * Rodada inválida
+   */
+  INVALID_ROUND_NUMBER("Rodada inválida"),
 
-   /**
-    * Mensagem a ser lançada junta com a exceção.
-    */
-   private String message;
+  /**
+   * Id do clube inválido.
+   */
+  INVALID_CLUB_ID("O Id do clube é inválido");
 
-   /**
-    * Construtor padrão.
-    *
-    * @param message A mensagem de erro.
-    */
-   ValidationExceptionMessageEnum(String message) {
-      this.message = message;
-   }
+  /**
+   * Mensagem a ser lançada junta com a exceção.
+   */
+  private String message;
 
-   public String getMessage() {
-      return message;
-   }
+  /**
+   * Construtor padrão.
+   *
+   * @param message A mensagem de erro.
+   */
+  ValidationExceptionMessageEnum(String message) {
+    this.message = message;
+  }
+
+  public String getMessage() {
+    return message;
+  }
 }

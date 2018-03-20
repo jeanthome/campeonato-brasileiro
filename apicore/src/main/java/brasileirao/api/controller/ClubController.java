@@ -3,6 +3,10 @@ package brasileirao.api.controller;
 import brasileirao.api.dto.ClubDto;
 import brasileirao.api.dto.CoachDto;
 import brasileirao.api.dto.PlayerDto;
+import brasileirao.api.enums.ValidationExceptionMessageEnum;
+import brasileirao.api.exception.ValidationException;
+import brasileirao.api.helper.ConverterHelper;
+import brasileirao.api.helper.ValidationHelper;
 import brasileirao.api.persistence.Club;
 import brasileirao.api.persistence.Coach;
 import brasileirao.api.persistence.Player;
@@ -37,172 +41,168 @@ import java.util.List;
 @RequestMapping("/clubs")
 public class ClubController {
 
-   /**
-    * Instância da classe de serviços da entidade <i>Club</i>
-    */
-   @Autowired
-   private ClubService clubService;
+  /**
+   * Instância da classe de serviços da entidade <i>Club</i>
+   */
+  @Autowired
+  private ClubService clubService;
 
-   /**
-    * Instância da classe de serviços da entidade <i>Coach</i>
-    */
-   @Autowired
-   private CoachService coachService;
+  /**
+   * Instância da classe de serviços da entidade <i>Coach</i>
+   */
+  @Autowired
+  private CoachService coachService;
 
-   /***
-    * Instância da classe de serviços da entidade {@link brasileirao.api.persistence.Player}
-    */
-   @Autowired
-   private PlayerService playerService;
+  /***
+   * Instância da classe de serviços da entidade {@link brasileirao.api.persistence.Player}
+   */
+  @Autowired
+  private PlayerService playerService;
 
-   /**
-    * Retorna JSON com todos os clubes cadastrados no banco.
-    *
-    * @return ResponseEntity Objeto com detalhes da requisição HTTP, como o Status.
-    * @throws IOException Exceção a ser lançada
-    */
-   @GetMapping(value = "", produces = MediaType.APPLICATION_JSON_VALUE)
-   public ResponseEntity<?> getAllClubs() throws IOException {
+  /**
+   * Retorna JSON com todos os clubes cadastrados no banco.
+   *
+   * @return ResponseEntity Objeto com detalhes da requisição HTTP, como o Status.
+   * @throws IOException Exceção a ser lançada
+   */
+  @GetMapping(value = "", produces = MediaType.APPLICATION_JSON_VALUE)
+  public ResponseEntity<?> getAllClubs() throws IOException, ValidationException {
 
-      final Iterable<Club> clubIterable = this.clubService.findAll();
-      final Iterator<Club> clubIterator = clubIterable.iterator();
+    final List<ClubDto> clubDtoList = this.clubService.getAllClubs();
+    return new ResponseEntity<>(clubDtoList, HttpStatus.OK);
+  }
 
-      final List<ClubDto> clubDtoList = new ArrayList<>();
-      while (clubIterator.hasNext()) {
-         final Club club = clubIterator.next();
-         final ClubDto clubDto = this.clubService.convertClubToClubDto(club);
-         clubDto.addLinks(club.getId());
-         clubDtoList.add(clubDto);
-      }
+  /**
+   * Retorna JSON que representa o clube com o 'id' especificado.
+   *
+   * @param clubId Identificador do clube a ser buscado.
+   * @return ResponseEntity Objeto com detalhes da requisição HTTP, como o Status.
+   * @throws IOException Exceção para arquivo não encontrado.
+   */
+  @GetMapping(value = "/{clubId}", produces = MediaType.APPLICATION_JSON_VALUE)
+  public ResponseEntity<?> getClubById(@PathVariable String clubId) throws IOException,
+      ValidationException {
 
-      return new ResponseEntity<>(clubDtoList, HttpStatus.OK);
+    if (!ValidationHelper.isNumber(clubId)) {
+      throw new ValidationException(ValidationExceptionMessageEnum.INVALID_CLUB_ID.getMessage());
+    }
 
-   }
+    final ClubDto clubDto =
+        this.clubService.getClubById(ConverterHelper.convertStringToLong(clubId));
 
-   /**
-    * Retorna JSON que representa o clube com o 'id' especificado.
-    *
-    * @param id Identificador do clube a ser buscado.
-    * @return ResponseEntity Objeto com detalhes da requisição HTTP, como o Status.
-    * @throws IOException Exceção para arquivo não encontrado.
-    */
-   @GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
-   public ResponseEntity<?> getClubById(@PathVariable Long id) throws IOException {
+    if (clubDto != null) {
+      return new ResponseEntity<>(clubDto, HttpStatus.FOUND);
+    } else {
+      return new ResponseEntity<>("Não encontrado", HttpStatus.NOT_FOUND);
+    }
 
-      final Club club = this.clubService.findById(id);
-      if (club != null) {
+  }
 
-         final ClubDto clubDto = this.clubService.convertClubToClubDto(club);
-         clubDto.addLinks(club.getId());
-         return new ResponseEntity<>(clubDto, HttpStatus.FOUND);
+  /**
+   * Persiste lista de clubes no banco.
+   *
+   * @param clubs JSON com lista dos clubes a serem persistidos.
+   * @return ResponseEntity Objeto com detalhes da requisição HTTP, como o Status.
+   */
+  @PostMapping(value = "/clubs-list", produces = MediaType.APPLICATION_JSON_VALUE)
+  public ResponseEntity<?> createClubs(@RequestBody List<Club> clubs) {
 
-      } else {
-         return new ResponseEntity<>("Não encontrado", HttpStatus.NOT_FOUND);
-      }
-   }
+    for (Club club : clubs) {
+      clubService.save(club);
+    }
+    return new ResponseEntity<>("Salvo", HttpStatus.CREATED);
+  }
 
-   /**
-    * Persiste lista de clubes no banco.
-    *
-    * @param clubs JSON com lista dos clubes a serem persistidos.
-    * @return ResponseEntity Objeto com detalhes da requisição HTTP, como o Status.
-    */
-   @PostMapping(value = "/clubs-list", produces = MediaType.APPLICATION_JSON_VALUE)
-   public ResponseEntity<?> createClubs(@RequestBody List<Club> clubs) {
+  /**
+   * Atribui um clube à instância de <i>Coach</i> recebida e faz a persistência no banco. O atributo
+   * <b>clubId</b> deve ser o identificador do clube a ser atribuído ao técnico. Retorna erro se o
+   * atributo não corresponder a nenhuma instância da classe <i>Club</i>.
+   *
+   * @param coach Instância de <i>Coach</i> a ser persistida.
+   * @param clubId Identificador do clube a ser atribuido ao técnico,
+   * @return ResponseEntity Objeto com detalhes da requisição HTTP, como o Status.
+   * @see Club
+   * @see Coach
+   */
+  @PostMapping(value = "/{clubId}/coach", produces = MediaType.APPLICATION_JSON_VALUE)
+  public ResponseEntity<?> setClubToCoach(@RequestBody Coach coach, @PathVariable Long clubId) {
 
-      for (Club club : clubs) {
-         clubService.save(club);
-      }
-      return new ResponseEntity<>("Salvo", HttpStatus.CREATED);
-   }
+    final Club club = this.clubService.findById(clubId);
 
-   /**
-    * Atribui um clube à instância de <i>Coach</i> recebida e faz a persistência no banco.
-    * O atributo <b>clubId</b> deve ser o identificador do clube a ser atribuído ao técnico.
-    * Retorna erro se o atributo não corresponder a nenhuma instância da classe <i>Club</i>.
-    *
-    * @param coach  Instância de <i>Coach</i> a ser persistida.
-    * @param clubId Identificador do clube a ser atribuido ao técnico,
-    * @return ResponseEntity Objeto com detalhes da requisição HTTP, como o Status.
-    * @see Club
-    * @see Coach
-    */
-   @PostMapping(value = "/{clubId}/coach", produces = MediaType.APPLICATION_JSON_VALUE)
-   public ResponseEntity<?> setClubToCoach(@RequestBody Coach coach, @PathVariable Long clubId) {
 
-      final Club club = this.clubService.findById(clubId);
+    if (club != null) {
+      coach.setActualClub(club);
+      this.coachService.save(coach);
+      final CoachDto coachDto = this.coachService.convertCoachToDto(coach);
+      return new ResponseEntity<>(coachDto, HttpStatus.CREATED);
+    } else {
+      return new ResponseEntity<>("Clube não encontrado", HttpStatus.NOT_FOUND);
+    }
+  }
 
-      if (club != null) {
-         coach.setActualClub(club);
-         this.coachService.save(coach);
-         final CoachDto coachDto = this.coachService.convertCoachToDto(coach);
-         return new ResponseEntity<>(coachDto, HttpStatus.CREATED);
-      } else {
-         return new ResponseEntity<>("Clube não encontrado", HttpStatus.NOT_FOUND);
-      }
-   }
+  @GetMapping(value = "/{clubId}/coach", produces = MediaType.APPLICATION_JSON_VALUE)
+  public ResponseEntity<?> getCoachOfClub(@PathVariable Long clubId) throws IOException,
+      ValidationException {
+    final Club club = this.clubService.findById(clubId);
 
-   @GetMapping(value = "/{clubId}/coach", produces = MediaType.APPLICATION_JSON_VALUE)
-   public ResponseEntity<?> getCoachOfClub(@PathVariable Long clubId) throws IOException {
-      final Club club = this.clubService.findById(clubId);
+    if (club != null) {
 
-      if (club != null) {
+      final Coach coach = this.coachService.findByActualClub(club);
 
-         final Coach coach = this.coachService.findByActualClub(club);
-
-         if (coach != null) {
-            final CoachDto coachDto = this.coachService.convertCoachToDto(coach);
-            coachDto.addLinks(club.getId());
-            return new ResponseEntity<>(coachDto, HttpStatus.FOUND);
-
-         } else {
-            return new ResponseEntity<>("Técnico não encontrado.", HttpStatus.NOT_FOUND);
-         }
+      if (coach != null) {
+        final CoachDto coachDto = this.coachService.convertCoachToDto(coach);
+        coachDto.addLinks(club.getId());
+        return new ResponseEntity<>(coachDto, HttpStatus.FOUND);
 
       } else {
-         return new ResponseEntity<>("Clube não encontrado.", HttpStatus.NOT_FOUND);
+        return new ResponseEntity<>("Técnico não encontrado.", HttpStatus.NOT_FOUND);
       }
-   }
 
-   @GetMapping(value = "/{clubId}/players", produces = MediaType.APPLICATION_JSON_VALUE)
-   public ResponseEntity<?> getPlayers(@PathVariable Long clubId) throws IOException {
+    } else {
+      return new ResponseEntity<>("Clube não encontrado.", HttpStatus.NOT_FOUND);
+    }
+  }
 
-      final Club club = this.clubService.findById(clubId);
-      final List<PlayerDto> playerDtoList = new ArrayList<>();
+  @GetMapping(value = "/{clubId}/players", produces = MediaType.APPLICATION_JSON_VALUE)
+  public ResponseEntity<?> getPlayers(@PathVariable Long clubId) throws IOException,
+      ValidationException {
 
-      /*Ordena jogadores por posição*/
-      Collections.sort(club.getPlayerList());
+    final Club club = this.clubService.findById(clubId);
+    final List<PlayerDto> playerDtoList = new ArrayList<>();
 
-      for (Player player : club.getPlayerList()) {
-         final PlayerDto playerDto = this.playerService.convertPlayerToDto(player);
-         playerDto.addLinksToPlayer(player.getId(), clubId);
-         playerDtoList.add(playerDto);
+    /* Ordena jogadores por posição */
+    Collections.sort(club.getPlayerList());
+
+    for (Player player : club.getPlayerList()) {
+      final PlayerDto playerDto = this.playerService.convertPlayerToDto(player);
+      playerDto.addLinksToPlayer(player.getId(), clubId);
+      playerDtoList.add(playerDto);
+    }
+    return new ResponseEntity<Object>(playerDtoList, HttpStatus.OK);
+  }
+
+  @GetMapping(value = "/{clubId}/badge", produces = MediaType.APPLICATION_JSON_VALUE)
+  public ResponseEntity<?> getBadge(@PathVariable Long clubId) throws IOException {
+
+    final Club club = this.clubService.findById(clubId);
+    if (club != null) {
+
+      // TODO Mover para a classe de servico.
+      final ClassPathResource image =
+          new ClassPathResource("/images/clubs/" + club.getFolderName() + "/" + club.getImage()
+              + ".png");
+      try {
+        final InputStreamResource inputStreamResource =
+            new InputStreamResource(image.getInputStream());
+        return ResponseEntity.ok().contentLength(image.contentLength())
+            .contentType(MediaType.IMAGE_PNG).body(inputStreamResource);
+
+      } catch (IOException e) {
+        return new ResponseEntity<>(e, HttpStatus.NOT_FOUND);
       }
-      return new ResponseEntity<Object>(playerDtoList, HttpStatus.OK);
-   }
-
-   @GetMapping(value = "/{clubId}/badge", produces = MediaType.APPLICATION_JSON_VALUE)
-   public ResponseEntity<?> getBadge(@PathVariable Long clubId) throws IOException {
-
-      final Club club = this.clubService.findById(clubId);
-      if (club != null) {
-
-         //TODO Mover para a classe de servico.
-         final ClassPathResource image = new ClassPathResource("/images/clubs/"
-                 + club.getFolderName() + "/" + club.getImage() + ".png");
-         try {
-            final InputStreamResource inputStreamResource =
-                    new InputStreamResource(image.getInputStream());
-            return ResponseEntity.ok().contentLength(image.contentLength())
-                    .contentType(MediaType.IMAGE_PNG).body(inputStreamResource);
-
-         } catch (IOException e) {
-            return new ResponseEntity<>(e, HttpStatus.NOT_FOUND);
-         }
-      } else {
-         return new ResponseEntity<>("Clube não encontrado", HttpStatus.NOT_FOUND);
-      }
-   }
+    } else {
+      return new ResponseEntity<>("Clube não encontrado", HttpStatus.NOT_FOUND);
+    }
+  }
 
 }
-

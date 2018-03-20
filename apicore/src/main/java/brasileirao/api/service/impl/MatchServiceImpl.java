@@ -6,8 +6,6 @@ import java.util.List;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import brasileirao.api.dao.ClubDao;
@@ -167,10 +165,10 @@ public class MatchServiceImpl implements MatchService {
     final ModelMapper modelMapper = new ModelMapper();
     final MatchDto matchDto = modelMapper.map(match, MatchDto.class);
     matchDto.setIdentificator(match.getId());
-    matchDto.getHomeClub().setIdentificator(match.getHomeClub().getId());
-    matchDto.getVisitorClub().setIdentificator(match.getVisitorClub().getId());
+    matchDto.getHomeClub().setIdentifier(match.getHomeClub().getId());
+    matchDto.getVisitorClub().setIdentifier(match.getVisitorClub().getId());
 
-    /**
+    /*
      * Converte os jogadores em seus respectivos DTOs.
      */
     matchDto.setHomeClubStartingPlayers(this.playerInMatchService
