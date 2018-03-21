@@ -1,6 +1,7 @@
 package brasileirao.api.controller;
 
 import brasileirao.api.dto.CoachDto;
+import brasileirao.api.exception.ServiceException;
 import brasileirao.api.exception.ValidationException;
 import brasileirao.api.persistence.Coach;
 import brasileirao.api.service.CoachService;
@@ -40,7 +41,8 @@ public class CoachController {
    * @throws IOException Exceçao
    */
   @GetMapping(value = "/coaches", produces = MediaType.APPLICATION_JSON_VALUE)
-  public ResponseEntity<?> getAllCoaches() throws IOException, ValidationException {
+  public ResponseEntity<?> getAllCoaches() throws IOException, ValidationException,
+      ServiceException {
 
     final Iterable<Coach> coachIterable = this.coachService.findAll();
     final Iterator<Coach> coachIterator = coachIterable.iterator();
@@ -68,7 +70,7 @@ public class CoachController {
    */
   @GetMapping(value = "/coaches/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
   public ResponseEntity<?> getCoachById(@PathVariable Long id) throws IOException,
-      ValidationException {
+      ValidationException, ServiceException {
 
     final Coach coach = this.coachService.findById(id);
 

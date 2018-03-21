@@ -1,6 +1,9 @@
 package brasileirao.api.service;
 
 import brasileirao.api.dto.ClubDto;
+import brasileirao.api.dto.CoachDto;
+import brasileirao.api.dto.PlayerDto;
+import brasileirao.api.exception.ServiceException;
 import brasileirao.api.exception.ValidationException;
 import brasileirao.api.persistence.Club;
 
@@ -50,7 +53,7 @@ public interface ClubService {
    * @return Lista de {@link ClubDto} com os dados dos clubes;
    * @throws IOException Pode ser lançada ao adicionar os links no DTO de retorno.
    */
-  List<ClubDto> getAllClubs() throws IOException, ValidationException;
+  List<ClubDto> getAllClubs() throws IOException, ValidationException, ServiceException;
 
   /**
    * Obtém os dados de um clube a partir do seu identificador.
@@ -61,6 +64,29 @@ public interface ClubService {
    * @throws IOException Pode ser lançada ao adicionar os links no DTO de retorno.
    * @throws ValidationException Pode ser lançada ao adicionar os links no DTO de retorno.
    */
-  ClubDto getClubById(Long clubId) throws IOException, ValidationException;
+  ClubDto getClubById(Long clubId) throws IOException, ValidationException, ServiceException;
+
+  /**
+   * Obtém os dados do técnico de um clube específico.
+   * @param clubId Identificador do clube no qual o técnico trabalha.
+   * @return Instância de {@link CoachDto} com os dados do técnico encontrado. null caso o técnico
+   * não seja encotrado.
+   * @throws ServiceException Lançada caso o clube não seja encontrado.
+   * @throws IOException Pode ser lançada ao adicionar os links no DTO.
+   * @throws ValidationException Pode ser lançada ao adicionar os links no DTO.
+   */
+  CoachDto getClubCoach(Long clubId) throws ServiceException, IOException, ValidationException;
+
+  /**
+   * Obtém a lista de jogadores de um clube específico.
+   *
+   * @param clubId O identificador do clube do qual deseja-se obter a lista de jogadores.
+   * @return Lista de {@link PlayerDto} com os dados dos jogadores encontrados.
+   * @throws IOException Pode ser lançada no momento de adicioanr os links no DTO.
+   * @throws ValidationException Lançada caso o id do clube seja inválido.
+   * @throws ServiceException Lançada caso o clube não seja encontrado.
+   */
+  List<PlayerDto> getClubPlayers(Long clubId) throws ServiceException, IOException,
+      ValidationException;
 
 }

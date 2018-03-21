@@ -2,6 +2,7 @@ package brasileirao.api.dto;
 
 import brasileirao.api.controller.ClubController;
 import brasileirao.api.controller.CoachController;
+import brasileirao.api.exception.ServiceException;
 import brasileirao.api.exception.ValidationException;
 import org.springframework.hateoas.ResourceSupport;
 
@@ -58,7 +59,7 @@ public class CoachDto extends ResourceSupport {
    * @return DTO com os links adicionados.
    * @throws IOException Excecao
    */
-  public CoachDto addLinks(Long clubId) throws IOException, ValidationException {
+  public CoachDto addLinks(Long clubId) throws IOException, ValidationException, ServiceException {
     this.add(linkTo(methodOn(CoachController.class).getCoachById(this.id)).withSelfRel());
     this.add(linkTo(methodOn(CoachController.class).getCoachImage(this.id)).withRel("image"));
 

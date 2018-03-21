@@ -1,18 +1,8 @@
 package brasileirao.api.controller;
 
-import brasileirao.api.dto.ClubDto;
-import brasileirao.api.dto.CoachDto;
-import brasileirao.api.dto.PlayerDto;
-import brasileirao.api.enums.ValidationExceptionMessageEnum;
-import brasileirao.api.exception.ValidationException;
-import brasileirao.api.helper.ConverterHelper;
-import brasileirao.api.helper.ValidationHelper;
-import brasileirao.api.persistence.Club;
-import brasileirao.api.persistence.Coach;
-import brasileirao.api.persistence.Player;
-import brasileirao.api.service.ClubService;
-import brasileirao.api.service.CoachService;
-import brasileirao.api.service.PlayerService;
+import java.io.IOException;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.InputStreamResource;
@@ -27,11 +17,18 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Iterator;
-import java.util.List;
+import brasileirao.api.dto.ClubDto;
+import brasileirao.api.dto.CoachDto;
+import brasileirao.api.dto.PlayerDto;
+import brasileirao.api.enums.ValidationExceptionMessageEnum;
+import brasileirao.api.exception.ServiceException;
+import brasileirao.api.exception.ValidationException;
+import brasileirao.api.helper.ConverterHelper;
+import brasileirao.api.helper.ValidationHelper;
+import brasileirao.api.persistence.Club;
+import brasileirao.api.persistence.Coach;
+import brasileirao.api.service.ClubService;
+import brasileirao.api.service.CoachService;
 
 /**
  * Lida com requisições referentes à entidade <i>Club</i>.
@@ -53,20 +50,16 @@ public class ClubController {
   @Autowired
   private CoachService coachService;
 
-  /***
-   * Instância da classe de serviços da entidade {@link brasileirao.api.persistence.Player}
-   */
-  @Autowired
-  private PlayerService playerService;
-
   /**
    * Retorna JSON com todos os clubes cadastrados no banco.
    *
    * @return ResponseEntity Objeto com detalhes da requisição HTTP, como o Status.
-   * @throws IOException Exceção a ser lançada
+   * @throws IOException Pode ser lançada no momento de adicioanr os links no DTO.
+   * @throws ValidationException Pode ser lançada no momento de adicioanr os links no DTO.
+   * @throws ServiceException Pode ser lançada no momento de adicioanr os links no DTO.
    */
   @GetMapping(value = "", produces = MediaType.APPLICATION_JSON_VALUE)
-  public ResponseEntity<?> getAllClubs() throws IOException, ValidationException {
+  public ResponseEntity<?> getAllClubs() throws IOException, ValidationException, ServiceException {
 
     final List<ClubDto> clubDtoList = this.clubService.getAllClubs();
     return new ResponseEntity<>(clubDtoList, HttpStatus.OK);
@@ -77,11 +70,13 @@ public class ClubController {
    *
    * @param clubId Identificador do clube a ser buscado.
    * @return ResponseEntity Objeto com detalhes da requisição HTTP, como o Status.
-   * @throws IOException Exceção para arquivo não encontrado.
+   * @throws IOException Pode ser lançada no momento de adicioanr os links no DTO.
+   * @throws ValidationException Pode ser lançada no momento de adicioanr os links no DTO.
+   * @throws ServiceException Pode ser lançada no momento de adicioanr os links no DTO.
    */
   @GetMapping(value = "/{clubId}", produces = MediaType.APPLICATION_JSON_VALUE)
   public ResponseEntity<?> getClubById(@PathVariable String clubId) throws IOException,
-      ValidationException {
+      ValidationException, ServiceException {
 
     if (!ValidationHelper.isNumber(clubId)) {
       throw new ValidationException(ValidationExceptionMessageEnum.INVALID_CLUB_ID.getMessage());
@@ -96,21 +91,6 @@ public class ClubController {
       return new ResponseEntity<>("Não encontrado", HttpStatus.NOT_FOUND);
     }
 
-  }
-
-  /**
-   * Persiste lista de clubes no banco.
-   *
-   * @param clubs JSON com lista dos clubes a serem persistidos.
-   * @return ResponseEntity Objeto com detalhes da requisição HTTP, como o Status.
-   */
-  @PostMapping(value = "/clubs-list", produces = MediaType.APPLICATION_JSON_VALUE)
-  public ResponseEntity<?> createClubs(@RequestBody List<Club> clubs) {
-
-    for (Club club : clubs) {
-      clubService.save(club);
-    }
-    return new ResponseEntity<>("Salvo", HttpStatus.CREATED);
   }
 
   /**
@@ -140,47 +120,65 @@ public class ClubController {
     }
   }
 
+
+  /**
+   * Obtém os dados do técnico de um clube específico.
+   *
+   * @param clubId Identificador do clube no qual o técnico trabalha.
+   * @return Instância de {@link ResponseEntity} com os dados encontrados e o resultado da
+   *         requisição.
+   * @throws IOException Pode ser lançada ao adicionar os links no DTO.
+   * @throws ValidationException Lançada caso o Id seja inválido.
+   * @throws ServiceException Lançada caso o clube ou o técnico não sejam encontrados.
+   */
   @GetMapping(value = "/{clubId}/coach", produces = MediaType.APPLICATION_JSON_VALUE)
-  public ResponseEntity<?> getCoachOfClub(@PathVariable Long clubId) throws IOException,
-      ValidationException {
-    final Club club = this.clubService.findById(clubId);
+  public ResponseEntity<?> getClubCoach(@PathVariable String clubId) throws IOException,
+      ValidationException, ServiceException {
 
-    if (club != null) {
-
-      final Coach coach = this.coachService.findByActualClub(club);
-
-      if (coach != null) {
-        final CoachDto coachDto = this.coachService.convertCoachToDto(coach);
-        coachDto.addLinks(club.getId());
-        return new ResponseEntity<>(coachDto, HttpStatus.FOUND);
-
-      } else {
-        return new ResponseEntity<>("Técnico não encontrado.", HttpStatus.NOT_FOUND);
-      }
-
-    } else {
-      return new ResponseEntity<>("Clube não encontrado.", HttpStatus.NOT_FOUND);
+    if (!ValidationHelper.isNumber(clubId)) {
+      throw new ValidationException(ValidationExceptionMessageEnum.INVALID_CLUB_ID.getMessage());
     }
+
+    final CoachDto coachDto =
+        this.clubService.getClubCoach(ConverterHelper.convertStringToLong(clubId));
+
+    if (coachDto == null) {
+      return new ResponseEntity<>("Técnico não encontrado.", HttpStatus.NOT_FOUND);
+    }
+    return new ResponseEntity<>(coachDto, HttpStatus.FOUND);
   }
 
+
+  /**
+   * Obtém a lista de jogadores de um clube específico.
+   *
+   * @param clubId O identificador do clube do qual deseja-se obter a lista de jogadores.
+   * @return Lista de {@link PlayerDto} com os dados dos jogadores encontrados.
+   * @throws IOException Pode ser lançada no momento de adicioanr os links no DTO.
+   * @throws ValidationException Lançada caso o id do clube seja inválido.
+   * @throws ServiceException Lançada caso o clube não seja encontrado.
+   */
   @GetMapping(value = "/{clubId}/players", produces = MediaType.APPLICATION_JSON_VALUE)
-  public ResponseEntity<?> getPlayers(@PathVariable Long clubId) throws IOException,
-      ValidationException {
+  public ResponseEntity<?> getPlayers(@PathVariable String clubId) throws IOException,
+      ValidationException, ServiceException {
 
-    final Club club = this.clubService.findById(clubId);
-    final List<PlayerDto> playerDtoList = new ArrayList<>();
-
-    /* Ordena jogadores por posição */
-    Collections.sort(club.getPlayerList());
-
-    for (Player player : club.getPlayerList()) {
-      final PlayerDto playerDto = this.playerService.convertPlayerToDto(player);
-      playerDto.addLinksToPlayer(player.getId(), clubId);
-      playerDtoList.add(playerDto);
+    if (!ValidationHelper.isNumber(clubId)) {
+      throw new ValidationException(ValidationExceptionMessageEnum.INVALID_CLUB_ID.getMessage());
     }
+
+    final List<PlayerDto> playerDtoList =
+        this.clubService.getClubPlayers(ConverterHelper.convertStringToLong(clubId));
+
     return new ResponseEntity<Object>(playerDtoList, HttpStatus.OK);
   }
 
+  /**
+   * Obtém o escudo do clube.
+   *
+   * @param clubId O identificador do clube do qual deseja-se obter o escudo.
+   * @return Stream com o escudo do clube.
+   * @throws IOException
+   */
   @GetMapping(value = "/{clubId}/badge", produces = MediaType.APPLICATION_JSON_VALUE)
   public ResponseEntity<?> getBadge(@PathVariable Long clubId) throws IOException {
 

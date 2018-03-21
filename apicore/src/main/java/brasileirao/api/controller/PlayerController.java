@@ -2,6 +2,7 @@ package brasileirao.api.controller;
 
 import brasileirao.api.dto.PlayerDto;
 import brasileirao.api.dto.PlayerRegisterDto;
+import brasileirao.api.exception.ServiceException;
 import brasileirao.api.exception.ValidationException;
 import brasileirao.api.persistence.Player;
 import brasileirao.api.service.PlayerService;
@@ -45,7 +46,8 @@ public class PlayerController {
    * @return ResponseEntity Objeto com detalhes da requisição HTTP, como o Status.
    */
   @GetMapping(value = "", produces = MediaType.APPLICATION_JSON_VALUE)
-  public ResponseEntity<?> getAllPlayers() throws IOException, ValidationException {
+  public ResponseEntity<?> getAllPlayers() throws IOException, ValidationException,
+      ServiceException {
 
     final Iterable<Player> playerIterable = this.playerService.findAll();
     final Iterator<Player> playerIterator = playerIterable.iterator();
@@ -81,7 +83,7 @@ public class PlayerController {
    */
   @GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
   public ResponseEntity<?> getPlayerById(@PathVariable Long id) throws IOException,
-      ValidationException {
+      ValidationException, ServiceException {
 
     final Player player = this.playerService.findById(id);
 

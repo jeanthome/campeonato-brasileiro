@@ -5,36 +5,42 @@ package brasileirao.api.enums;
  */
 public enum ServiceExceptionMessageEnum {
 
-   /**
-    * Jogador não encontrado.
-    */
-   PLAYER_NOT_FOUND("Jogador não encontrado."),
+  /**
+   * Jogador não encontrado.
+   */
+  PLAYER_NOT_FOUND("Jogador não encontrado."),
 
-   /**
-    * Partida não encontrada.
-    */
-   MATCH_NOT_FOUND("Partida não encontrada."),
+  /**
+   * Partida não encontrada.
+   */
+  MATCH_NOT_FOUND("Partida não encontrada."),
 
-   /**
-    * Clube não encontrado.
-    */
-   CLUB_NOT_FOUND("Clube não encontrado.");
+  /**
+   * Clube não encontrado.
+   */
+  CLUB_NOT_FOUND("Clube não encontrado."),
 
-   /**
-    * Mensagem a ser lançada junta com a exceção.
-    */
-   private String message;
+  /**
+   * Técnico não encontrado.
+   */
+  COACH_NOT_FOUND("Técnico não encontrado.");
 
-   /**
-    * Construtor padrão.
-    *
-    * @param message A mensagem de erro.
-    */
-   ServiceExceptionMessageEnum(String message) {
-      this.message = message;
-   }
 
-   public String getMessage() {
-      return message;
-   }
+  /**
+   * Mensagem a ser lançada junta com a exceção.
+   */
+  private String message;
+
+  /**
+   * Construtor padrão.
+   *
+   * @param message A mensagem de erro.
+   */
+  ServiceExceptionMessageEnum(String message) {
+    this.message = message;
+  }
+
+  public String getMessage() {
+    return message;
+  }
 }

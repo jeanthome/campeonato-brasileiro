@@ -6,6 +6,7 @@ import static org.springframework.hateoas.mvc.ControllerLinkBuilder.methodOn;
 import java.io.IOException;
 import java.util.Map;
 
+import brasileirao.api.exception.ServiceException;
 import org.springframework.hateoas.ResourceSupport;
 
 import brasileirao.api.controller.ClubController;
@@ -92,7 +93,7 @@ public class PlayerDto extends ResourceSupport {
    * @throws IOException Exceção lançada no método GetPlayerImage.
    */
   public PlayerDto addLinksToPlayer(Long playerId, Long clubId) throws IOException,
-      ValidationException {
+      ValidationException, ServiceException {
     this.add(linkTo(methodOn(PlayerController.class).getPlayerById(playerId)).withSelfRel());
     this.add(linkTo(methodOn(PlayerController.class).getPlayerImage(playerId)).withRel("image"));
     this.add(linkTo(methodOn(ClubController.class).getClubById(clubId.toString())).withRel("club"));
@@ -106,7 +107,7 @@ public class PlayerDto extends ResourceSupport {
    * @return Instância de {@link ClubDto} com os links adicionados.
    * @throws IOException Exceção lançada no método GetPlayerImage
    */
-  public PlayerDto addLinks(Long playerId) throws IOException, ValidationException {
+  public PlayerDto addLinks(Long playerId) throws IOException, ValidationException, ServiceException {
     this.add(linkTo(methodOn(PlayerController.class).getPlayerById(playerId)).withSelfRel());
     this.add(linkTo(methodOn(PlayerController.class).getPlayerImage(playerId)).withRel("image"));
     return this;
