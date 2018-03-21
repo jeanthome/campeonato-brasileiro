@@ -15,7 +15,10 @@ import brasileirao.api.service.CoachService;
 import brasileirao.api.service.PlayerService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.ClassPathResource;
+import org.springframework.core.io.InputStreamResource;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
@@ -43,13 +46,11 @@ public class ClubServiceImpl implements ClubService {
   @Autowired
   private CoachService coachService;
 
-
   /***
    * Instância da classe de serviços da entidade {@link Player}
    */
   @Autowired
   private PlayerService playerService;
-
 
   /**
    * Busca por um clube usando como critério seu identificador.
@@ -119,7 +120,7 @@ public class ClubServiceImpl implements ClubService {
   public ClubDto getClubById(Long clubId) throws IOException, ValidationException, ServiceException {
 
     ClubDto clubDto = null;
-    final Club club = this.findById(clubId);
+    final Club club = this.clubDao.findById(clubId);
     if (club != null) {
       clubDto = this.convertClubToClubDto(club);
       clubDto.addLinks(club.getId());
@@ -131,7 +132,7 @@ public class ClubServiceImpl implements ClubService {
   public CoachDto getClubCoach(Long clubId) throws ServiceException, IOException,
       ValidationException {
 
-    final Club club = this.findById(clubId);
+    final Club club = this.clubDao.findById(clubId);
     final CoachDto coachDto;
 
     if (club != null) {
@@ -153,7 +154,7 @@ public class ClubServiceImpl implements ClubService {
   public List<PlayerDto> getClubPlayers(Long clubId) throws ServiceException, IOException,
       ValidationException {
 
-    final Club club = this.findById(clubId);
+    final Club club = this.clubDao.findById(clubId);
     final List<PlayerDto> playerDtoList = new ArrayList<>();
 
     if (club != null) {
@@ -173,5 +174,29 @@ public class ClubServiceImpl implements ClubService {
 
     return playerDtoList;
 
+  }
+
+  @Override
+  public ResponseEntity getClubBadge(Long clubId) throws IOException, ServiceException {
+
+    final Club club = this.clubDao.findById(clubId);
+
+    if (club == null) {
+      throw new ServiceException(ServiceExceptionMessageEnum.CLUB_NOT_FOUND.getMessage());
+    }
+
+    final ClassPathResource image =
+        new ClassPathResource("/images/clubs/" + club.getFolderName() + "/" + club.getImage()
+            + ".png");
+
+    final InputStreamResource inputStreamResource;
+    try {
+      inputStreamResource = new InputStreamResource(image.getInputStream());
+    } catch (IOException e) {
+      throw new ServiceException(ServiceExceptionMessageEnum.CLUB_BADGE_NOT_FOUND.getMessage());
+    }
+
+    return ResponseEntity.ok().contentLength(image.contentLength())
+        .contentType(MediaType.IMAGE_PNG).body(inputStreamResource);
   }
 }

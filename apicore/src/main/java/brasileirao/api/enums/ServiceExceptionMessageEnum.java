@@ -23,7 +23,12 @@ public enum ServiceExceptionMessageEnum {
   /**
    * Técnico não encontrado.
    */
-  COACH_NOT_FOUND("Técnico não encontrado.");
+  COACH_NOT_FOUND("Técnico não encontrado."),
+
+  /**
+   * Escudo não encontrado.
+   */
+  CLUB_BADGE_NOT_FOUND("O escudo do clube não foi encontrado.");
 
 
   /**

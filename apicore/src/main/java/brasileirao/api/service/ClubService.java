@@ -6,6 +6,8 @@ import brasileirao.api.dto.PlayerDto;
 import brasileirao.api.exception.ServiceException;
 import brasileirao.api.exception.ValidationException;
 import brasileirao.api.persistence.Club;
+import org.springframework.core.io.InputStreamResource;
+import org.springframework.http.ResponseEntity;
 
 import java.io.IOException;
 import java.util.List;
@@ -88,5 +90,16 @@ public interface ClubService {
    */
   List<PlayerDto> getClubPlayers(Long clubId) throws ServiceException, IOException,
       ValidationException;
+
+  /**
+   * Obtém o escudo de um clube específico.
+   *
+   * @param clubId O identificador do clube do qual deseja-se obter o escudo.
+   * @return {@link ResponseEntity} com a stream que contém a imagem do escudo.
+   * @throws IOException Pode ser lançada no momento de instancair a classe
+   *         {@link InputStreamResource} no service.
+   * @throws ServiceException Lançada caso o clube não seja encontrado.
+   */
+  ResponseEntity getClubBadge(Long clubId) throws IOException, ServiceException;
 
 }

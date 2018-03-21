@@ -79,7 +79,6 @@ public class Club {
    /**
     * Lista de jogadores do clube.
     */
-   //@NotNull
    @OneToMany(fetch = FetchType.LAZY, mappedBy = "actualClub")
    private List<Player> playerList;
 

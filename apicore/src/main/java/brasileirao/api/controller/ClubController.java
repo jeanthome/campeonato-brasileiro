@@ -30,6 +30,8 @@ import brasileirao.api.persistence.Coach;
 import brasileirao.api.service.ClubService;
 import brasileirao.api.service.CoachService;
 
+import javax.xml.ws.Service;
+
 /**
  * Lida com requisições referentes à entidade <i>Club</i>.
  */
@@ -173,34 +175,22 @@ public class ClubController {
   }
 
   /**
-   * Obtém o escudo do clube.
+   * Obtém o escudo de um clube específico.
    *
    * @param clubId O identificador do clube do qual deseja-se obter o escudo.
-   * @return Stream com o escudo do clube.
-   * @throws IOException
+   * @return {@link ResponseEntity} com a stream que contém a imagem do escudo.
+   * @throws IOException Pode ser lançada no momento de instancair a classe
+   *         {@link InputStreamResource} no service.
+   * @throws ValidationException Lançada caso o Id do clube seja inválido.
+   * @throws ServiceException Lançada caso o clube não seja encontrado.
    */
   @GetMapping(value = "/{clubId}/badge", produces = MediaType.APPLICATION_JSON_VALUE)
-  public ResponseEntity<?> getBadge(@PathVariable Long clubId) throws IOException {
+  public ResponseEntity<?> getBadge(@PathVariable String clubId) throws IOException,
+      ValidationException, ServiceException {
 
-    final Club club = this.clubService.findById(clubId);
-    if (club != null) {
-
-      // TODO Mover para a classe de servico.
-      final ClassPathResource image =
-          new ClassPathResource("/images/clubs/" + club.getFolderName() + "/" + club.getImage()
-              + ".png");
-      try {
-        final InputStreamResource inputStreamResource =
-            new InputStreamResource(image.getInputStream());
-        return ResponseEntity.ok().contentLength(image.contentLength())
-            .contentType(MediaType.IMAGE_PNG).body(inputStreamResource);
-
-      } catch (IOException e) {
-        return new ResponseEntity<>(e, HttpStatus.NOT_FOUND);
-      }
-    } else {
-      return new ResponseEntity<>("Clube não encontrado", HttpStatus.NOT_FOUND);
+    if (!ValidationHelper.isNumber(clubId)) {
+      throw new ValidationException(ValidationExceptionMessageEnum.INVALID_CLUB_ID.getMessage());
     }
+    return this.clubService.getClubBadge(ConverterHelper.convertStringToLong(clubId));
   }
-
 }

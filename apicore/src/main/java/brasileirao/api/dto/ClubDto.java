@@ -93,7 +93,7 @@ public class ClubDto extends ResourceSupport {
   public ClubDto addLinks(Long clubId) throws IOException, ValidationException, ServiceException {
 
     this.add(linkTo(methodOn(ClubController.class).getClubById(clubId.toString())).withSelfRel());
-    this.add(linkTo(methodOn(ClubController.class).getBadge(clubId)).withRel("badge"));
+    this.add(linkTo(methodOn(ClubController.class).getBadge(clubId.toString())).withRel("badge"));
     this.add(linkTo(methodOn(ClubController.class).getClubCoach(clubId.toString()))
         .withRel("coach"));
     this.add(linkTo(methodOn(ClubController.class).getPlayers(clubId.toString()))
