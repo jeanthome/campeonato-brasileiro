@@ -17,7 +17,6 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.InputStreamResource;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -164,7 +163,7 @@ public class ClubServiceImpl implements ClubService {
 
       for (Player player : club.getPlayerList()) {
         final PlayerDto playerDto = this.playerService.convertPlayerToDto(player);
-        playerDto.addLinksToPlayer(player.getId(), clubId);
+        playerDto.addLinks(player);
         playerDtoList.add(playerDto);
       }
 

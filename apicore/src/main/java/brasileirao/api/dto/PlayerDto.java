@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.util.Map;
 
 import brasileirao.api.exception.ServiceException;
+import brasileirao.api.persistence.Player;
 import org.springframework.hateoas.ResourceSupport;
 
 import brasileirao.api.controller.ClubController;
@@ -85,31 +86,27 @@ public class PlayerDto extends ResourceSupport {
   }
 
   /**
-   * Adiciona links (self, image e acualClub) no JSON de {@link PlayerDto}
+   * Adiciona os links (self, image e actualClub) no DTO contendo as informações do jogador.
    *
-   * @param playerId Identificador do jogador.
-   * @param clubId Identificador do club ao qual o jogador pertence.
-   * @return Instância de {@link ClubDto} com os links adicionados.
-   * @throws IOException Exceção lançada no método GetPlayerImage.
+   * @param player A instância do jogador cujos dados foram solicitados.
+   * @return
+   * @throws IOException Exceção dos métodos dos Controllers.
+   * @throws ValidationException Exceção dos métodos dos Controllers.
+   * @throws ServiceException Exceção dos métodos dos Controllers.
    */
-  public PlayerDto addLinksToPlayer(Long playerId, Long clubId) throws IOException,
-      ValidationException, ServiceException {
-    this.add(linkTo(methodOn(PlayerController.class).getPlayerById(playerId)).withSelfRel());
-    this.add(linkTo(methodOn(PlayerController.class).getPlayerImage(playerId)).withRel("image"));
-    this.add(linkTo(methodOn(ClubController.class).getClubById(clubId.toString())).withRel("club"));
-    return this;
-  }
+  public PlayerDto addLinks(Player player) throws IOException, ValidationException,
+      ServiceException {
 
-  /**
-   * Adiciona links (self e image) no JSON de {@link Club}
-   *
-   * @param playerId Identificador do jogador.
-   * @return Instância de {@link ClubDto} com os links adicionados.
-   * @throws IOException Exceção lançada no método GetPlayerImage
-   */
-  public PlayerDto addLinks(Long playerId) throws IOException, ValidationException, ServiceException {
-    this.add(linkTo(methodOn(PlayerController.class).getPlayerById(playerId)).withSelfRel());
-    this.add(linkTo(methodOn(PlayerController.class).getPlayerImage(playerId)).withRel("image"));
+    this.add(linkTo(methodOn(PlayerController.class).getPlayerById(player.getId().toString()))
+        .withSelfRel());
+    this.add(linkTo(methodOn(PlayerController.class).getPlayerImage(player.getId().toString()))
+        .withRel("image"));
+
+    final Club actualClub = player.getActualClub();
+    if (player.getActualClub() != null) {
+      this.add(linkTo(methodOn(ClubController.class).getClubById(actualClub.getId().toString()))
+          .withRel("club"));
+    }
     return this;
   }
 }

@@ -1,5 +1,6 @@
 package brasileirao.api.service.impl;
 
+import brasileirao.api.dao.PlayerDao;
 import brasileirao.api.dao.PlayerInMatchDao;
 import brasileirao.api.dto.PlayerMinDto;
 import brasileirao.api.persistence.Player;
@@ -20,69 +21,75 @@ import java.util.List;
 @Service
 public class PlayerInMatchServiceImpl implements PlayerInMatchService {
 
-   /**
-    * Classe de acesso de dados da entidade PlayerInMatch
-    */
-   @Autowired
-   private PlayerInMatchDao playerInMatchDao;
+  /**
+   * Classe de acesso de dados da entidade PlayerInMatch
+   */
+  @Autowired
+  private PlayerInMatchDao playerInMatchDao;
 
-   /**
-    * Instância da classe de serviços da entidade {@link brasileirao.api.persistence.Player}
-    */
-   @Autowired
-   private PlayerService playerService;
+  /**
+   * Instância da classe de serviços da entidade {@link brasileirao.api.persistence.Player}
+   */
+  @Autowired
+  private PlayerService playerService;
 
-   @Override
-   public PlayerInMatch save(PlayerInMatch playerInMatch) {
-      return playerInMatchDao.save(playerInMatch);
-   }
+  /**
+   * Objeto de acesso de dados da entidade {@link Player};
+   */
+  @Autowired
+  private PlayerDao playerDao;
 
-   @Override
-   public List<PlayerInMatch> getPlayerListByIdList(List<Long> idList) {
+  @Override
+  public PlayerInMatch save(PlayerInMatch playerInMatch) {
+    return playerInMatchDao.save(playerInMatch);
+  }
 
-      final List<PlayerInMatch> playerInMatchList = new ArrayList<>();
+  @Override
+  public List<PlayerInMatch> getPlayerListByIdList(List<Long> idList) {
 
-      for (Long id : idList) {
-         final Player player = this.playerService.findById(id);
+    final List<PlayerInMatch> playerInMatchList = new ArrayList<>();
 
-         if (player != null) {
-            final PlayerInMatch playerInMatch = this.convertPlayerToPlayerInMatch(player);
-            playerInMatchList.add(playerInMatch);
-         }
+    for (Long id : idList) {
+      final Player player = this.playerDao.findById(id);
+
+      if (player != null) {
+        final PlayerInMatch playerInMatch = this.convertPlayerToPlayerInMatch(player);
+        playerInMatchList.add(playerInMatch);
       }
-      return playerInMatchList;
-   }
+    }
+    return playerInMatchList;
+  }
 
-   @Override
-   public PlayerInMatch convertPlayerToPlayerInMatch(Player player) {
-      final PlayerInMatch playerInMatch = new PlayerInMatch();
-      playerInMatch.setDisplayName(player.getDisplayName());
-      playerInMatch.setNumber(player.getNumber());
-      playerInMatch.setPositionEnum(player.getPositionEnum());
-      playerInMatch.setSourcePlayer(player);
-      this.save(playerInMatch);
-      return playerInMatch;
-   }
+  @Override
+  public PlayerInMatch convertPlayerToPlayerInMatch(Player player) {
+    final PlayerInMatch playerInMatch = new PlayerInMatch();
+    playerInMatch.setDisplayName(player.getDisplayName());
+    playerInMatch.setNumber(player.getNumber());
+    playerInMatch.setPositionEnum(player.getPositionEnum());
+    playerInMatch.setSourcePlayer(player);
+    this.save(playerInMatch);
+    return playerInMatch;
+  }
 
-   @Override
-   public PlayerMinDto convertPlayerInMatchToMinDto(PlayerInMatch playerInMatch) {
-      final ModelMapper modelMapper = new ModelMapper();
-      final PlayerMinDto playerMinDto = modelMapper.map(playerInMatch, PlayerMinDto.class);
-      playerMinDto.setPositionAbbreviation(playerInMatch.getPositionEnum().getAbbreviation());
-      playerMinDto.setId(playerInMatch.getId());
-      return playerMinDto;
-   }
+  @Override
+  public PlayerMinDto convertPlayerInMatchToMinDto(PlayerInMatch playerInMatch) {
+    final ModelMapper modelMapper = new ModelMapper();
+    final PlayerMinDto playerMinDto = modelMapper.map(playerInMatch, PlayerMinDto.class);
+    playerMinDto.setPositionAbbreviation(playerInMatch.getPositionEnum().getAbbreviation());
+    playerMinDto.setId(playerInMatch.getId());
+    return playerMinDto;
+  }
 
-   @Override
-   public List<PlayerMinDto> convertPlayerInMatchListToPlayerMinDtoList(
-           List<PlayerInMatch> playerList) {
+  @Override
+  public List<PlayerMinDto> convertPlayerInMatchListToPlayerMinDtoList(
+      List<PlayerInMatch> playerList) {
 
-      final List<PlayerMinDto> playerMinDtoList = new ArrayList<>();
-      Collections.sort(playerList);
-      for (PlayerInMatch player : playerList) {
-         final PlayerMinDto playerMinDto = this.convertPlayerInMatchToMinDto(player);
-         playerMinDtoList.add(playerMinDto);
-      }
-      return playerMinDtoList;
-   }
+    final List<PlayerMinDto> playerMinDtoList = new ArrayList<>();
+    Collections.sort(playerList);
+    for (PlayerInMatch player : playerList) {
+      final PlayerMinDto playerMinDto = this.convertPlayerInMatchToMinDto(player);
+      playerMinDtoList.add(playerMinDto);
+    }
+    return playerMinDtoList;
+  }
 }

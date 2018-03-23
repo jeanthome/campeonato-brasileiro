@@ -1,14 +1,9 @@
 package brasileirao.api.controller;
 
-import brasileirao.api.dto.PlayerDto;
-import brasileirao.api.dto.PlayerRegisterDto;
-import brasileirao.api.exception.ServiceException;
-import brasileirao.api.exception.ValidationException;
-import brasileirao.api.persistence.Player;
-import brasileirao.api.service.PlayerService;
+import java.io.IOException;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.io.ClassPathResource;
-import org.springframework.core.io.InputStreamResource;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -21,10 +16,14 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
+import brasileirao.api.dto.PlayerDto;
+import brasileirao.api.dto.PlayerRegisterDto;
+import brasileirao.api.enums.ValidationExceptionMessageEnum;
+import brasileirao.api.exception.ServiceException;
+import brasileirao.api.exception.ValidationException;
+import brasileirao.api.helper.ConverterHelper;
+import brasileirao.api.helper.ValidationHelper;
+import brasileirao.api.service.PlayerService;
 
 /**
  * Lida com requisições referentes à entidade <i>Player</i>
@@ -49,82 +48,51 @@ public class PlayerController {
   public ResponseEntity<?> getAllPlayers() throws IOException, ValidationException,
       ServiceException {
 
-    final Iterable<Player> playerIterable = this.playerService.findAll();
-    final Iterator<Player> playerIterator = playerIterable.iterator();
-
-    final List<PlayerDto> playerDtoList = new ArrayList<>();
-
-    while (playerIterator.hasNext()) {
-      final Player player = playerIterator.next();
-      final PlayerDto playerDto = this.playerService.convertPlayerToDto(player);
-
-      /* Adiciona link para o clube caso o jogador pertença a um. */
-      if (player.getActualClub() != null) {
-        playerDto.addLinksToPlayer(player.getId(), player.getActualClub().getId());
-      } else {
-        playerDto.addLinks(player.getId());
-      }
-
-      playerDtoList.add(playerDto);
-    }
-
-    if (playerIterable.iterator().hasNext()) {
-      return new ResponseEntity<>(playerDtoList, HttpStatus.FOUND);
-    } else {
-      return new ResponseEntity<>("Não encontrado", HttpStatus.NOT_FOUND);
-    }
+    final List<PlayerDto> playerDtoList = this.playerService.getAllPlayers();
+    return new ResponseEntity<>(playerDtoList, HttpStatus.FOUND);
   }
 
   /**
    * Retorna JSON que representa o jogador com o <b>id</b> especificado.
    *
-   * @param id Identificador do jogador a ser buscado.
+   * @param playerId Identificador do jogador a ser buscado.
    * @return ResponseEntity Objeto com detalhes da requisição HTTP, como o Status.
    */
-  @GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
-  public ResponseEntity<?> getPlayerById(@PathVariable Long id) throws IOException,
+  @GetMapping(value = "/{playerId}", produces = MediaType.APPLICATION_JSON_VALUE)
+  public ResponseEntity<?> getPlayerById(@PathVariable String playerId) throws IOException,
       ValidationException, ServiceException {
 
-    final Player player = this.playerService.findById(id);
-
-    if (player != null) {
-
-      final PlayerDto playerDto = this.playerService.convertPlayerToDto(player);
-
-      /* Adiciona link para o clube caso o jogador pertença a um. */
-      if (player.getActualClub() != null) {
-        playerDto.addLinksToPlayer(player.getId(), player.getActualClub().getId());
-      } else {
-        playerDto.addLinks(player.getId());
-      }
-
-      return new ResponseEntity<>(playerDto, HttpStatus.FOUND);
-    } else {
-      return new ResponseEntity<>("Não encontrado", HttpStatus.NOT_FOUND);
+    if (!ValidationHelper.isNumber(playerId)) {
+      throw new ValidationException(ValidationExceptionMessageEnum.INVALID_PLAYER_ID.getMessage());
     }
+
+    final PlayerDto playerDto =
+        this.playerService.getPlayerById(ConverterHelper.convertStringToLong(playerId));
+
+    if (playerDto != null) {
+      return new ResponseEntity<>(playerDto, HttpStatus.FOUND);
+    }
+
+    return new ResponseEntity<>(new PlayerDto(), HttpStatus.NOT_FOUND);
   }
 
-  @GetMapping(value = "/{id}/image", produces = MediaType.APPLICATION_JSON_VALUE)
-  public ResponseEntity<?> getPlayerImage(@PathVariable Long id) {
-    final Player player = this.playerService.findById(id);
+  /**
+   * Obtém a imagem de um jogador específico.
+   *
+   * @param playerId Identificador do jogador do qual deseja-se obter a imagem.
+   * @return {@link ResponseEntity} com a stream que contém a imagem do jogador.
+   * @throws ValidationException Lançada caso o id do jogador seja inválido.
+   * @throws IOException  Pode ser lançada no momento de adicioanr os links no DTO.
+   * @throws ServiceException Lançada caso o jogador não seja encontrado.
+   */
+  @GetMapping(value = "/{playerId}/image", produces = MediaType.APPLICATION_JSON_VALUE)
+  public ResponseEntity<?> getPlayerImage(@PathVariable String playerId)
+      throws ValidationException, IOException, ServiceException {
 
-    if (player != null) {
-
-      final ClassPathResource image =
-          new ClassPathResource("/images/clubs/" + player.getActualClub().getFolderName() + "/"
-              + player.getPhoto() + ".png");
-      try {
-        final InputStreamResource inputStreamResource =
-            new InputStreamResource(image.getInputStream());
-        return ResponseEntity.ok().contentLength(image.contentLength())
-            .contentType(MediaType.IMAGE_PNG).body(inputStreamResource);
-
-      } catch (IOException e) {
-        return new ResponseEntity<>(e, HttpStatus.NOT_FOUND);
-      }
-    } else {
-      return new ResponseEntity<>("Jogador não encontrado.", HttpStatus.NOT_FOUND);
+    if (!ValidationHelper.isNumber(playerId)) {
+      throw new ValidationException(ValidationExceptionMessageEnum.INVALID_PLAYER_ID.getMessage());
     }
+    return this.playerService.getPlayerImage(ConverterHelper.convertStringToLong(playerId));
   }
 
   @PostMapping

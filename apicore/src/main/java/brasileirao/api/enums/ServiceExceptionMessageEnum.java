@@ -28,7 +28,12 @@ public enum ServiceExceptionMessageEnum {
   /**
    * Escudo não encontrado.
    */
-  CLUB_BADGE_NOT_FOUND("O escudo do clube não foi encontrado.");
+  CLUB_BADGE_NOT_FOUND("O escudo do clube não foi encontrado."),
+
+  /**
+   * Mensagem de erro para quando a imagem não for encontrada.
+   */
+  PLAYER_IMAGE_NOT_FOUND("A imagem do jogador não foi encontrada.");
 
 
   /**
