@@ -1,19 +1,19 @@
 
 # Recurso: Técnicos
 
-### URI
+## URI
     GET /coaches/:id/image
 
-### Descrição
+## Descrição
 Retorna uma imagem de um técnico específico. A imagem tem um dimensão de 140x140 pixels e está no formato PNG.
 
-### Parâmetros
+## Parâmetros
 Nenhum.
 
-### Formato de retorno
+## Formato de retorno
 Uma imagem de 140x140 pixels no formato PNG.
 
-### Exemplo
+## Exemplo
 
     https://domain.com/coaches/13/image
 

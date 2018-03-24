@@ -1,23 +1,23 @@
 
 # Recurso: Técnicos
 
-### URI 
+## URI
     GET /coaches/:id
 
-### Descrição
+## Descrição
 Retorna os dados de um técnico específico.
 
-### Parâmetros
+## Parâmetros
 Nenhum.
 
-### Erros
+## Erros
 - **404 Not Found** — Caso não exista um técnico com o id especificado na requisição.
 
-### Formato de retorno
+## Formato de retorno
 Um objeto JSON com os dados do técnico encontrado. Caso não exista nenhum técnico com o id especificado, 
 é retornado um objeto JSON com todos os atributos com valores nulos (```null```).
 
-### Exemplo
+## Exemplo
 
     https://domain.com/coaches/13
 
