@@ -1,18 +1,19 @@
 
 # Recurso: Técnicos
 
+### URI 
     GET /coaches
 
-## Descrição
+### Descrição
 Retorna todos os técnicos registrados.
 
-## Parâmetros
+### Parâmetros
 Nenhum.
 
-## Formato de retorno
+### Formato de retorno
 Um objeto JSON com uma lista de técnicos existentes.
 
-## Exemplo
+### Exemplo
 
     https://domain.com/coaches
 
