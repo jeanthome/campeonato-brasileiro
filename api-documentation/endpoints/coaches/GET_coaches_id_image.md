@@ -17,6 +17,5 @@ Uma imagem de 140x140 pixels no formato PNG.
     https://domain.com/coaches/13/image
 
 **Retorno**
-``` json
-//TODO Inserir a imagem
-```
+
+![N|Solid](https://github.com/jeanthome/campeonato-brasileiro/blob/master/apicore/src/main/resources/images/clubs/corinthians/carille.png)
