@@ -141,7 +141,7 @@ public class ClubServiceImpl implements ClubService {
         throw new ServiceException(ServiceExceptionMessageEnum.COACH_NOT_FOUND.getMessage());
       }
       coachDto = this.coachService.convertCoachToDto(coach);
-      coachDto.addLinks(clubId);
+      coachDto.addLinks(coach);
 
     } else {
       throw new ServiceException(ServiceExceptionMessageEnum.CLUB_NOT_FOUND.getMessage());

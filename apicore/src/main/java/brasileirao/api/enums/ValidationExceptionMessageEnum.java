@@ -23,7 +23,12 @@ public enum ValidationExceptionMessageEnum {
   /**
    * Mensagem de erro para quando o id do jogador está errado.
    */
-  INVALID_PLAYER_ID("O Id do jogador é inválido.");
+  INVALID_PLAYER_ID("O Id do jogador é inválido."),
+
+  /**
+   * Mensagem de erro para quando o id do técnico está errado.
+   */
+  INVALID_COACH_ID("O Id do técnico é inválido.");
 
   /**
    * Mensagem a ser lançada junta com a exceção.

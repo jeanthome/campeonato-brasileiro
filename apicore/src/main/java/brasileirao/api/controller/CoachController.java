@@ -1,8 +1,12 @@
 package brasileirao.api.controller;
 
 import brasileirao.api.dto.CoachDto;
+import brasileirao.api.dto.PlayerDto;
+import brasileirao.api.enums.ValidationExceptionMessageEnum;
 import brasileirao.api.exception.ServiceException;
 import brasileirao.api.exception.ValidationException;
+import brasileirao.api.helper.ConverterHelper;
+import brasileirao.api.helper.ValidationHelper;
 import brasileirao.api.persistence.Coach;
 import brasileirao.api.service.CoachService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +20,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -26,6 +31,7 @@ import java.util.List;
  * Lida com as requisições referentes à entidade <i>Coach</i>
  */
 @Controller
+@RequestMapping("/coaches")
 public class CoachController {
 
   /**
@@ -40,77 +46,55 @@ public class CoachController {
    * @return ResponseEntity Objeto com detalhes da requisição HTTP, como o Status.
    * @throws IOException Exceçao
    */
-  @GetMapping(value = "/coaches", produces = MediaType.APPLICATION_JSON_VALUE)
+  @GetMapping(value = "", produces = MediaType.APPLICATION_JSON_VALUE)
   public ResponseEntity<?> getAllCoaches() throws IOException, ValidationException,
       ServiceException {
 
-    final Iterable<Coach> coachIterable = this.coachService.findAll();
-    final Iterator<Coach> coachIterator = coachIterable.iterator();
-
-    final List<CoachDto> coachDtoList = new ArrayList<>();
-    while (coachIterator.hasNext()) {
-      final Coach coach = coachIterator.next();
-      final CoachDto coachDto = this.coachService.convertCoachToDto(coach);
-      coachDto.addLinks(coach.getId());
-      coachDtoList.add(coachDto);
-    }
-
-    if (coachIterable.iterator().hasNext()) {
-      return new ResponseEntity<>(coachDtoList, HttpStatus.FOUND);
-    } else {
-      return new ResponseEntity<>("Não encontrado", HttpStatus.NOT_FOUND);
-    }
+    final List<CoachDto> coachDtoList = this.coachService.getAllCoaches();
+    return new ResponseEntity<>(coachDtoList, HttpStatus.FOUND);
   }
 
   /**
    * Retorna JSON que representa o técnico com o <b>id</b> especificado.
    *
-   * @param id Identificador do técnico a ser buscado.
+   * @param coachId Identificador do técnico a ser buscado.
    * @return ResponseEntity Objeto com detalhes da requisição HTTP, como o Status.
    */
-  @GetMapping(value = "/coaches/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
-  public ResponseEntity<?> getCoachById(@PathVariable Long id) throws IOException,
+  @GetMapping(value = "/{coachId}", produces = MediaType.APPLICATION_JSON_VALUE)
+  public ResponseEntity<?> getCoachById(@PathVariable String coachId) throws IOException,
       ValidationException, ServiceException {
 
-    final Coach coach = this.coachService.findById(id);
-
-    if (coach != null) {
-      final CoachDto coachDto = this.coachService.convertCoachToDto(coach);
-      coachDto.addLinks(coach.getActualClub().getId());
-      return new ResponseEntity<>(coachDto, HttpStatus.FOUND);
-    } else {
-      return new ResponseEntity<>("Não encontrado", HttpStatus.NOT_FOUND);
+    if (!ValidationHelper.isNumber(coachId)) {
+      throw new ValidationException(ValidationExceptionMessageEnum.INVALID_COACH_ID.getMessage());
     }
+
+    final CoachDto coachDto =
+        this.coachService.getCoachById(ConverterHelper.convertStringToLong(coachId));
+
+    if (coachDto != null) {
+      return new ResponseEntity<>(coachDto, HttpStatus.FOUND);
+    }
+
+    return new ResponseEntity<>(new CoachDto(), HttpStatus.NOT_FOUND);
   }
 
   /**
    * Retorna JSON que representa o técnico com o <b>id</b> especificado.
    *
-   * @param id Identificador do técnico a ser buscado.
+   * @param coachId Identificador do técnico a ser buscado.
    * @return ResponseEntity Objeto com detalhes da requisição HTTP, como o Status.
+   * @throws IOException Lançada caso o id do jogador seja inválido.
+   * @throws ValidationException  Pode ser lançada no momento de adicioanr os links no DTO.
+   * @throws ServiceException Lançada caso o jogador não seja encontrado.
    */
-  @GetMapping(value = "/coaches/{id}/image", produces = MediaType.APPLICATION_JSON_VALUE)
-  public ResponseEntity<?> getCoachImage(@PathVariable Long id) throws IOException {
+  @GetMapping(value = "/{coachId}/image", produces = MediaType.APPLICATION_JSON_VALUE)
+  public ResponseEntity<?> getCoachImage(@PathVariable String coachId) throws IOException,
+      ValidationException, ServiceException {
 
-    final Coach coach = this.coachService.findById(id);
-
-    if (coach != null) {
-
-      final ClassPathResource image =
-          new ClassPathResource("/images/clubs/" + coach.getActualClub().getFolderName() + "/"
-              + coach.getPhoto() + ".png");
-      try {
-        final InputStreamResource inputStreamResource =
-            new InputStreamResource(image.getInputStream());
-        return ResponseEntity.ok().contentLength(image.contentLength())
-            .contentType(MediaType.IMAGE_PNG).body(inputStreamResource);
-
-      } catch (IOException e) {
-        return new ResponseEntity<>(e, HttpStatus.NOT_FOUND);
-      }
-    } else {
-      return new ResponseEntity<>("Coach não encontrado.", HttpStatus.NOT_FOUND);
+    if (!ValidationHelper.isNumber(coachId)) {
+      throw new ValidationException(ValidationExceptionMessageEnum.INVALID_COACH_ID.getMessage());
     }
+    return this.coachService.getCoachImage(ConverterHelper.convertStringToLong(coachId));
   }
 
   /**
@@ -121,7 +105,7 @@ public class CoachController {
    * @param coach Instância da classe <i>Coach</i>, que será persistida.
    * @return Instância persistida.
    */
-  @PostMapping(value = "/coaches", produces = MediaType.APPLICATION_JSON_VALUE)
+  @PostMapping(value = "", produces = MediaType.APPLICATION_JSON_VALUE)
   public ResponseEntity<?> createCoach(@RequestBody Coach coach) {
     this.coachService.save(coach);
     return new ResponseEntity<>("Salvo", HttpStatus.CREATED);

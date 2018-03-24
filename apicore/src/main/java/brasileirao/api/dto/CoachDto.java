@@ -4,6 +4,7 @@ import brasileirao.api.controller.ClubController;
 import brasileirao.api.controller.CoachController;
 import brasileirao.api.exception.ServiceException;
 import brasileirao.api.exception.ValidationException;
+import brasileirao.api.persistence.Coach;
 import org.springframework.hateoas.ResourceSupport;
 
 import java.io.IOException;
@@ -20,7 +21,7 @@ public class CoachDto extends ResourceSupport {
   /***
    * Id do Coach.
    */
-  protected Long id;
+  protected Long identifier;
 
   /***
    * Nome de exibição do técnico.
@@ -32,8 +33,12 @@ public class CoachDto extends ResourceSupport {
    */
   protected Integer age;
 
-  public void setId(Long id) {
-    this.id = id;
+  public Long getIdentifier() {
+    return identifier;
+  }
+
+  public void setIdentifier(Long identifier) {
+    this.identifier = identifier;
   }
 
   public String getDisplayName() {
@@ -55,18 +60,19 @@ public class CoachDto extends ResourceSupport {
   /**
    * Adiciona os devidos links ao DTO de {@link brasileirao.api.persistence.Coach}
    * 
-   * @param clubId Id do clube no qual o Coach trabalha.
+   * @param coach A instância do técnico cujos dados foram solicitados.
    * @return DTO com os links adicionados.
    * @throws IOException Excecao
    */
-  public CoachDto addLinks(Long clubId) throws IOException, ValidationException, ServiceException {
-    this.add(linkTo(methodOn(CoachController.class).getCoachById(this.id)).withSelfRel());
-    this.add(linkTo(methodOn(CoachController.class).getCoachImage(this.id)).withRel("image"));
+  public CoachDto addLinks(Coach coach) throws IOException, ValidationException, ServiceException {
+    this.add(linkTo(methodOn(CoachController.class).getCoachById(coach.getId().toString())).withSelfRel());
+    this.add(linkTo(methodOn(CoachController.class).getCoachImage(coach.getId().toString())).withRel("image"));
 
-    if (clubId != null) {
-      this.add(linkTo(methodOn(ClubController.class).getClubById(clubId.toString())).withRel(
+    if (coach.getActualClub() != null) {
+      this.add(linkTo(methodOn(ClubController.class).getClubById(coach.getActualClub().getId().toString())).withRel(
           "actualClub"));
     }
+
     return this;
   }
 
