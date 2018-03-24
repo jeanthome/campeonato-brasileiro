@@ -14,14 +14,15 @@ Nenhum.
 - **404 Not Found** — Caso não exista um técnico com o id especificado na requisição.
 
 ## Formato de retorno
-Um objeto JSON com os dados do técnico encontrado. Caso não exista nenhum técnico com o id especificado, 
+Um objeto JSON com os dados do técnico encontrado. Caso não exista um técnico com o id especificado, 
 é retornado um objeto JSON com todos os atributos com valores nulos (```null```).
 
 ## Exemplo
 
     https://domain.com/coaches/13
 
-**Retorno**
+
+#### Retorno em caso de sucesso:
 ``` json
 {
     "identifier": 13,
@@ -40,3 +41,11 @@ Um objeto JSON com os dados do técnico encontrado. Caso não exista nenhum téc
     }
 }
 ```
+#### Retorno em caso de erro 404 (Not Found):
+``` json
+{
+    "identifier": null,
+    "displayName": null,
+    "age": null
+}
+``` 

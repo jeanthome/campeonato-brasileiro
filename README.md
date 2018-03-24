@@ -5,9 +5,9 @@
 A ideia do projeto é desenvolver uma [REST API](http://en.wikipedia.org/wiki/Representational_State_Transfer "RESTful") 
 que provê informações de uma temporada do Campeonato Brasileiro, tais como:
 - Lista de times;
-- Lista de técnicos;
 - Lista de jogadores;
-- Lista de partidads;
+- Lista de técnicos;
+- Lista de partidas;
 - Detalhes de cada partida:
   - Gols;
   - Cartões;
@@ -23,8 +23,15 @@ documentações. Essa lista pode sofrer alterações conforme novas funcionalida
 
 ## Endpoints
 
+#### Recurso: Jogadores
+
+- **[<code>GET</code> /players](https://github.com/jeanthome/campeonato-brasileiro/blob/master/api-documentation/endpoints/players/GET_players.md)**
+- **[<code>GET</code> /players/:id](https://github.com/jeanthome/campeonato-brasileiro/blob/master/api-documentation/endpoints/players/GET_players_id.md)**
+- **[<code>GET</code> /players/:id/image](https://github.com/jeanthome/campeonato-brasileiro/blob/master/api-documentation/endpoints/players/GET_players_id_image.md)**
+
+
 #### Recurso: Técnicos
 
-- **[<code>GET</code> coaches](https://github.com/jeanthome/campeonato-brasileiro/blob/master/api-documentation/endpoints/coaches/GET_coaches.md)**
-- **[<code>GET</code> coaches/:id](https://github.com/jeanthome/campeonato-brasileiro/blob/master/api-documentation/endpoints/coaches/GET_coaches_id.md)**
-- **[<code>GET</code> coaches/:id/image](https://github.com/jeanthome/campeonato-brasileiro/blob/master/api-documentation/endpoints/coaches/GET_coaches_id_image.md)**
+- **[<code>GET</code> /coaches](https://github.com/jeanthome/campeonato-brasileiro/blob/master/api-documentation/endpoints/coaches/GET_coaches.md)**
+- **[<code>GET</code> /coaches/:id](https://github.com/jeanthome/campeonato-brasileiro/blob/master/api-documentation/endpoints/coaches/GET_coaches_id.md)**
+- **[<code>GET</code> /coaches/:id/image](https://github.com/jeanthome/campeonato-brasileiro/blob/master/api-documentation/endpoints/coaches/GET_coaches_id_image.md)**

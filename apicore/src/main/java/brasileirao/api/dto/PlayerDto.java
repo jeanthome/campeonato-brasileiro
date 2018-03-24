@@ -23,7 +23,7 @@ public class PlayerDto extends ResourceSupport {
   /**
    * Identificador do jogador.
    */
-  private Long identificator;
+  private Long identifier;
 
   /**
    * Nome de exibição do jogador.
@@ -45,12 +45,12 @@ public class PlayerDto extends ResourceSupport {
    */
   private Long number;
 
-  public Long getIdentificator() {
-    return identificator;
+  public Long getIdentifier() {
+    return identifier;
   }
 
-  public void setIdentificator(Long identificator) {
-    this.identificator = identificator;
+  public void setIdentifier(Long identifier) {
+    this.identifier = identifier;
   }
 
   public String getDisplayName() {
@@ -105,7 +105,7 @@ public class PlayerDto extends ResourceSupport {
     final Club actualClub = player.getActualClub();
     if (player.getActualClub() != null) {
       this.add(linkTo(methodOn(ClubController.class).getClubById(actualClub.getId().toString()))
-          .withRel("club"));
+          .withRel("actualClub"));
     }
     return this;
   }
