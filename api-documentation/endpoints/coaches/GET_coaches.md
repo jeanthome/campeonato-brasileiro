@@ -10,7 +10,7 @@ Retorna todos os técnicos registrados.
 Nenhum.
 
 ## Formato de retorno
-Um objeto JSON com os perfis existentes.
+Um objeto JSON com uma lista de técnicos existentes.
 
 ## Exemplo
 
