@@ -252,12 +252,12 @@ public class MatchServiceImpl implements MatchService {
    * @return Dto com as informações do gol inserido.
    * @throws ServiceException Exceção das classes de serviço.
    */
-  public GoalDto insertGoalInMatch(GoalInputDto goalInputDto) throws ServiceException {
+  public GoalDto insertGoalInMatch(Long matchId, GoalInputDto goalInputDto) throws ServiceException {
 
-    final Match match = this.matchDao.findById(goalInputDto.getMatchId());
+    final Match match = this.matchDao.findById(matchId);
 
     if (match == null) {
-      throw new ServiceException(ServiceExceptionMessageEnum.MATCH_NOT_FOUND.getMessage());
+      throw new ServiceException(ServiceExceptionMessageEnum.MATCH_NOT_FOUND.name());
     }
 
     final Goal goal = this.goalService.convertGoalInputDtoToGoal(goalInputDto);

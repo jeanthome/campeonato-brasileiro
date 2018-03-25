@@ -102,24 +102,36 @@ public class MatchController {
   /**
    * Insere um gol em uma partida.
    *
+   * @param matchId O id da partida onde o cartão será inserido.
    * @param goalInputDto Dto com as informações do gol.
-   * @return ResponseEntity com o status da resposta.
-   * @throws ServiceException Exceção das classes de serviço.
+   * @param result Objeto com possíveis erros de validação.
+   * @return ResponseEntity com o status da requisição e os dados do gol inserido.
+   * @throws ValidationException Em casos de erros de validação ou id da partida for inválido.
+   * @throws ServiceException aso não seja encontrada a partida onde o cartão seria inserido.
    */
   @PutMapping(value = "/{matchId}/goals", produces = MediaType.APPLICATION_JSON_VALUE)
-  public ResponseEntity insertGoal(@PathVariable Long matchId,
-      @RequestBody GoalInputDto goalInputDto, BindingResult result) throws ServiceException {
+  public ResponseEntity insertGoal(@PathVariable String matchId,
+      @RequestBody GoalInputDto goalInputDto, BindingResult result) throws ValidationException,
+      ServiceException {
 
     if (result.hasErrors()) {
-      return new ResponseEntity<>("Dados inválidos", HttpStatus.BAD_REQUEST);
+      throw new ValidationException(HttpStatus.BAD_REQUEST.name());
     }
 
-    final GoalDto goalDto = this.matchService.insertGoalInMatch(goalInputDto);
+    if (!ValidationHelper.isNumber(matchId)) {
+      throw new ValidationException(ValidationExceptionMessageEnum.INVALID_MATCH_ID.name());
+    }
+
+    final GoalDto goalDto =
+        this.matchService.insertGoalInMatch(ConverterHelper.convertStringToLong(matchId),
+            goalInputDto);
+
     return new ResponseEntity<Object>(goalDto, HttpStatus.OK);
   }
 
   /**
    * Insere um cartão em uma partida.
+   * 
    * @param matchId O id da partida onde o cartão será inserido.
    * @param cardInputDto Dto com as informações do cartão.
    * @param result Objeto com possíveis erros de validação.
@@ -187,14 +199,23 @@ public class MatchController {
     return new ResponseEntity<Object>(stadiumEnumList, HttpStatus.OK);
   }
 
+  /**
+   * Obtém lista de partidas em uma rodada específica.
+   * 
+   * @param roundNumber A rodada a ser usada como filtro.
+   * @return ResponseEntity com o status da resposta e os dados das partidas encontradas.
+   * @throws ValidationException Caso a rodada passada seja inválida/
+   */
   @GetMapping(value = "/round/{roundNumber}", produces = MediaType.APPLICATION_JSON_VALUE)
-  public ResponseEntity<?> getMatchesInRound(@PathVariable Long roundNumber)
+  public ResponseEntity<?> getMatchesInRound(@PathVariable String roundNumber)
       throws ValidationException {
 
     if (!ValidationHelper.isRoundNumber(roundNumber)) {
       throw new ValidationException(ValidationExceptionMessageEnum.INVALID_ROUND_NUMBER.name());
     }
-    final List<MatchMinDto> matchMinDtos = this.matchService.getMatchesInRound(roundNumber);
+
+    final List<MatchMinDto> matchMinDtos =
+        this.matchService.getMatchesInRound(ConverterHelper.convertStringToLong(roundNumber));
     return new ResponseEntity<Object>(matchMinDtos, HttpStatus.OK);
   }
 

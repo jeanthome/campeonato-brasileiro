@@ -13,12 +13,6 @@ import brasileirao.api.enums.HalfEnum;
 public class GoalInputDto {
 
 	/**
-	 * Id da partida onde o gol foi marcado.
-	 */
-	@NotNull
-	private Long matchId;
-
-	/**
 	 * Clube dono do gol. (HOMECLUB || VISITORCLUB)
 	 *
 	 * @see brasileirao.api.enums.ClubTypeEnum
@@ -43,7 +37,7 @@ public class GoalInputDto {
 	 */
 	@Min(0)
 	@NotNull
-	private Long goalMinute;
+	private Long minute;
 
 	/**
 	 * Tipo de gol.
@@ -62,14 +56,6 @@ public class GoalInputDto {
 	 */
 	@NotNull
 	private String description;
-
-	public Long getMatchId() {
-		return matchId;
-	}
-
-	public void setMatchId(Long matchId) {
-		this.matchId = matchId;
-	}
 
 	public ClubTypeEnum getClubType() {
 		return clubType;
@@ -95,12 +81,12 @@ public class GoalInputDto {
 		this.half = half;
 	}
 
-	public Long getGoalMinute() {
-		return goalMinute;
+	public Long getMinute() {
+		return minute;
 	}
 
-	public void setGoalMinute(Long goalMinute) {
-		this.goalMinute = goalMinute;
+	public void setMinute(Long minute) {
+		this.minute = minute;
 	}
 
 	public GoalTypeEnum getGoalType() {

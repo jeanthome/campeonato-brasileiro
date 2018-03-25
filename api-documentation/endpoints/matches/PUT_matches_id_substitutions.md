@@ -26,7 +26,7 @@ Insere uma substituição de jogadores em uma partida específica.
 ***
 
 ## Formato de retorno
-Um objeto JSON com os dados do cartão inserido.
+Um objeto JSON com os dados da substituição inserida.
 ***
 
 ## Exemplo
@@ -36,11 +36,11 @@ Um objeto JSON com os dados do cartão inserido.
 #### Body:
 ``` json
 {
-	"clubType" : "HOME_CLUB",
-	"playerWhoLeaves": 28,
-	"playerWhoEnters": 93,
-	"half": "SECOND_HALF",
-	"minute": 34
+    "clubType": "HOME_CLUB",
+    "playerWhoLeaves": 28,
+    "playerWhoEnters": 93,
+    "half": "SECOND_HALF",
+    "minute": 34
 }
 ```
 
