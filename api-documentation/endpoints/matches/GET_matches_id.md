@@ -294,7 +294,7 @@ Um objeto JSON com os dados da partida encontrada. Caso não exista uma partida 
             "half": "SECOND_HALF",
             "goalType": "NORMAL",
             "title": "GOLAÇO DE CABEÇA!",
-            "description": "O zagueiro subiu no segundo andar para marcar um lindo gol de cabeça, após cobrança de escanteio de Diego."
+            "description": "O zagueiro subiu no segundo andar para marcar um lindo gol de cabeça após cobrança de escanteio de Diego."
         },
         {
             "owner": {
