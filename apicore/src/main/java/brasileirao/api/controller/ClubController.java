@@ -89,10 +89,9 @@ public class ClubController {
 
     if (clubDto != null) {
       return new ResponseEntity<>(clubDto, HttpStatus.FOUND);
-    } else {
-      return new ResponseEntity<>("Não encontrado", HttpStatus.NOT_FOUND);
     }
 
+    return new ResponseEntity<>( new ClubDto(), HttpStatus.NOT_FOUND);
   }
 
   /**
@@ -145,7 +144,7 @@ public class ClubController {
         this.clubService.getClubCoach(ConverterHelper.convertStringToLong(clubId));
 
     if (coachDto == null) {
-      return new ResponseEntity<>("Técnico não encontrado.", HttpStatus.NOT_FOUND);
+      return new ResponseEntity<>(new CoachDto(), HttpStatus.NOT_FOUND);
     }
     return new ResponseEntity<>(coachDto, HttpStatus.FOUND);
   }
@@ -165,7 +164,7 @@ public class ClubController {
       ValidationException, ServiceException {
 
     if (!ValidationHelper.isNumber(clubId)) {
-      throw new ValidationException(ValidationExceptionMessageEnum.INVALID_CLUB_ID.getMessage());
+      throw new ValidationException(ValidationExceptionMessageEnum.INVALID_CLUB_ID.name());
     }
 
     final List<PlayerDto> playerDtoList =
@@ -189,7 +188,7 @@ public class ClubController {
       ValidationException, ServiceException {
 
     if (!ValidationHelper.isNumber(clubId)) {
-      throw new ValidationException(ValidationExceptionMessageEnum.INVALID_CLUB_ID.getMessage());
+      throw new ValidationException(ValidationExceptionMessageEnum.INVALID_CLUB_ID.name());
     }
     return this.clubService.getClubBadge(ConverterHelper.convertStringToLong(clubId));
   }

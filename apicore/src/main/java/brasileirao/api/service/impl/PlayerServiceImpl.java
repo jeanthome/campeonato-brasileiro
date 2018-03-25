@@ -151,7 +151,7 @@ public class PlayerServiceImpl implements PlayerService {
     final Player player = this.playerDao.findById(playerId);
 
     if (player == null) {
-      throw new ServiceException(ServiceExceptionMessageEnum.PLAYER_NOT_FOUND.getMessage());
+      throw new ServiceException(ServiceExceptionMessageEnum.PLAYER_NOT_FOUND.name());
     }
 
     final ClassPathResource image =

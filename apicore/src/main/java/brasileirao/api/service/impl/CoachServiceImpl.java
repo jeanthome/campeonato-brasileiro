@@ -135,7 +135,7 @@ public class CoachServiceImpl implements CoachService {
     final Coach coach = this.coachDao.findById(coachId);
 
     if (coach == null) {
-      throw new ServiceException(ServiceExceptionMessageEnum.COACH_NOT_FOUND.getMessage());
+      throw new ServiceException(ServiceExceptionMessageEnum.COACH_NOT_FOUND.name());
     }
 
     final ClassPathResource image =
@@ -146,7 +146,7 @@ public class CoachServiceImpl implements CoachService {
     try {
       inputStreamResource = new InputStreamResource(image.getInputStream());
     } catch (IOException e) {
-      throw new ServiceException(ServiceExceptionMessageEnum.COACH_IMAGE_NOT_FOUND.getMessage());
+      throw new ServiceException(ServiceExceptionMessageEnum.COACH_IMAGE_NOT_FOUND.name());
     }
 
     return ResponseEntity.ok().contentLength(image.contentLength())

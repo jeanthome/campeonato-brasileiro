@@ -4,7 +4,7 @@
 
 A ideia do projeto é desenvolver uma [REST API](http://en.wikipedia.org/wiki/Representational_State_Transfer "RESTful") 
 que provê informações de uma temporada do Campeonato Brasileiro, tais como:
-- Lista de times;
+- Lista de clubes;
 - Lista de jogadores;
 - Lista de técnicos;
 - Lista de partidas;
@@ -22,6 +22,15 @@ A seguir, você encontrará uma lista de chamadas disponíveis atualmente na API
 documentações. Essa lista pode sofrer alterações conforme novas funcionalidades são adicionadas.
 
 ## Endpoints
+
+#### Recurso: Clubes
+
+- **[<code>GET</code> /clubs](https://github.com/jeanthome/campeonato-brasileiro/blob/master/api-documentation/endpoints/clubs/GET_clubs.md)**
+- **[<code>GET</code> /clubs/:id](https://github.com/jeanthome/campeonato-brasileiro/blob/master/api-documentation/endpoints/clubs/GET_clubs_id.md)**
+- **[<code>GET</code> /clubs/:id/players](https://github.com/jeanthome/campeonato-brasileiro/blob/master/api-documentation/endpoints/clubs/GET_clubs_id_players.md)**
+- **[<code>GET</code> /clubs/:id/coach](https://github.com/jeanthome/campeonato-brasileiro/blob/master/api-documentation/endpoints/clubs/GET_clubs_id_coach.md)**
+- **[<code>GET</code> /clubs/:id/badge](https://github.com/jeanthome/campeonato-brasileiro/blob/master/api-documentation/endpoints/clubs/GET_clubs_id_badge.md)**
+
 
 #### Recurso: Jogadores
 

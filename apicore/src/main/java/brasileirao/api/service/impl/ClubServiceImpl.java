@@ -138,13 +138,13 @@ public class ClubServiceImpl implements ClubService {
       final Coach coach = this.coachService.findByActualClub(club);
 
       if (coach == null) {
-        throw new ServiceException(ServiceExceptionMessageEnum.COACH_NOT_FOUND.getMessage());
+        return new CoachDto();
       }
       coachDto = this.coachService.convertCoachToDto(coach);
       coachDto.addLinks(coach);
 
     } else {
-      throw new ServiceException(ServiceExceptionMessageEnum.CLUB_NOT_FOUND.getMessage());
+      throw new ServiceException(ServiceExceptionMessageEnum.CLUB_NOT_FOUND.name());
     }
     return coachDto;
   }
@@ -168,7 +168,7 @@ public class ClubServiceImpl implements ClubService {
       }
 
     } else {
-      throw new ServiceException(ServiceExceptionMessageEnum.CLUB_NOT_FOUND.getMessage());
+      throw new ServiceException(ServiceExceptionMessageEnum.CLUB_NOT_FOUND.name());
     }
 
     return playerDtoList;
@@ -181,7 +181,7 @@ public class ClubServiceImpl implements ClubService {
     final Club club = this.clubDao.findById(clubId);
 
     if (club == null) {
-      throw new ServiceException(ServiceExceptionMessageEnum.CLUB_NOT_FOUND.getMessage());
+      throw new ServiceException(ServiceExceptionMessageEnum.CLUB_NOT_FOUND.name());
     }
 
     final ClassPathResource image =
@@ -192,7 +192,7 @@ public class ClubServiceImpl implements ClubService {
     try {
       inputStreamResource = new InputStreamResource(image.getInputStream());
     } catch (IOException e) {
-      throw new ServiceException(ServiceExceptionMessageEnum.CLUB_BADGE_NOT_FOUND.getMessage());
+      throw new ServiceException(ServiceExceptionMessageEnum.CLUB_BADGE_NOT_FOUND.name());
     }
 
     return ResponseEntity.ok().contentLength(image.contentLength())

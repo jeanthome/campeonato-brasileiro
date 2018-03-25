@@ -1,5 +1,5 @@
 
-# Recurso: Técnicos
+# Recurso: Jogadores
 
 ## URI
     GET /players/:id
