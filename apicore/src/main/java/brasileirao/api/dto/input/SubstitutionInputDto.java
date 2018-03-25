@@ -10,11 +10,6 @@ import javax.validation.constraints.NotNull;
  * DTO com as informações de inserção de uma nova substituição.
  */
 public class SubstitutionInputDto {
-   /**
-    * Id da partida onde o gol foi marcado.
-    */
-   @NotNull
-   private Long matchId;
 
    /**
     * Clube que fez a substituição. (HOMECLUB || VISITORCLUB)
@@ -48,14 +43,6 @@ public class SubstitutionInputDto {
    @Min(0)
    @NotNull
    private Long minute;
-
-   public Long getMatchId() {
-      return matchId;
-   }
-
-   public void setMatchId(Long matchId) {
-      this.matchId = matchId;
-   }
 
    public ClubTypeEnum getClubType() {
       return clubType;

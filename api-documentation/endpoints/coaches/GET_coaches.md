@@ -3,15 +3,19 @@
 
 ## URI 
     GET /coaches
+***
 
 ## Descrição
 Retorna todos os técnicos registrados.
+***
 
 ## Parâmetros
 Nenhum.
+***
 
 ## Formato de retorno
 Um objeto JSON com uma lista de técnicos existentes.
+***
 
 ## Exemplo
 

@@ -3,19 +3,24 @@
 
 ## URI
     GET /players/:id
+***
 
 ## Descrição
 Retorna os dados de um jogador específico.
+***
 
 ## Parâmetros
 Nenhum.
+***
 
 ## Erros
 - **404 Not Found** — Caso não exista um jogador com o id especificado na requisição.
+***
 
 ## Formato de retorno
 Um objeto JSON com os dados do jogador encontrado. Caso não exista um jogador com o id especificado, 
 é retornado um objeto JSON com todos os atributos com valores nulos (```null```).
+***
 
 ## Exemplo
 

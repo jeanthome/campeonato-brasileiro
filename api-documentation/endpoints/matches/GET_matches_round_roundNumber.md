@@ -3,20 +3,25 @@
 
 ## URI
     GET /matches/round/:roundNumber
+***
 
 ## Descrição
 Retorna uma lista com os 10 jogos de uma determinada rodada.
+***
 
 ## Parâmetros
 Nenhum.
+***
 
 ## Erros
 - **INVALID_ROUND_NUMBER Exception** — Caso o número da rodada especificado na requisição seja inválido,
 ou seja, não pertença ao intervalo [1-38].
+***
 
 ## Formato de retorno
 Um objeto JSON com os dados dos jogos encontrados, em um array. Caso não existam jogos associados à 
 rodada especificada, é retornado um objeto JSON representando um array vazio.
+***
 
 ## Exemplo
 

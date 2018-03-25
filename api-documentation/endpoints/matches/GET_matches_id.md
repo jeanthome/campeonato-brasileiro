@@ -3,19 +3,24 @@
 
 ## URI
     GET /matches/:id
+***
 
 ## Descrição
 Retorna os dados de um jogo específico.
+***
 
 ## Parâmetros
 Nenhum.
+***
 
 ## Erros
 - **404 Not Found** — Caso não exista uma partida com o id especificado na requisição.
+***
 
 ## Formato de retorno
 Um objeto JSON com os dados da partida encontrada. Caso não exista uma partida com o id especificado, 
 é retornado um objeto JSON com todos os atributos com valores nulos (```null```).
+***
 
 ## Exemplo
 

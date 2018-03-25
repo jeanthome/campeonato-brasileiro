@@ -49,7 +49,7 @@ public class SubstitutionServiceImpl implements SubstitutionService {
         this.playerInMatchDao.findOne(substitutionInputDto.getPlayerWhoEnters());
 
     if (playerWhoEnters == null || playerWhoLeaves == null) {
-      throw new ServiceException(ServiceExceptionMessageEnum.PLAYER_NOT_FOUND.getMessage());
+      throw new ServiceException(ServiceExceptionMessageEnum.PLAYER_NOT_FOUND.name());
     }
 
     substitution.setPlayerWhoEnters(playerWhoEnters);

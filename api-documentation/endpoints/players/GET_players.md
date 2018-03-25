@@ -3,21 +3,25 @@
 
 ## URI 
     GET /players
+***
 
 ## Descrição
 Retorna todos os jogadores registrados..
+***
 
 ## Parâmetros
 Nenhum.
+***
 
 ## Formato de retorno
 Um objeto JSON com uma lista de jogadores existentes.
+***
 
 ## Exemplo
 
     https://domain.com/players
 
-**Retorno**
+#### Retorno em caso de sucesso:
 ``` json
 [{
     "identifier": 59,

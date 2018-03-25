@@ -2,31 +2,35 @@
 
 ## URI
     PUT /matches/:id/cards
+***
 
 ## Descrição
 Atribui um cartão a um jogador de uma determinada partida.
+***
 
 ## Parâmetros
 
 - **clubType** _(required)_ — O clube do jogador que recebeu o cartão. Valores possíveis:
-    - _HOME_CLUB_ — Caso o jogador que recebeu o cartão seja da equipe mandante.
-    - _VISITOR_CLUB_ — Caso o jogador que recebeu o cartão seja da equipe visitante.
+    - 'HOME_CLUB': Caso o jogador que recebeu o cartão seja da equipe mandante.
+    - 'VISITOR_CLUB': Caso o jogador que recebeu o cartão seja da equipe visitante.
 - **cardOwner** _(required)_ — O identificador do jogador que recebeu o cartão.
 - **cardColor** _(required)_ — A cor do cartão que o jogador recebeu. Valores possíveis:
-    - _YELLOW_ — Caso o jogador recebeu um cartão amarelo.
-    - _RED_ — Caso o jogador recebeu um cartão vermelho.
+    - 'YELLOW': Caso o jogador recebeu um cartão amarelo.
+    - 'RED': Caso o jogador recebeu um cartão vermelho.
 - **half** _(required)_ — O tempo do jogo em que o jogador recebeu o cartão. Valores possíveis:
-    - _FIRST_HALF_ — Caso o jogador tenha recebido o cartão no primeiro tempo.
-    - _SECOND_HALF_ — Caso o jogador tenha recebido o cartão no segundo tempo
+    - 'FIRST_HALF': Caso o jogador tenha recebido o cartão no primeiro tempo.
+    - 'SECOND_HALF': Caso o jogador tenha recebido o cartão no segundo tempo
 - **minute** _(required)_ — O minuto em que o jogador recebeu o cartão.
 - **reason** _(required)_ — O motivo pelo qual o jogador que recebeu o cartão.
 ***
 
 ## Erros
 - **MATCH_NOT_FOUND Exception** — Caso não exista uma partida com o id especificado na requisição.
+***
 
 ## Formato de retorno
 Um objeto JSON com os dados do cartão inserido.
+***
 
 ## Exemplo
 

@@ -3,21 +3,25 @@
 
 ## URI 
     GET /clubs
+***
 
 ## Descrição
 Retorna todos os clubes participantes da temporada atual do campeonato.
+***
 
 ## Parâmetros
 Nenhum.
+***
 
 ## Formato de retorno
 Um objeto JSON com uma lista de clubes encontrados.
+***
 
 ## Exemplo
 
     https://domain.com/clubs
 
-**Retorno**
+#### Retorno em caso de sucesso:
 ``` json
 [{
     "identifier": 51,

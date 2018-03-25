@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import brasileirao.api.dto.CardDto;
+import brasileirao.api.dto.SubstitutionDto;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -305,13 +306,13 @@ public class MatchServiceImpl implements MatchService {
   }
 
   @Override
-  public void insertSubstitutionInMatch(SubstitutionInputDto substitutionInputDto)
-      throws ServiceException {
+  public SubstitutionDto insertSubstitutionInMatch(Long matchId,
+      SubstitutionInputDto substitutionInputDto) throws ServiceException {
 
-    final Match match = this.matchDao.findById(substitutionInputDto.getMatchId());
+    final Match match = this.matchDao.findById(matchId);
 
     if (match == null) {
-      throw new ServiceException((ServiceExceptionMessageEnum.MATCH_NOT_FOUND).getMessage());
+      throw new ServiceException((ServiceExceptionMessageEnum.MATCH_NOT_FOUND).name());
     }
 
     final Substitution substitution =
@@ -326,5 +327,6 @@ public class MatchServiceImpl implements MatchService {
     }
 
     matchDao.save(match);
+    return substitutionService.convertSubstitutionToSubstitutionDto(substitution);
   }
 }

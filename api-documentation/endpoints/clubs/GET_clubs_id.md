@@ -3,19 +3,24 @@
 
 ## URI
     GET /clubs/:id
+***
 
 ## Descrição
 Retorna os dados de um clube específico.
+***
 
 ## Parâmetros
 Nenhum.
+***
 
 ## Erros
 - **404 Not Found** — Caso não exista um clube com o id especificado na requisição.
+***
 
 ## Formato de retorno
 Um objeto JSON com os dados do clube encontrado. Caso não exista um clube com o id especificado, 
 é retornado um objeto JSON com todos os atributos com valores nulos (```null```).
+***
 
 ## Exemplo
 

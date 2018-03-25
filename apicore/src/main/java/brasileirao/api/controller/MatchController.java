@@ -4,6 +4,7 @@ import java.text.ParseException;
 import java.util.HashMap;
 import java.util.List;
 
+import brasileirao.api.dto.SubstitutionDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -155,17 +156,23 @@ public class MatchController {
    * @throws ServiceException Exceção das classes de serviço.
    */
   @PutMapping(value = "/{matchId}/substitutions", produces = MediaType.APPLICATION_JSON_VALUE)
-  public ResponseEntity insertSubstitution(@PathVariable Long matchId,
+  public ResponseEntity insertSubstitution(@PathVariable String matchId,
       @RequestBody SubstitutionInputDto substitutionInputDto, BindingResult result)
-      throws ServiceException {
+      throws ValidationException, ServiceException {
 
     if (result.hasErrors()) {
-      return new ResponseEntity<>("Dados inválidos", HttpStatus.BAD_REQUEST);
+      throw new ValidationException(HttpStatus.BAD_REQUEST.name());
     }
 
-    this.matchService.insertSubstitutionInMatch(substitutionInputDto);
+    if (!ValidationHelper.isNumber(matchId)) {
+      throw new ValidationException(ValidationExceptionMessageEnum.INVALID_MATCH_ID.name());
+    }
 
-    return new ResponseEntity<Object>("Substituição inserida com sucesso.", HttpStatus.OK);
+    final SubstitutionDto substitutionDto =
+        this.matchService.insertSubstitutionInMatch(ConverterHelper.convertStringToLong(matchId),
+            substitutionInputDto);
+
+    return new ResponseEntity<Object>(substitutionDto, HttpStatus.OK);
   }
 
 

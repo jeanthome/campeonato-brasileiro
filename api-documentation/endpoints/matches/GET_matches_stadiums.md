@@ -3,15 +3,19 @@
 
 ## URI
     GET /matches/stadiums
+***
 
 ## Descrição
 Retorna uma lista de estádios onde os jogos podem ocorrer.
+***
 
 ## Parâmetros
 Nenhum.
+***
 
 ## Formato de retorno
 Um objeto JSON com os dados dos estádios encontrados, em um array.
+***
 
 ## Exemplo
 
