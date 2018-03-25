@@ -7,8 +7,8 @@ que provê informações de uma temporada do Campeonato Brasileiro, tais como:
 - Lista de clubes;
 - Lista de jogadores;
 - Lista de técnicos;
-- Lista de partidas;
-- Detalhes de cada partida:
+- Lista de jogos;
+- Detalhes de cada jogo:
   - Gols;
   - Cartões;
   - Substituições.
@@ -22,6 +22,12 @@ A seguir, você encontrará uma lista de chamadas disponíveis atualmente na API
 documentações. Essa lista pode sofrer alterações conforme novas funcionalidades são adicionadas.
 
 ## Endpoints
+
+#### Recurso: Jogos
+
+- **[<code>GET</code> /matches/:id](https://github.com/jeanthome/campeonato-brasileiro/blob/master/api-documentation/endpoints/matches/GET_matches_id.md)**
+- **[<code>GET</code> /matches/round/:roundNumber](https://github.com/jeanthome/campeonato-brasileiro/blob/master/api-documentation/endpoints/matches/GET_matches_round_roundNumber.md)**
+
 
 #### Recurso: Clubes
 

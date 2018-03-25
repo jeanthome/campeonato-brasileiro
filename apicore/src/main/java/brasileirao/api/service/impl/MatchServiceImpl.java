@@ -148,11 +148,11 @@ public class MatchServiceImpl implements MatchService {
 
     final Match match = this.matchDao.findById(matchId);
 
-    if (match == null) {
-      throw new ServiceException(ServiceExceptionMessageEnum.MATCH_NOT_FOUND.getMessage());
+    MatchDto matchDto = null;
+    if (match != null) {
+      matchDto = this.convertMatchToDto(match);
     }
-
-    return this.convertMatchToDto(match);
+    return matchDto;
   }
 
   /**
@@ -164,7 +164,7 @@ public class MatchServiceImpl implements MatchService {
   private MatchDto convertMatchToDto(Match match) {
     final ModelMapper modelMapper = new ModelMapper();
     final MatchDto matchDto = modelMapper.map(match, MatchDto.class);
-    matchDto.setIdentificator(match.getId());
+    matchDto.setIdentifier(match.getId());
     matchDto.getHomeClub().setIdentifier(match.getHomeClub().getId());
     matchDto.getVisitorClub().setIdentifier(match.getVisitorClub().getId());
 

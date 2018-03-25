@@ -14,7 +14,7 @@ Nenhum.
 - **CLUB_NOT_FOUND Exception** — Caso não exista um clube com o id especificado na requisição.
 
 ## Formato de retorno
-Um objeto JSON com os dados dos jogadores encontrados. Caso não existam jogadores associados ao 
+Um objeto JSON com os dados dos jogadores encontrados, em um array. Caso não existam jogadores associados ao 
 clube com o id especificado, é retornado um objeto JSON representando um array vazio.
 
 ## Exemplo

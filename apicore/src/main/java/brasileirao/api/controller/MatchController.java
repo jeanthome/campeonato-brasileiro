@@ -66,6 +66,10 @@ public class MatchController {
     }
 
     final MatchDto matchDto = this.matchService.findById(ConverterHelper.convertStringToLong(id));
+
+    if (matchDto == null) {
+      return new ResponseEntity<Object>(new MatchDto(), HttpStatus.NOT_FOUND);
+    }
     return new ResponseEntity<Object>(matchDto, HttpStatus.OK);
   }
 
@@ -172,7 +176,7 @@ public class MatchController {
 
     if (!ValidationHelper.isRoundNumber(roundNumber)) {
       throw new ValidationException(
-          ValidationExceptionMessageEnum.INVALID_ROUND_NUMBER.getMessage());
+          ValidationExceptionMessageEnum.INVALID_ROUND_NUMBER.name());
     }
     final List<MatchMinDto> matchMinDtos = this.matchService.getMatchesInRound(roundNumber);
     return new ResponseEntity<Object>(matchMinDtos, HttpStatus.OK);
