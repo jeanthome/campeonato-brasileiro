@@ -1,5 +1,6 @@
 package brasileirao.api.service;
 
+import brasileirao.api.dto.CardDto;
 import brasileirao.api.dto.input.CardInputDto;
 import brasileirao.api.dto.GoalDto;
 import brasileirao.api.dto.input.GoalInputDto;
@@ -60,7 +61,7 @@ public interface MatchService {
     * @param cardInputDto Dto com as informações do cartão a ser inserido,
     * @throws ServiceException Exceção que pode ser lançada ao não encontrar uma entidade.
     */
-   void insertCardInMatch(CardInputDto cardInputDto) throws ServiceException;
+   CardDto insertCardInMatch(Long matchId, CardInputDto cardInputDto) throws ServiceException;
 
    /**
     * Insere uma substituição em uma partida.

@@ -8,43 +8,32 @@ public enum ValidationExceptionMessageEnum {
   /**
    * Número inválido.
    */
-  INVALID_NUMBER("Número inválido"),
+  INVALID_NUMBER,
 
   /**
    * Rodada inválida
    */
-  INVALID_ROUND_NUMBER("Rodada inválida"),
+  INVALID_ROUND_NUMBER,
 
   /**
    * Id do clube inválido.
    */
-  INVALID_CLUB_ID("O Id do clube é inválido"),
+  INVALID_CLUB_ID,
 
   /**
-   * Mensagem de erro para quando o id do jogador está errado.
+   * Id do jogador está errado.
    */
-  INVALID_PLAYER_ID("O Id do jogador é inválido."),
+  INVALID_PLAYER_ID,
 
   /**
-   * Mensagem de erro para quando o id do técnico está errado.
+   * Id do técnico está errado.
    */
-  INVALID_COACH_ID("O Id do técnico é inválido.");
+  INVALID_COACH_ID,
 
   /**
-   * Mensagem a ser lançada junta com a exceção.
+   * Id da partida está inválido
    */
-  private String message;
+  INVALID_MATCH_ID;
 
-  /**
-   * Construtor padrão.
-   *
-   * @param message A mensagem de erro.
-   */
-  ValidationExceptionMessageEnum(String message) {
-    this.message = message;
-  }
-
-  public String getMessage() {
-    return message;
-  }
+  ValidationExceptionMessageEnum() {}
 }

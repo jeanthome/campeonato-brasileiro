@@ -13,13 +13,7 @@ import javax.validation.constraints.NotNull;
 public class CardInputDto {
 
    /**
-    * Id da partida onde o gol foi marcado.
-    */
-   @NotNull
-   private Long matchId;
-
-   /**
-    * Clube dono do gol. (HOMECLUB || VISITORCLUB)
+    * Clube dono do gol. (HOME_CLUB || VISITOR_CLUB)
     *
     * @see brasileirao.api.enums.ClubTypeEnum
     */
@@ -56,14 +50,6 @@ public class CardInputDto {
     */
    @NotNull
    private String reason;
-
-   public Long getMatchId() {
-      return matchId;
-   }
-
-   public void setMatchId(Long matchId) {
-      this.matchId = matchId;
-   }
 
    public ClubTypeEnum getClubType() {
       return clubType;

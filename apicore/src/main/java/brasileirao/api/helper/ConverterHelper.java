@@ -27,7 +27,7 @@ public final class ConverterHelper {
   public static Long convertStringToLong(String number) throws ValidationException {
 
     if (!ValidationHelper.isNumber(number)) {
-      throw new ValidationException(ValidationExceptionMessageEnum.INVALID_NUMBER.getMessage());
+      throw new ValidationException(ValidationExceptionMessageEnum.INVALID_NUMBER.name());
     }
 
     return Long.valueOf(number);

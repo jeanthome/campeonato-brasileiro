@@ -81,7 +81,7 @@ public class ClubController {
       ValidationException, ServiceException {
 
     if (!ValidationHelper.isNumber(clubId)) {
-      throw new ValidationException(ValidationExceptionMessageEnum.INVALID_CLUB_ID.getMessage());
+      throw new ValidationException(ValidationExceptionMessageEnum.INVALID_CLUB_ID.name());
     }
 
     final ClubDto clubDto =
@@ -137,7 +137,7 @@ public class ClubController {
       ValidationException, ServiceException {
 
     if (!ValidationHelper.isNumber(clubId)) {
-      throw new ValidationException(ValidationExceptionMessageEnum.INVALID_CLUB_ID.getMessage());
+      throw new ValidationException(ValidationExceptionMessageEnum.INVALID_CLUB_ID.name());
     }
 
     final CoachDto coachDto =

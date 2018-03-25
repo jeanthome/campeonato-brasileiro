@@ -4,6 +4,7 @@ import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
 
+import brasileirao.api.dto.CardDto;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -282,12 +283,12 @@ public class MatchServiceImpl implements MatchService {
   }
 
   @Override
-  public void insertCardInMatch(CardInputDto cardInputDto) throws ServiceException {
+  public CardDto insertCardInMatch(Long matchId, CardInputDto cardInputDto) throws ServiceException {
 
-    final Match match = this.matchDao.findById(cardInputDto.getMatchId());
+    final Match match = this.matchDao.findById(matchId);
 
     if (match == null) {
-      throw new ServiceException(ServiceExceptionMessageEnum.MATCH_NOT_FOUND.getMessage());
+      throw new ServiceException(ServiceExceptionMessageEnum.MATCH_NOT_FOUND.name());
     }
 
     final Card card = this.cardService.convertCardInputDtoToCard(cardInputDto);
@@ -300,6 +301,7 @@ public class MatchServiceImpl implements MatchService {
     }
 
     matchDao.save(match);
+    return cardService.convertCardToCardDto(card);
   }
 
   @Override

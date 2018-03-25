@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import brasileirao.api.dto.CardDto;
 import brasileirao.api.dto.GoalDto;
 import brasileirao.api.dto.MatchDto;
 import brasileirao.api.dto.MatchMinDto;
@@ -62,7 +63,7 @@ public class MatchController {
       ServiceException {
 
     if (!ValidationHelper.isNumber(id)) {
-      throw new ValidationException(ValidationExceptionMessageEnum.INVALID_NUMBER.getMessage());
+      throw new ValidationException(ValidationExceptionMessageEnum.INVALID_NUMBER.name());
     }
 
     final MatchDto matchDto = this.matchService.findById(ConverterHelper.convertStringToLong(id));
@@ -118,21 +119,30 @@ public class MatchController {
 
   /**
    * Insere um cartão em uma partida.
-   *
+   * @param matchId O id da partida onde o cartão será inserido.
    * @param cardInputDto Dto com as informações do cartão.
-   * @return ResponseEntity com o status da resposta.
-   * @throws ServiceException Exceção das classes de serviço.
+   * @param result Objeto com possíveis erros de validação.
+   * @return ResponseEntity com o status da requisição e os dados do cartão inserido.
+   * @throws ValidationException Em casos de erros de validação ou id da partida for inválido.
+   * @throws ServiceException Caso não seja encontrada a partida onde o cartão seria inserido.
    */
   @PutMapping(value = "/{matchId}/cards", produces = MediaType.APPLICATION_JSON_VALUE)
-  public ResponseEntity insertCard(@PathVariable Long matchId,
-      @RequestBody CardInputDto cardInputDto, BindingResult result) throws ServiceException {
+  public ResponseEntity insertCard(@PathVariable String matchId,
+      @RequestBody CardInputDto cardInputDto, BindingResult result) throws ValidationException,
+      ServiceException {
 
     if (result.hasErrors()) {
-      return new ResponseEntity<>("Dados inválidos", HttpStatus.BAD_REQUEST);
+      throw new ValidationException(HttpStatus.BAD_REQUEST.name());
     }
 
-    this.matchService.insertCardInMatch(cardInputDto);
-    return new ResponseEntity<Object>("Cartão inserido com sucesso.", HttpStatus.OK);
+    if (!ValidationHelper.isNumber(matchId)) {
+      throw new ValidationException(ValidationExceptionMessageEnum.INVALID_MATCH_ID.name());
+    }
+
+    final CardDto cardDto =
+        this.matchService.insertCardInMatch(ConverterHelper.convertStringToLong(matchId),
+            cardInputDto);
+    return new ResponseEntity<Object>(cardDto, HttpStatus.OK);
   }
 
   /**
@@ -175,8 +185,7 @@ public class MatchController {
       throws ValidationException {
 
     if (!ValidationHelper.isRoundNumber(roundNumber)) {
-      throw new ValidationException(
-          ValidationExceptionMessageEnum.INVALID_ROUND_NUMBER.name());
+      throw new ValidationException(ValidationExceptionMessageEnum.INVALID_ROUND_NUMBER.name());
     }
     final List<MatchMinDto> matchMinDtos = this.matchService.getMatchesInRound(roundNumber);
     return new ResponseEntity<Object>(matchMinDtos, HttpStatus.OK);

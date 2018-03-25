@@ -63,7 +63,7 @@ public class PlayerController {
       ValidationException, ServiceException {
 
     if (!ValidationHelper.isNumber(playerId)) {
-      throw new ValidationException(ValidationExceptionMessageEnum.INVALID_PLAYER_ID.getMessage());
+      throw new ValidationException(ValidationExceptionMessageEnum.INVALID_PLAYER_ID.name());
     }
 
     final PlayerDto playerDto =
@@ -90,7 +90,7 @@ public class PlayerController {
       throws ValidationException, IOException, ServiceException {
 
     if (!ValidationHelper.isNumber(playerId)) {
-      throw new ValidationException(ValidationExceptionMessageEnum.INVALID_PLAYER_ID.getMessage());
+      throw new ValidationException(ValidationExceptionMessageEnum.INVALID_PLAYER_ID.name());
     }
     return this.playerService.getPlayerImage(ConverterHelper.convertStringToLong(playerId));
   }

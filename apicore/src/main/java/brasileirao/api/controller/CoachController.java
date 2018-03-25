@@ -65,7 +65,7 @@ public class CoachController {
       ValidationException, ServiceException {
 
     if (!ValidationHelper.isNumber(coachId)) {
-      throw new ValidationException(ValidationExceptionMessageEnum.INVALID_COACH_ID.getMessage());
+      throw new ValidationException(ValidationExceptionMessageEnum.INVALID_COACH_ID.name());
     }
 
     final CoachDto coachDto =
@@ -92,7 +92,7 @@ public class CoachController {
       ValidationException, ServiceException {
 
     if (!ValidationHelper.isNumber(coachId)) {
-      throw new ValidationException(ValidationExceptionMessageEnum.INVALID_COACH_ID.getMessage());
+      throw new ValidationException(ValidationExceptionMessageEnum.INVALID_COACH_ID.name());
     }
     return this.coachService.getCoachImage(ConverterHelper.convertStringToLong(coachId));
   }
