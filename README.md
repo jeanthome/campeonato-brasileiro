@@ -26,6 +26,7 @@ documentações. Essa lista pode sofrer alterações conforme novas funcionalida
 #### Recurso: Jogos
 
 - **[<code>GET</code> /matches/:id](https://github.com/jeanthome/campeonato-brasileiro/blob/master/api-documentation/endpoints/matches/GET_matches_id.md)**
+- **[<code>GET</code> /matches/:id/goals](https://github.com/jeanthome/campeonato-brasileiro/blob/master/api-documentation/endpoints/matches/GET_matches_id_goals.md)**
 - **[<code>GET</code> /matches/round/:roundNumber](https://github.com/jeanthome/campeonato-brasileiro/blob/master/api-documentation/endpoints/matches/GET_matches_round_roundNumber.md)**
 - **[<code>GET</code> /matches/stadiums](https://github.com/jeanthome/campeonato-brasileiro/blob/master/api-documentation/endpoints/matches/GET_matches_stadiums.md)**
 - **[<code>GET</code> /matches/goalType](https://github.com/jeanthome/campeonato-brasileiro/blob/master/api-documentation/endpoints/matches/GET_matches_goalType.md)**
