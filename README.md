@@ -1,6 +1,6 @@
 # API Brasileirão
 
- **```ESTE É UM PROJETO PESSOAL SEM FINS COMERCIAIS, MANTIDO SOMENTE (E APENAS) PARA FINS EDUCACIONAIS```**
+ **```ESTE É UM PROJETO PESSOAL SEM FINS COMERCIAIS, MANTIDO SOMENTE (E APENAS) PARA FINS DE APRENDIZAGEM```**
 
 A ideia do projeto é desenvolver uma [REST API](http://en.wikipedia.org/wiki/Representational_State_Transfer "RESTful") 
 que provê informações de uma temporada do Campeonato Brasileiro, tais como:

@@ -19,7 +19,7 @@ public enum ClubTypeEnum {
 	VISITOR_CLUB;
 
 	/**
-	 * Lookup para obter a instância a partir da descrição.
+	 * Lookup para obter a instância a partir da propriedade 'name'.
 	 */
 	private static Map<String, ClubTypeEnum> lookup = new HashMap<>();
 
@@ -41,7 +41,7 @@ public enum ClubTypeEnum {
     * @param name Nome no enum.
     * @return
     */
-   public ClubTypeEnum getByName(String name) {
+   public static ClubTypeEnum getByName(String name) {
       return lookup.get(name);
    }
 }

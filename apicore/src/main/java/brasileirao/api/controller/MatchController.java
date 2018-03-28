@@ -4,10 +4,13 @@ import java.text.ParseException;
 import java.util.HashMap;
 import java.util.List;
 
+import brasileirao.api.dto.MatchGoalsDto;
 import brasileirao.api.dto.SubstitutionDto;
+import brasileirao.api.enums.ClubTypeEnum;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.http.RequestEntity;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -17,6 +20,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import brasileirao.api.dto.CardDto;
@@ -59,15 +63,15 @@ public class MatchController {
    * @return Instância de {@link MatchDto} caso a partida seja encontrada. <i>null</i> caso
    *         contrário
    */
-  @GetMapping("/{id}")
-  public ResponseEntity<?> getMatchById(@PathVariable String id) throws ValidationException,
+  @GetMapping("/{matchId}")
+  public ResponseEntity<?> getMatchById(@PathVariable String matchId) throws ValidationException,
       ServiceException {
 
-    if (!ValidationHelper.isNumber(id)) {
+    if (!ValidationHelper.isNumber(matchId)) {
       throw new ValidationException(ValidationExceptionMessageEnum.INVALID_NUMBER.name());
     }
 
-    final MatchDto matchDto = this.matchService.findById(ConverterHelper.convertStringToLong(id));
+    final MatchDto matchDto = this.matchService.findById(ConverterHelper.convertStringToLong(matchId));
 
     if (matchDto == null) {
       return new ResponseEntity<Object>(new MatchDto(), HttpStatus.NOT_FOUND);
@@ -228,5 +232,40 @@ public class MatchController {
   public ResponseEntity<?> getGoalType() {
     final List<HashMap<String, String>> goalsTypeList = GoalTypeEnum.getGoalTypeEnumList();
     return new ResponseEntity<Object>(goalsTypeList, HttpStatus.OK);
+  }
+
+  /**
+   * Obtém a lista de gols de uma partida.
+   *
+   * @param matchId O identificador da partida cujos gols são requisitados.
+   * @param clubType Atributo opcional, que permite filtrar os gols pelo time.
+   * @return {@link ResponseEntity} com os gols encontrados e o status da requisição.
+   * @throws ValidationException Caso algum dos atributos da requisição seja inválido.
+   * @throws ServiceException Caso não exista uma partida com o id especificado.
+   */
+  @GetMapping(value = "/{matchId}/goals", produces = MediaType.APPLICATION_JSON_VALUE)
+  public ResponseEntity<?> getMatchGoals(@PathVariable String matchId, @RequestParam(
+      value = "clubType", required = false) String clubType) throws ValidationException,
+      ServiceException {
+
+    if (!ValidationHelper.isNumber(matchId)) {
+      throw new ValidationException(ValidationExceptionMessageEnum.INVALID_MATCH_ID.name());
+    }
+
+    MatchGoalsDto matchGoalsDto = null;
+    if (clubType == null) {
+      matchGoalsDto = this.matchService.getMatchGoals(ConverterHelper.convertStringToLong(matchId));
+    } else {
+      final ClubTypeEnum clubTypeEnum = ClubTypeEnum.getByName(clubType);
+
+      if (clubTypeEnum == null) {
+        throw new ServiceException(ValidationExceptionMessageEnum.INVALID_CLUB_TYPE.name());
+      }
+      matchGoalsDto =
+          this.matchService.getMatchGoals(ConverterHelper.convertStringToLong(matchId),
+              clubTypeEnum);
+    }
+
+    return new ResponseEntity<Object>(matchGoalsDto, HttpStatus.OK);
   }
 }

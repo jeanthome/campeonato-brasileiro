@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import brasileirao.api.dto.CardDto;
+import brasileirao.api.dto.MatchGoalsDto;
 import brasileirao.api.dto.SubstitutionDto;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -328,5 +329,46 @@ public class MatchServiceImpl implements MatchService {
 
     matchDao.save(match);
     return substitutionService.convertSubstitutionToSubstitutionDto(substitution);
+  }
+
+  @Override
+  public MatchGoalsDto getMatchGoals(Long matchId, ClubTypeEnum clubTypeEnum) throws ServiceException {
+
+    final Match match = this.matchDao.findById(matchId);
+
+    if (match == null) {
+      throw new ServiceException(ServiceExceptionMessageEnum.MATCH_NOT_FOUND.name());
+    }
+
+    final MatchGoalsDto matchGoalsDto = new MatchGoalsDto();
+
+    if (ClubTypeEnum.HOME_CLUB.equals(clubTypeEnum)) {
+      matchGoalsDto.setHomeCLubeGoals(this.goalService.convertGoalListToGoalDtoList(match
+          .getHomeClubGoals()));
+    } else if (ClubTypeEnum.VISITOR_CLUB.equals(clubTypeEnum)) {
+      matchGoalsDto.setVisitorClubGoals(this.goalService.convertGoalListToGoalDtoList(match
+      .getVisitorClubGoals()));
+    }
+
+    return matchGoalsDto;
+  }
+
+  @Override
+  public MatchGoalsDto getMatchGoals(Long matchId) throws ServiceException {
+
+    final Match match = this.matchDao.findById(matchId);
+
+    if (match == null) {
+      throw new ServiceException(ServiceExceptionMessageEnum.MATCH_NOT_FOUND.name());
+    }
+
+    final MatchGoalsDto matchGoalsDto = new MatchGoalsDto();
+
+    matchGoalsDto.setHomeCLubeGoals(this.goalService.convertGoalListToGoalDtoList(match
+        .getHomeClubGoals()));
+    matchGoalsDto.setVisitorClubGoals(this.goalService.convertGoalListToGoalDtoList(match
+        .getVisitorClubGoals()));
+
+    return matchGoalsDto;
   }
 }

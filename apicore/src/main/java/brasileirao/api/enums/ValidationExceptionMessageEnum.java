@@ -33,7 +33,12 @@ public enum ValidationExceptionMessageEnum {
   /**
    * Id da partida está inválido
    */
-  INVALID_MATCH_ID;
+  INVALID_MATCH_ID,
+
+  /**
+   * O tipo do clube no Enum {@link ClubTypeEnum} é inválido.
+   */
+  INVALID_CLUB_TYPE;
 
   ValidationExceptionMessageEnum() {}
 }
