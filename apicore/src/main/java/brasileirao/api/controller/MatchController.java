@@ -113,7 +113,7 @@ public class MatchController {
    * @throws ValidationException Em casos de erros de validação ou id da partida for inválido.
    * @throws ServiceException aso não seja encontrada a partida onde o cartão seria inserido.
    */
-  @PutMapping(value = "/{matchId}/goals", produces = MediaType.APPLICATION_JSON_VALUE)
+  @PostMapping(value = "/{matchId}/goals", produces = MediaType.APPLICATION_JSON_VALUE)
   public ResponseEntity insertGoal(@PathVariable String matchId,
       @RequestBody GoalInputDto goalInputDto, BindingResult result) throws ValidationException,
       ServiceException {
@@ -143,7 +143,7 @@ public class MatchController {
    * @throws ValidationException Em casos de erros de validação ou id da partida for inválido.
    * @throws ServiceException Caso não seja encontrada a partida onde o cartão seria inserido.
    */
-  @PutMapping(value = "/{matchId}/cards", produces = MediaType.APPLICATION_JSON_VALUE)
+  @PostMapping(value = "/{matchId}/cards", produces = MediaType.APPLICATION_JSON_VALUE)
   public ResponseEntity insertCard(@PathVariable String matchId,
       @RequestBody CardInputDto cardInputDto, BindingResult result) throws ValidationException,
       ServiceException {
@@ -171,7 +171,7 @@ public class MatchController {
    * @return ResponseEntity com o status da resposta.
    * @throws ServiceException Exceção das classes de serviço.
    */
-  @PutMapping(value = "/{matchId}/substitutions", produces = MediaType.APPLICATION_JSON_VALUE)
+  @PostMapping(value = "/{matchId}/substitutions", produces = MediaType.APPLICATION_JSON_VALUE)
   public ResponseEntity insertSubstitution(@PathVariable String matchId,
       @RequestBody SubstitutionInputDto substitutionInputDto, BindingResult result)
       throws ValidationException, ServiceException {

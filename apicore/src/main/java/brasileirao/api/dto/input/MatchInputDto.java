@@ -9,81 +9,84 @@ import javax.validation.constraints.NotNull;
  */
 public class MatchInputDto {
 
-   /**
-    * Número da rodada em que a partida foi realizada.
-    */
-   @NotNull
-   private Long roundNumber;
+  public MatchInputDto() {}
 
-   /**
-    * Data e hora da realização da partida.
-    */
-   @NotNull
-   private String kickOff;
+  /**
+   * Número da rodada em que a partida foi realizada.
+   */
+  @NotNull
+  private Long roundNumber;
 
-   /**
-    * Estádio onde a partida foi realizada
-    */
-   @NotNull
-   private StadiumEnum stadiumEnum;
+  /**
+   * Data e hora da realização da partida.
+   */
+  @NotNull
+  private String kickOff;
 
-   /**
-    * Id do clube mandante.
-    */
-   @NotNull
-   private Long homeClubId;
+  /**
+   * Estádio onde a partida foi realizada
+   */
+  @NotNull
+  private StadiumEnum stadiumEnum;
 
-   /**
-    * Id do clube visitante
-    */
-   @NotNull
-   private Long visitorClubId;
+  /**
+   * Id do clube mandante.
+   */
+  @NotNull
+  private Long homeClubId;
 
-   public MatchInputDto(Long roundNumber, String kickOff, StadiumEnum stadiumEnum, Long homeClubId, Long visitorClubId) {
-      this.roundNumber = roundNumber;
-      this.kickOff = kickOff;
-      this.stadiumEnum = stadiumEnum;
-      this.homeClubId = homeClubId;
-      this.visitorClubId = visitorClubId;
-   }
+  /**
+   * Id do clube visitante
+   */
+  @NotNull
+  private Long visitorClubId;
 
-   public Long getRoundNumber() {
-      return roundNumber;
-   }
+  public MatchInputDto(Long roundNumber, String kickOff, StadiumEnum stadiumEnum, Long homeClubId,
+      Long visitorClubId) {
+    this.roundNumber = roundNumber;
+    this.kickOff = kickOff;
+    this.stadiumEnum = stadiumEnum;
+    this.homeClubId = homeClubId;
+    this.visitorClubId = visitorClubId;
+  }
 
-   public void setRoundNumber(Long roundNumber) {
-      this.roundNumber = roundNumber;
-   }
+  public Long getRoundNumber() {
+    return roundNumber;
+  }
 
-   public String getKickOff() {
-      return kickOff;
-   }
+  public void setRoundNumber(Long roundNumber) {
+    this.roundNumber = roundNumber;
+  }
 
-   public void setKickOff(String kickOff) {
-      this.kickOff = kickOff;
-   }
+  public String getKickOff() {
+    return kickOff;
+  }
 
-   public StadiumEnum getStadiumEnum() {
-      return stadiumEnum;
-   }
+  public void setKickOff(String kickOff) {
+    this.kickOff = kickOff;
+  }
 
-   public void setStadiumEnum(StadiumEnum stadiumEnum) {
-      this.stadiumEnum = stadiumEnum;
-   }
+  public StadiumEnum getStadiumEnum() {
+    return stadiumEnum;
+  }
 
-   public Long getHomeClubId() {
-      return homeClubId;
-   }
+  public void setStadiumEnum(StadiumEnum stadiumEnum) {
+    this.stadiumEnum = stadiumEnum;
+  }
 
-   public void setHomeClubId(Long homeClubId) {
-      this.homeClubId = homeClubId;
-   }
+  public Long getHomeClubId() {
+    return homeClubId;
+  }
 
-   public Long getVisitorClubId() {
-      return visitorClubId;
-   }
+  public void setHomeClubId(Long homeClubId) {
+    this.homeClubId = homeClubId;
+  }
 
-   public void setVisitorClubId(Long visitorClubId) {
-      this.visitorClubId = visitorClubId;
-   }
+  public Long getVisitorClubId() {
+    return visitorClubId;
+  }
+
+  public void setVisitorClubId(Long visitorClubId) {
+    this.visitorClubId = visitorClubId;
+  }
 }
