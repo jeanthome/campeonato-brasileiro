@@ -4,20 +4,15 @@ import java.text.ParseException;
 import java.util.HashMap;
 import java.util.List;
 
-import brasileirao.api.dto.MatchGoalsDto;
-import brasileirao.api.dto.SubstitutionDto;
-import brasileirao.api.enums.ClubTypeEnum;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
-import org.springframework.http.RequestEntity;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -25,12 +20,16 @@ import org.springframework.web.bind.annotation.RestController;
 
 import brasileirao.api.dto.CardDto;
 import brasileirao.api.dto.GoalDto;
+import brasileirao.api.dto.MatchCardsDto;
 import brasileirao.api.dto.MatchDto;
+import brasileirao.api.dto.MatchGoalsDto;
 import brasileirao.api.dto.MatchMinDto;
+import brasileirao.api.dto.SubstitutionDto;
 import brasileirao.api.dto.input.CardInputDto;
 import brasileirao.api.dto.input.GoalInputDto;
 import brasileirao.api.dto.input.MatchInputDto;
 import brasileirao.api.dto.input.SubstitutionInputDto;
+import brasileirao.api.enums.ClubTypeEnum;
 import brasileirao.api.enums.GoalTypeEnum;
 import brasileirao.api.enums.StadiumEnum;
 import brasileirao.api.enums.ValidationExceptionMessageEnum;
@@ -71,7 +70,8 @@ public class MatchController {
       throw new ValidationException(ValidationExceptionMessageEnum.INVALID_NUMBER.name());
     }
 
-    final MatchDto matchDto = this.matchService.findById(ConverterHelper.convertStringToLong(matchId));
+    final MatchDto matchDto =
+        this.matchService.findById(ConverterHelper.convertStringToLong(matchId));
 
     if (matchDto == null) {
       return new ResponseEntity<Object>(new MatchDto(), HttpStatus.NOT_FOUND);
@@ -252,7 +252,7 @@ public class MatchController {
       throw new ValidationException(ValidationExceptionMessageEnum.INVALID_MATCH_ID.name());
     }
 
-    MatchGoalsDto matchGoalsDto = null;
+    final MatchGoalsDto matchGoalsDto;
     if (clubType == null) {
       matchGoalsDto = this.matchService.getMatchGoals(ConverterHelper.convertStringToLong(matchId));
     } else {
@@ -267,5 +267,34 @@ public class MatchController {
     }
 
     return new ResponseEntity<Object>(matchGoalsDto, HttpStatus.OK);
+  }
+
+  @GetMapping(value = "/{matchId}/cards", produces = MediaType.APPLICATION_JSON_VALUE)
+  public ResponseEntity<?> getMatchCards(@PathVariable String matchId, @RequestParam(
+      value = "clubType", required = false) String clubType) throws ValidationException,
+      ServiceException {
+
+    if (!ValidationHelper.isNumber(matchId)) {
+      throw new ValidationException(ValidationExceptionMessageEnum.INVALID_MATCH_ID.name());
+    }
+
+    final MatchCardsDto matchCardsDto;
+
+    if (clubType == null) {
+      matchCardsDto = this.matchService.getMatchCards(ConverterHelper.convertStringToLong(matchId));
+    } else {
+
+      final ClubTypeEnum clubTypeEnum = ClubTypeEnum.getByName(clubType);
+
+      if (clubTypeEnum == null) {
+        throw new ServiceException(ValidationExceptionMessageEnum.INVALID_CLUB_TYPE.name());
+      }
+
+      matchCardsDto =
+          this.matchService.getMatchCards(ConverterHelper.convertStringToLong(matchId),
+              clubTypeEnum);
+    }
+
+    return new ResponseEntity<Object>(matchCardsDto, HttpStatus.OK);
   }
 }

@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import brasileirao.api.dto.CardDto;
+import brasileirao.api.dto.MatchCardsDto;
 import brasileirao.api.dto.MatchGoalsDto;
 import brasileirao.api.dto.SubstitutionDto;
 import org.modelmapper.ModelMapper;
@@ -370,5 +371,45 @@ public class MatchServiceImpl implements MatchService {
         .getVisitorClubGoals()));
 
     return matchGoalsDto;
+  }
+
+  @Override
+  public MatchCardsDto getMatchCards(Long matchId) throws ServiceException {
+    
+    final Match match = this.matchDao.findById(matchId);
+    
+    if (match == null) {
+      throw new ServiceException(ServiceExceptionMessageEnum.MATCH_NOT_FOUND.name());
+    }
+    
+    final MatchCardsDto matchCardsDto = new MatchCardsDto();
+    matchCardsDto.setHomeClubCards(this.cardService.convertCardListToCardDtoList(match
+        .getHomeClubCardList()));
+    matchCardsDto.setVisitorClubCards(this.cardService.convertCardListToCardDtoList(match
+        .getVisitorClubCardList()));
+
+    return matchCardsDto;
+  }
+
+  @Override
+  public MatchCardsDto getMatchCards(Long matchId, ClubTypeEnum clubTypeEnum) throws ServiceException {
+    
+    final Match match = this.matchDao.findById(matchId);
+    
+    if (match == null) {
+      throw new ServiceException(ServiceExceptionMessageEnum.MATCH_NOT_FOUND.name());
+    }
+    
+    final MatchCardsDto matchCardsDto = new MatchCardsDto();
+
+    if (ClubTypeEnum.HOME_CLUB.equals(clubTypeEnum)) {
+      matchCardsDto.setHomeClubCards(this.cardService.convertCardListToCardDtoList(match
+          .getHomeClubCardList()));
+    } else if (ClubTypeEnum.VISITOR_CLUB.equals(clubTypeEnum)) {
+      matchCardsDto.setVisitorClubCards(this.cardService.convertCardListToCardDtoList(match
+          .getVisitorClubCardList()));
+    }
+
+    return matchCardsDto;    
   }
 }
