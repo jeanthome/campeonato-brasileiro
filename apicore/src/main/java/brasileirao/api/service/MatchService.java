@@ -1,21 +1,22 @@
 package brasileirao.api.service;
 
+import java.text.ParseException;
+import java.util.List;
+
 import brasileirao.api.dto.CardDto;
+import brasileirao.api.dto.GoalDto;
+import brasileirao.api.dto.MatchCardsDto;
+import brasileirao.api.dto.MatchDto;
 import brasileirao.api.dto.MatchGoalsDto;
+import brasileirao.api.dto.MatchMinDto;
 import brasileirao.api.dto.SubstitutionDto;
 import brasileirao.api.dto.input.CardInputDto;
-import brasileirao.api.dto.GoalDto;
 import brasileirao.api.dto.input.GoalInputDto;
-import brasileirao.api.dto.MatchDto;
 import brasileirao.api.dto.input.MatchInputDto;
-import brasileirao.api.dto.MatchMinDto;
 import brasileirao.api.dto.input.SubstitutionInputDto;
 import brasileirao.api.enums.ClubTypeEnum;
 import brasileirao.api.exception.ServiceException;
 import brasileirao.api.persistence.Match;
-
-import java.text.ParseException;
-import java.util.List;
 
 /**
  * Classe de serviços da entidade {@link Match}.
@@ -67,6 +68,26 @@ public interface MatchService {
    * @throws ServiceException Caso não exista uma partida com o id especificado.
    */
   MatchGoalsDto getMatchGoals(Long matchId) throws ServiceException;
+
+  /**
+   * Obtém a lista de cartões de uma partida específica.
+   *
+   * @param matchId O identificador da partida.
+   * @return Instância de {@link MatchCardsDto} com os dados dos gols encontrados.
+   * @throws ServiceException Caso não exista uma partida com o id especificado.
+   */
+  MatchCardsDto getMatchCards(Long matchId) throws ServiceException;
+
+  /**
+   * Obtém a lista de cartões de um clube em uma partida específica.
+   *
+   * @param matchId O identificador da partida.
+   * @param clubTypeEnum O identificador do tipo de clube.
+   * @return Instância de {@link MatchCardsDto} com os dados dos gols encontrados.
+   * @throws ServiceException Caso não exista uma partida com o id especificado.
+   */
+  MatchCardsDto getMatchCards(Long matchId, ClubTypeEnum clubTypeEnum) throws ServiceException;
+
   /**
    * Insere um gol em uma partida.
    *
